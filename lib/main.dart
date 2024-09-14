@@ -112,7 +112,6 @@ void writeVideoBytes(List arg) async {
       print("error = ${error.toString()}");
       sendPort?.send("error");
     } finally {
-      stream?.cancel();
       reader?.cancel();
     }
   });
