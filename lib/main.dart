@@ -76,7 +76,6 @@ void writeVideoBytes(List arg) async {
     receiveTimeout: const Duration(hours: 1),
     sendTimeout: const Duration(hours: 1),
   ));
-  print("AAAAA");
   final response = await dio.get(
     arg[1],
     onReceiveProgress: (received, total) {
@@ -92,31 +91,19 @@ void writeVideoBytes(List arg) async {
           return status! < 500;
         }),
   ).then((value) async {
-    print("valuevaluevaluevalue");
 
     int fileSize =
         int.tryParse((value.headers.map['content-length'])?.first ?? '-1') ??
             -1;
     reader = ChunkedStreamReader((value.data as ResponseBody).stream);
-    print("adadadadad");
     try {
       Uint8List buffer;
       do {
-        print("sadadadada");
         buffer = await reader!.readBytes(chunkSize);
-        print("bbfbfbbfbf");
-
         offset += buffer.length;
-        print("aaaaaaaa");
-
         sendPort?.send(offset / fileSize);
-        print("adadadada");
-
         final encrypted = encrypter.encryptBytes(buffer, iv: iv);
-        print("OHOHO");
-
         await file.writeAsBytes(encrypted.bytes, mode: FileMode.append);
-        print("writing....");
       } while (buffer.length == chunkSize);
       sendPort?.send("done");
     } catch (error, s) {
