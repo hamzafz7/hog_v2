@@ -6,6 +6,7 @@ class LessionModel {
   final bool? isVisible;
   final bool? isOpen;
   final String? type;
+  final String? source;
   final bool? isWatched;
   final int? chapterId;
   final String? description;
@@ -21,6 +22,7 @@ class LessionModel {
       required this.isVisible,
       required this.isOpen,
       this.description,
+      this.source,
       required this.type,
       required this.chapterId,
       required this.isWatched
@@ -36,6 +38,7 @@ class LessionModel {
         time: json['time'],
         isVisible: json['is_visible'],
         isOpen: json['is_open'],
+        source: json["source"],
         type: json['type'],
         chapterId: json['chapter_id'],
         description: json['description'],

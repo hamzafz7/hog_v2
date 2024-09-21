@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hog/offline_videos_feature/presentation/pages/offline_videos_page.dart';
 import 'package:hog/presentation/homepage/pages/home_page.dart';
-import 'package:hog/presentation/my_courses/page/my_courses_page.dart';
 import 'package:hog/presentation/profile/pages/my_profile_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
@@ -13,5 +13,9 @@ class MainPageController extends GetxController {
     currentPageIndex.value = ind;
   }
 
-  List<Widget> screens = const [MyProfilePage(), HomePage(), MyCoursesPage()];
+  List<Widget> screens = const [
+    MyProfilePage(),
+    HomePage(),
+    OfflineVideosPage()
+  ];
 }

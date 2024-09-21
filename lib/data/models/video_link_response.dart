@@ -21,7 +21,7 @@ class VideoLinksResponse {
   VideoLinksResponse({required this.link});
 
   factory VideoLinksResponse.fromJson(Map<String, dynamic> json) {
-    var list = json['link'] as List;
+    var list = json['data']["link"] as List;
     List<VideoLink> videoLinksList =
         list.map((i) => VideoLink.fromJson(i)).toList();
 

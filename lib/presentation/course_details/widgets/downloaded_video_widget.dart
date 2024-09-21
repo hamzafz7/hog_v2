@@ -36,7 +36,7 @@ class DownloadedVideoWidget extends StatelessWidget {
             SizedBox(width: 8),
             IconButton(
                 onPressed: () {
-                  controller.deleteVideo(video.courseName, video.videoName);
+                  // controller.deleteVideo(video.courseName, video.videoName);
                 },
                 icon: Icon(
                   Icons.delete,

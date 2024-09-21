@@ -45,7 +45,8 @@ class CourseLessonWidget extends StatelessWidget {
                         link: lessionModel.link!,
                         id: lessionModel.id,
                         description: lessionModel.description,
-                        name: lessionModel.title ?? "لا يوجد اسم");
+                        name: lessionModel.title ?? "لا يوجد اسم",
+                        source: lessionModel.source);
                   } else {
                     Get.to(FileViewWidget(imagePath: lessionModel.link!));
                     // print(lessionModel.link);
@@ -92,7 +93,7 @@ class CourseLessonWidget extends StatelessWidget {
             ),
             Spacer(),
             if (lessionModel.type == 'video' &&
-                !controller.isVideoDownloaded(lessionModel.title ?? "none"))
+                lessionModel.source != "youtube")
               Obx(
                 () => controller.downloadStatus.value ==
                             RequestStatus.loading &&
@@ -129,7 +130,8 @@ class CourseLessonWidget extends StatelessWidget {
                               controller.courseInfoModel!.course!.name!,
                               lessionModel.title!,
                               lessionModel.id,
-                              lessionModel.description, onRealDownload: (link) {
+                              lessionModel.description,
+                              lessionModel.source!, onRealDownload: (link) {
                             BlocProvider.of<OfflineVideosBloc>(context)
                                 .add(DownloadYoutubeVideo(
                               sectionName: lessionModel.title!,
@@ -141,7 +143,8 @@ class CourseLessonWidget extends StatelessWidget {
                                   videoName: lessionModel.title!,
                                   key: '',
                                   description: '',
-                                  id: lessionModel.id),
+                                  id: lessionModel.id,
+                                  source: ''),
                               tilteVideo: lessionModel.title!,
                               link: link,
                             ));
@@ -183,7 +186,8 @@ class CourseLessonWidget extends StatelessWidget {
                 videoName: lessionModel.title!,
                 key: '',
                 description: '',
-                id: lessionModel.id),
+                id: lessionModel.id,
+                source: ''),
           ));
         }, context, lessionModel.id)
       ],

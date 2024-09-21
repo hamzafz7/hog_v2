@@ -117,13 +117,14 @@ class CategoryRepository {
     }
   }
 
-  Future<AppResponse> watchVideo(String link) async {
+  Future<AppResponse> watchVideo(String link, String source) async {
     try {
       print(CacheProvider.getAppToken());
-      var appResponse = await ApiProvider.get(
-          url: watchVidUrl,
-          token: CacheProvider.getAppToken(),
-          query: {"link": link});
+      var body = {"link": link, "source": source};
+      print(body);
+
+      var appResponse = await ApiProvider.post(
+          url: watchVidUrl, token: CacheProvider.getAppToken(), body: body);
       return AppResponse(
           success: true, data: appResponse.data, errorMessage: null);
     } on DioException catch (e) {
@@ -132,12 +133,12 @@ class CategoryRepository {
     }
   }
 
-  Future<AppResponse> downloadVideo(String link) async {
+  Future<AppResponse> downloadVideo(String link, String source) async {
     try {
-      var appResponse = await ApiProvider.get(
+      var appResponse = await ApiProvider.post(
           url: downloadVidUrl,
           token: CacheProvider.getAppToken(),
-          query: {"link": link});
+          body: {"link": link, "source": source});
       return AppResponse(
           success: true, data: appResponse.data, errorMessage: null);
     } on DioException catch (e) {

@@ -133,7 +133,7 @@ class AppInterceptors extends Interceptor {
         );
       }
     } else {
-      String? error = err.response?.data['message'] ?? "حدث خطأ ما";
+      String? error = err.response?.data['message'].toString() ?? "حدث خطأ ما";
       return handler.next(
         DioException(
           requestOptions: err.requestOptions,

@@ -88,24 +88,6 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: context.w * 0.08,
-                              height: context.w * 0.08,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.white),
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: AppColors.primaryColor,
-                                  size: context.w * 0.05,
-                                ),
-                              ),
-                            ),
-                          ),
                           const SizedBox(
                             width: 16,
                           ),

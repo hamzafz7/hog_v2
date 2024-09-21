@@ -57,17 +57,17 @@ class CustomTapBar extends GetView<CourseDetailsController> {
               ),
             ),
           ),
-          Tab(
-            child: SizedBox(
-              width: 90.w,
-              child: Center(
-                child: Text(
-                  "المحفوظات",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            ),
-          ),
+          // Tab(
+          //   child: SizedBox(
+          //     width: 90.w,
+          //     child: Center(
+          //       child: Text(
+          //         "المحفوظات",
+          //         style: Theme.of(context).textTheme.bodyMedium,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

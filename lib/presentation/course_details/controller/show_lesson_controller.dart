@@ -36,8 +36,8 @@ class ShowLessonController extends GetxController {
     }
   }
 
-  Future<void> downloadVideo(String link) async {
-    var response = await _categoryRepository.downloadVideo(link);
+  Future<void> downloadVideo(String link, String source) async {
+    var response = await _categoryRepository.downloadVideo(link, source);
     if (response.success) {
       print(" heelp from success");
       final url =

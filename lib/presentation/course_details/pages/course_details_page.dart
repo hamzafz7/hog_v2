@@ -11,7 +11,6 @@ import 'package:hog/presentation/course_details/widgets/course_describtion.dart'
 import 'package:hog/presentation/course_details/widgets/course_details_header.dart';
 import 'package:hog/presentation/course_details/widgets/custom_shape.dart';
 import 'package:hog/presentation/course_details/widgets/custom_tap_bar.dart';
-import 'package:hog/presentation/course_details/widgets/downloaded_videos.dart';
 import 'package:hog/presentation/custom_dialogs/code_activate_dialog.dart';
 import 'package:hog/presentation/custom_dialogs/custom_dialogs.dart';
 import 'package:hog/presentation/widgets/custom_button.dart';
@@ -24,7 +23,7 @@ class CourseDetailsPage extends GetView<CourseDetailsController> {
     Get.put(CourseDetailsController());
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: SizedBox(
           width: Get.width,
           child: Obx(
@@ -49,7 +48,7 @@ class CourseDetailsPage extends GetView<CourseDetailsController> {
                             children: [
                               CourseDescribtionWidget(),
                               CourseCurriculum(),
-                              DownloadedVideosWidget(),
+                              // DownloadedVideosWidget(),
                             ],
                           ),
                         ),
