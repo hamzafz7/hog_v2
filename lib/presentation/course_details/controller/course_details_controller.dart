@@ -1,13 +1,7 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:hog/presentation/custom_dialogs/pick_quality_dialog.dart';
-import 'package:pointycastle/api.dart';
-import 'package:pointycastle/block/aes_fast.dart';
-import 'package:pointycastle/stream/ctr.dart';
 import 'package:hog/common/constants/enums/request_enum.dart';
 import 'package:hog/common/utils/utils.dart';
 import 'package:hog/data/models/course_info_model.dart';
@@ -21,9 +15,7 @@ import 'package:hog/data/repositories/category_repo.dart';
 import 'package:hog/presentation/custom_dialogs/custom_dialogs.dart';
 import 'package:hog/presentation/custom_dialogs/pick_quality_from_url.dart';
 import 'package:hog/presentation/my_courses/controllers/my_courses_controller.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 class CourseDetailsController extends GetxController {
   @override
@@ -182,8 +174,6 @@ class CourseDetailsController extends GetxController {
     currentDownloadedVidId.add(id);
   }
 
-  final _secureStorage = const FlutterSecureStorage();
-
   Future<void> deleteVideo(String courseName, String courseVid) async {
     await VideoDatabase.deleteVideo(courseName, courseVid).then((value) {
       getDownloadedVideos();
@@ -202,198 +192,189 @@ class CourseDetailsController extends GetxController {
   RxBool isPaused = false.obs;
   RxBool isReconnecting = false.obs;
   StreamSubscription<List<int>>? _downloadSubscription;
-  HttpClientRequest? _httpClientRequest;
-  HttpClientResponse? _httpClientResponse;
-  File? _file;
-  String? _filePath;
-  String? _url;
-  String? _courseName;
-  String? _courseVidName;
-  int? _videoId;
-  String? _description;
   Timer? _retryTimer;
 
   // Method to start downloading
-  Future<void> startDownload({
-    required String url,
-    required String courseName,
-    required String courseVidName,
-    required int videoId,
-    required String? description,
-  }) async {
-    _url = url;
-    _courseName = courseName;
-    _courseVidName = courseVidName;
-    _videoId = videoId;
-    _description = description;
+  // Future<void> startDownload({
+  //   required String url,
+  //   required String courseName,
+  //   required String courseVidName,
+  //   required int videoId,
+  //   required String? description,
+  // }) async {
+  //   _url = url;
+  //   _courseName = courseName;
+  //   _courseVidName = courseVidName;
+  //   _videoId = videoId;
+  //   _description = description;
 
-    isDownloading.value = true;
-    isPaused.value = false;
-    isReconnecting.value = false;
+  //   isDownloading.value = true;
+  //   isPaused.value = false;
+  //   isReconnecting.value = false;
 
-    // Enable wakelock to keep the device awake during download
-    WakelockPlus.enable();
+  //   // Enable wakelock to keep the device awake during download
+  //   WakelockPlus.enable();
 
-    // Determine the file path
-    Directory dir = await getExternalStorageDirectory() ??
-        await getApplicationDocumentsDirectory();
-    _filePath = "${dir.path}/$_courseName/$_courseVidName.mp4";
-    _file = File(_filePath!);
+  //   // Determine the file path
+  //   Directory dir = await getExternalStorageDirectory() ??
+  //       await getApplicationDocumentsDirectory();
+  //   _filePath = "${dir.path}/$_courseName/$_courseVidName.mp4";
+  //   _file = File(_filePath!);
 
-    // Create directories if they don't exist
-    _file!.parent.createSync(recursive: true);
+  //   // Create directories if they don't exist
+  //   _file!.parent.createSync(recursive: true);
 
-    // Get already downloaded size if the file exists
-    int downloadedSize = 0;
-    if (_file!.existsSync()) {
-      downloadedSize = await _file!.length();
-    }
-    downloaded.value = downloadedSize;
+  //   // Get already downloaded size if the file exists
+  //   int downloadedSize = 0;
+  //   if (_file!.existsSync()) {
+  //     downloadedSize = await _file!.length();
+  //   }
+  //   downloaded.value = downloadedSize;
 
-    await _downloadFile();
-  }
+  //   await _downloadFile();
+  // }
 
-  Future<void> _downloadFile() async {
-    try {
-      // Create request with range header for resuming if partially downloaded
-      final HttpClient httpClient = HttpClient();
-      _httpClientRequest = await httpClient.getUrl(Uri.parse(_url!));
-      _httpClientRequest!.headers.set('Range', 'bytes=${downloaded.value}-');
+  // Future<void> _downloadFile() async {
+  //   try {
+  //     // Create request with range header for resuming if partially downloaded
+  //     final HttpClient httpClient = HttpClient();
+  //     _httpClientRequest = await httpClient.getUrl(Uri.parse(_url!));
+  //     _httpClientRequest!.headers.set('Range', 'bytes=${downloaded.value}-');
 
-      _httpClientResponse = await _httpClientRequest!.close();
+  //     _httpClientResponse = await _httpClientRequest!.close();
 
-      // Calculate total file length
-      fileLength.value =
-          (_httpClientResponse!.contentLength ?? 0) + downloaded.value;
+  //     // Calculate total file length
+  //     fileLength.value =
+  //         (_httpClientResponse!.contentLength ?? 0) + downloaded.value;
 
-      // Open file stream
-      final output = _file!.openWrite(
-          mode: downloaded.value > 0 ? FileMode.append : FileMode.write);
+  //     // Open file stream
+  //     final output = _file!.openWrite(
+  //         mode: downloaded.value > 0 ? FileMode.append : FileMode.write);
 
-      // Subscribe to the download stream
-      _downloadSubscription = _httpClientResponse!.listen((data) {
-        if (!isPaused.value) {
-          Uint8List uint8List = Uint8List.fromList(data);
-          final encryptedData =
-              _encryptBytes(uint8List, 'u8x/A?D(G+KbPeShVmYq3t6w9z/C&F)J');
-          output.add(encryptedData);
-          downloaded.value += data.length;
-          print("Downloaded: ${downloaded.value} / ${fileLength.value}");
-        }
-      });
+  //     // Subscribe to the download stream
+  //     _downloadSubscription = _httpClientResponse!.listen((data) {
+  //       if (!isPaused.value) {
+  //         Uint8List uint8List = Uint8List.fromList(data);
+  //         final encryptedData =
+  //             _encryptBytes(uint8List, 'u8x/A?D(G+KbPeShVmYq3t6w9z/C&F)J');
+  //         output.add(encryptedData);
+  //         downloaded.value += data.length;
+  //         print("Downloaded: ${downloaded.value} / ${fileLength.value}");
+  //       }
+  //     });
 
-      _downloadSubscription!.onDone(() async {
-        await output.close();
-        await _endDownload();
-      });
+  //     _downloadSubscription!.onDone(() async {
+  //       await output.close();
+  //       await _endDownload();
+  //     });
 
-      _downloadSubscription!.onError((error) {
-        print("Download error: $error");
-        _handleDownloadError();
-      });
-    } catch (e) {
-      print("Failed to start download: $e");
-      _handleDownloadError();
-    }
-  }
+  //     _downloadSubscription!.onError((error) {
+  //       print("Download error: $error");
+  //       _handleDownloadError();
+  //     });
+  //   } catch (e) {
+  //     print("Failed to start download: $e");
+  //     _handleDownloadError();
+  //   }
+  // }
 
-  void pauseDownload() {
-    if (_downloadSubscription != null && !isPaused.value) {
-      _downloadSubscription!.pause();
-      isPaused.value = true;
-      print("Download paused");
-    }
-  }
+  // void pauseDownload() {
+  //   if (_downloadSubscription != null && !isPaused.value) {
+  //     _downloadSubscription!.pause();
+  //     isPaused.value = true;
+  //     print("Download paused");
+  //   }
+  // }
 
-  void resumeDownload() {
-    if (_downloadSubscription != null && isPaused.value) {
-      _downloadSubscription!.resume();
-      isPaused.value = false;
-      print("Download resumed");
-    }
-  }
+  // void resumeDownload() {
+  //   if (_downloadSubscription != null && isPaused.value) {
+  //     _downloadSubscription!.resume();
+  //     isPaused.value = false;
+  //     print("Download resumed");
+  //   }
+  // }
 
-  void _handleDownloadError() {
-    isReconnecting.value = true;
-    _downloadSubscription?.cancel();
+  // void _handleDownloadError() {
+  //   isReconnecting.value = true;
+  //   _downloadSubscription?.cancel();
 
-    // Retry mechanism with a delay
-    _retryTimer?.cancel();
-    _retryTimer = Timer.periodic(Duration(seconds: 10), (timer) {
-      if (!isPaused.value && !isDownloading.value) {
-        print("Retrying download...");
-        _retryDownload();
-      }
-    });
+  //   // Retry mechanism with a delay
+  //   _retryTimer?.cancel();
+  //   _retryTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+  //     if (!isPaused.value && !isDownloading.value) {
+  //       print("Retrying download...");
+  //       _retryDownload();
+  //     }
+  //   });
 
-    print("Attempting to reconnect...");
-  }
+  //   print("Attempting to reconnect...");
+  // }
 
-  void _retryDownload() {
-    if (isReconnecting.value) {
-      print("Reconnecting...");
-      isReconnecting.value = false;
-      _retryTimer?.cancel();
-      _downloadFile(); // Retry the download attempt
-    }
-  }
+  // void _retryDownload() {
+  //   if (isReconnecting.value) {
+  //     print("Reconnecting...");
+  //     isReconnecting.value = false;
+  //     _retryTimer?.cancel();
+  //     _downloadFile(); // Retry the download attempt
+  //   }
+  // }
 
-  Future<void> _endDownload() async {
-    isDownloading.value = false;
-    WakelockPlus.disable();
-    _downloadSubscription?.cancel();
-    _retryTimer?.cancel();
-    print("Download completed");
+  // Future<void> _endDownload() async {
+  //   isDownloading.value = false;
+  //   WakelockPlus.disable();
+  //   _downloadSubscription?.cancel();
+  //   _retryTimer?.cancel();
+  //   print("Download completed");
 
-    // Save the path to secure storage and database
-    final key = 'video_$_courseName-$_courseVidName';
-    await _secureStorage.write(key: key, value: _filePath!);
-    await VideoDatabase.insertVideo(
-      courseName: _courseName!,
-      videoName: _courseVidName!,
-      key: key,
-      videoId: _videoId!,
-      description: _description,
-    );
+  //   // Save the path to secure storage and database
+  //   final key = 'video_$_courseName-$_courseVidName';
+  //   await _secureStorage.write(key: key, value: _filePath!);
+  //   await VideoDatabase.insertVideo(
+  //     courseName: _courseName!,
+  //     videoName: _courseVidName!,
+  //     key: key,
+  //     videoId: _videoId!,
+  //     description: _description,
+  //   );
 
-    // Update the download status and notify the user
-    updateDownloadStatus(RequestStatus.success);
-    getDownloadedVideos();
-    Get.snackbar(
-        "تم الأمر بنجاح", "نود بإعلامك أن هذا الفيديو أصبح من المحفوظات");
-  }
+  //   // Update the download status and notify the user
+  //   updateDownloadStatus(RequestStatus.success);
+  //   getDownloadedVideos();
+  //   Get.snackbar(
+  //       "تم الأمر بنجاح", "نود بإعلامك أن هذا الفيديو أصبح من المحفوظات");
+  // }
 
-  Uint8List _encryptBytes(Uint8List data, String key) {
-    final keyBytes = Uint8List.fromList(key.codeUnits);
-    final iv = Uint8List(16);
-    final cipher = CTRStreamCipher(AESFastEngine())
-      ..init(
-        true,
-        ParametersWithIV(
-          KeyParameter(keyBytes),
-          iv,
-        ),
-      );
+  // Uint8List _encryptBytes(Uint8List data, String key) {
+  //   final keyBytes = Uint8List.fromList(key.codeUnits);
+  //   final iv = Uint8List(16);
+  //   final cipher = CTRStreamCipher(AESFastEngine())
+  //     ..init(
+  //       true,
+  //       ParametersWithIV(
+  //         KeyParameter(keyBytes),
+  //         iv,
+  //       ),
+  //     );
 
-    return cipher.process(data);
-  }
+  //   return cipher.process(data);
+  // }
 
-  Future<void> saveAndDownload({
-    required String url,
-    required String courseName,
-    required String courseVidName,
-    required int videoId,
-    required String? description,
-  }) async {
-    // Initiate the download process using the new download method
-    await startDownload(
-      url: url,
-      courseName: courseName,
-      courseVidName: courseVidName,
-      videoId: videoId,
-      description: description,
-    );
-  }
+  // Future<void> saveAndDownload({
+  //   required String url,
+  //   required String courseName,
+  //   required String courseVidName,
+  //   required int videoId,
+  //   required String? description,
+  // }) async {
+  //   // Initiate the download process using the new download method
+  //   await startDownload(
+  //     url: url,
+  //     courseName: courseName,
+  //     courseVidName: courseVidName,
+  //     videoId: videoId,
+  //     description: description,
+  //   );
+  // }
 
   Future<void> downloadVideo(String link, BuildContext context,
       String courseName, String videoName, int videoId, String? description,

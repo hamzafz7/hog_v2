@@ -130,7 +130,6 @@ class CourseLessonWidget extends StatelessWidget {
                               lessionModel.title!,
                               lessionModel.id,
                               lessionModel.description, onRealDownload: (link) {
-                            print("link = $link");
                             BlocProvider.of<OfflineVideosBloc>(context)
                                 .add(DownloadYoutubeVideo(
                               sectionName: lessionModel.title!,

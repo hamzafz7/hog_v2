@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -30,31 +29,12 @@ import 'offline_videos_feature/presentation/bloc/offline_videos_bloc.dart';
 import 'offline_videos_feature/presentation/controllers/video_downloader.dart';
 import 'package:async/async.dart';
 import 'package:encrypt/encrypt.dart' as enc;
-import 'package:provider/provider.dart';
 
 @pragma('vm:entry-point')
 void writeVideoBytes(List arg) async {
-  // BackgroundIsolateBinaryMessenger.ensureInitialized(arg[2]);
-  // 0 is the id
-  // 1 is the url
-  // 2 is the type (video or attachment)
-
   SendPort? sendPort = IsolateNameServer.lookupPortByName("iso_${arg[0]}");
   String basePath =
       await VideoDownloader().createBasePathFolder("Hog Offline Videos");
-  // const keyEnc = "wrt52pxy4fzxopewjshfbaeisdc9g3jd=";
-  //
-  // const int chunkSize = 1024 * 1024; // 1 MB
-  //
-  // StreamSubscription<ResponseBody>? stream;
-  // ChunkedStreamReader<int>? reader;
-  // File file = File('$basePath/video${arg[0]}.professor');
-  // await file.writeAsBytes([23], mode: FileMode.append);
-  // deleteFile('$basePath/video${arg[0]}.professor');
-  // final key = enc.Key.fromUtf8(keyEnc);
-  // final iv = enc.IV.fromUtf8("er4s0tm4socrjsow");
-  // final encrypter =
-  //     enc.Encrypter(enc.AES(key, mode: enc.AESMode.ctr, padding: null));
 
   const keyEnc = "we4RYhsG7DFOdCfEDKjSLsOXcvXsdA3=";
 
@@ -91,7 +71,6 @@ void writeVideoBytes(List arg) async {
           return status! < 500;
         }),
   ).then((value) async {
-
     int fileSize =
         int.tryParse((value.headers.map['content-length'])?.first ?? '-1') ??
             -1;
@@ -159,15 +138,6 @@ void decryptFile(List arg) async {
     reader.cancel();
     sendPort?.send("done");
 
-    //Fully encrypt
-    // do {
-    //   bufferRead++;
-    //   buffer = await reader.readBytes(chunkSize);
-    //
-    //   final encrypted = encrypter.decryptBytes(enc.Encrypted(buffer), iv: iv);
-    //   await file.writeAsBytes(encrypted, mode: FileMode.append);
-    //   sendPort?.send((bufferRead * chunkSize) / size);
-    // } while (buffer.length == chunkSize);
     reader.cancel();
     sendPort?.send("done");
   } catch (e, s) {
