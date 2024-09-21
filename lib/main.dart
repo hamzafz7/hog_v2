@@ -30,6 +30,8 @@ import 'offline_videos_feature/presentation/controllers/video_downloader.dart';
 import 'package:async/async.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 
+import 'offline_videos_feature/presentation/pages/offline_videos_page.dart';
+
 @pragma('vm:entry-point')
 void writeVideoBytes(List arg) async {
   SendPort? sendPort = IsolateNameServer.lookupPortByName("iso_${arg[0]}");
@@ -103,11 +105,11 @@ void decryptFile(List arg) async {
   // BackgroundIsolateBinaryMessenger.ensureInitialized(arg[1]);
   try {
     const int chunkSize = 1024 * 1024; // 1 MB
-    const keyEnc = "wrt52pxy4fzxopewjshfbaeisdc9g3jd";
+    const keyEnc = "we4RYhsG7DFOdCfEDKjSLsOXcvXsdA3=";
     final key = enc.Key.fromUtf8(keyEnc);
-    final iv = enc.IV.fromUtf8("er4s0tm4socrjsow");
+    final iv = enc.IV.fromUtf8("e16ce888a20dadb8");
     final encrypter =
-        enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
+    enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
     Uint8List buffer;
     ChunkedStreamReader<int>? reader;
     var tempDir = await getApplicationDocumentsDirectory();

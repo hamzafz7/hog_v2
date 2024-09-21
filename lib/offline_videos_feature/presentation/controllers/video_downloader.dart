@@ -39,9 +39,8 @@ class VideoDownloader {
       // RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
       IsolateNameServer.registerPortWithName(
           receivePort!.sendPort, "iso_$videoId");
-
+      print("QQQQQ");
       receivePort!.listen((message) {
-        print("message = $message");
         if (message == "done") {
           // print("DONOONO");
           // addOfflineVideoIdToList(data.id);
@@ -65,7 +64,11 @@ class VideoDownloader {
           downloadStatus.value = DownloadStatus.downloaded;
           newDownloadPercentage.value = {"percent": 0.0, "value": "0%"};
           onDone();
-          myIsolate!.kill();
+          if(myIsolate != null) {
+            print("KKKKK");
+
+            myIsolate = null;
+          }
         } else if (message == "error") {
           // print("Error");
           BotToast.showText(text: "حدث خطأ ما اثناء التحميل");
@@ -79,7 +82,9 @@ class VideoDownloader {
         }
       });
 
+      print("SSSS");
       myIsolate = await FlutterIsolate.spawn(writeVideoBytes, [videoId, url]);
+      print("WWWWW");
     } catch (e, s) {
       Catcher2.reportCheckedError(e, s);
       downloadStatus.value = DownloadStatus.init;
