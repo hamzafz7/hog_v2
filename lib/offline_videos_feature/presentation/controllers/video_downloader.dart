@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:catcher_2/core/catcher_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:hog/offline_videos_feature/presentation/bloc/offline_videos_event.dart';
@@ -86,7 +85,7 @@ class VideoDownloader {
       myIsolate = await FlutterIsolate.spawn(writeVideoBytes, [videoId, url]);
       print("WWWWW");
     } catch (e, s) {
-      Catcher2.reportCheckedError(e, s);
+      // Catcher2.reportCheckedError(e, s);
       downloadStatus.value = DownloadStatus.init;
       newDownloadPercentage.value = {"percent": 0.0, "value": "0%"};
     }

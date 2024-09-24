@@ -8,13 +8,9 @@ import 'package:hog/data/models/course_info_model.dart';
 import 'package:hog/data/models/courses_model.dart';
 import 'package:hog/data/models/download_model.dart';
 import 'package:hog/data/models/video_link_response.dart';
-import 'package:hog/data/models/video_model.dart';
-import 'package:hog/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog/data/providers/databaseProvider/video_database.dart';
 import 'package:hog/data/repositories/category_repo.dart';
 import 'package:hog/presentation/custom_dialogs/custom_dialogs.dart';
 import 'package:hog/presentation/custom_dialogs/pick_quality_from_url.dart';
-import 'package:hog/presentation/my_courses/controllers/my_courses_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CourseDetailsController extends GetxController {
@@ -90,11 +86,6 @@ class CourseDetailsController extends GetxController {
       updateSignInCourseStatus(RequestStatus.success);
       Get.back();
       getCourseInfo(id);
-      if (Get.isRegistered<MyCoursesController>()) {
-        Get.find<MyCoursesController>().getMyCourses(CacheProvider.getUserId());
-      } else {
-        Get.put(MyCoursesController()).getMyCourses(CacheProvider.getUserId());
-      }
     } else {
       print(response.errorMessage);
       Get.back();

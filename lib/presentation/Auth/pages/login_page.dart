@@ -55,7 +55,7 @@ class LoginPage extends GetView<RegisterationController> {
                 hintText: 'رقم الهاتف',
                 svgSrc: "assets/icons/Phone1.svg",
                 validator: (val) {
-                  return Utils.isPhoneValidated(val?.trim());
+                  return Utils.isPhoneFeildValidated(val?.trim());
                 },
               ),
               SizedBox(

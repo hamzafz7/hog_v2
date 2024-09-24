@@ -16,21 +16,16 @@ import 'package:hog/common/themes/themes.dart';
 import 'package:hog/data/httpClient.dart';
 import 'package:hog/data/providers/apiProvider/api_provider.dart';
 import 'package:hog/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog/data/providers/databaseProvider/course_database.dart';
-import 'package:hog/data/providers/databaseProvider/video_database.dart';
 import 'package:hog/data/providers/notificationProvider/notification_provider.dart';
 import 'package:hog/presentation/splashpage/page/splash_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'offline_videos_feature/dependency_injection/injection_container.dart';
 import 'offline_videos_feature/presentation/bloc/offline_videos_bloc.dart';
 import 'offline_videos_feature/presentation/controllers/video_downloader.dart';
 import 'package:async/async.dart';
 import 'package:encrypt/encrypt.dart' as enc;
-
-import 'offline_videos_feature/presentation/pages/offline_videos_page.dart';
 
 @pragma('vm:entry-point')
 void writeVideoBytes(List arg) async {
@@ -42,6 +37,7 @@ void writeVideoBytes(List arg) async {
 
   const int chunkSize = 1024 * 1024; // 1 MB
 
+  // ignore: unused_local_variable
   StreamSubscription<ResponseBody>? stream;
   ChunkedStreamReader<int>? reader;
   File file = File('$basePath/video${arg[0]}.professor');
@@ -58,6 +54,7 @@ void writeVideoBytes(List arg) async {
     receiveTimeout: const Duration(hours: 1),
     sendTimeout: const Duration(hours: 1),
   ));
+  // ignore: unused_local_variable
   final response = await dio.get(
     arg[1],
     onReceiveProgress: (received, total) {
@@ -87,6 +84,7 @@ void writeVideoBytes(List arg) async {
         await file.writeAsBytes(encrypted.bytes, mode: FileMode.append);
       } while (buffer.length == chunkSize);
       sendPort?.send("done");
+      // ignore: unused_catch_stack
     } catch (error, s) {
       await file.delete();
 
@@ -109,7 +107,7 @@ void decryptFile(List arg) async {
     final key = enc.Key.fromUtf8(keyEnc);
     final iv = enc.IV.fromUtf8("e16ce888a20dadb8");
     final encrypter =
-    enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
+        enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
     Uint8List buffer;
     ChunkedStreamReader<int>? reader;
     var tempDir = await getApplicationDocumentsDirectory();
@@ -170,14 +168,15 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
   await CacheProvider.init();
+  HttpOverrides.global = MyHttpOverrides();
+
   await ApiProvider.init();
-  await VideoDatabase.database;
-  await CourseDatabase.database;
+  // await VideoDatabase.database;
+  // await CourseDatabase.database;
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await FireBaseAPi().initNotifications();
   secureScreen();
-  HttpOverrides.global = MyHttpOverrides();
   if (CacheProvider().getDeviceId() == null) {
     await CacheProvider().setDeviceId();
     await setupDi();

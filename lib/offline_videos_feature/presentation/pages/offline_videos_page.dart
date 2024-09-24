@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:hog/offline_videos_feature/presentation/pages/play_offline_video_page.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../dependency_injection/injection_container.dart';
 import '../bloc/offline_videos_bloc.dart';
 import '../bloc/offline_videos_event.dart';
@@ -18,7 +17,6 @@ class OfflineVideosPage extends StatefulWidget {
 
 class _OfflineVideosPageState extends State<OfflineVideosPage>
     with TickerProviderStateMixin {
-  late TabController _tabController;
   final _bloc = getIt<OfflineVideosBloc>();
 
   @override
@@ -26,7 +24,6 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
     super.initState();
     _bloc.add(GetOfflineVideos());
     _bloc.add(GetVideosMaterials());
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
   }
 
   @override
@@ -242,12 +239,15 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
       textDirection: TextDirection.ltr,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PlayOfflineVideoPage(
-                        offlineVideoModel: state.offlineVideos[index],
-                      )));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => PlayOfflineVideoPage(
+          //               offlineVideoModel: state.offlineVideos[index],
+          //             )));
+          Get.to(PlayOfflineVideoPage(
+            offlineVideoModel: state.offlineVideos[index],
+          ));
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),

@@ -34,12 +34,10 @@ abstract class RegisterModule {
 
   /// Adding the [SharedPreferences] instance to the graph to be later used by the local data sources
   @lazySingleton
-  @preResolve
   Future<SharedPreferences> get prefs async {
     return await SharedPreferences.getInstance();
   }
 
   @lazySingleton
   FlutterSecureStorage get secureStorage => const FlutterSecureStorage();
-
 }

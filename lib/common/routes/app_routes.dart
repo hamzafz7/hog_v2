@@ -3,7 +3,6 @@ import 'package:hog/presentation/Auth/pages/login_page.dart';
 import 'package:hog/presentation/Auth/pages/register_page.dart';
 import 'package:hog/presentation/course_details/pages/course_details_page.dart';
 import 'package:hog/presentation/course_details/widgets/show_course_video.dart';
-import 'package:hog/presentation/downloadedVideos/page/downloaded_videos_page.dart';
 import 'package:hog/presentation/mainpage/pages/main_page.dart';
 import 'package:hog/presentation/onboarding/pages/on_boarding_page.dart';
 import 'package:hog/presentation/quizzes/pages/quiz_page.dart';
@@ -53,7 +52,7 @@ class AppRoute {
     GetPage(name: quizResultPageRoute, page: () => ResultPage()),
     GetPage(name: searchPageRoute, page: () => const SearchPage()),
     GetPage(name: privacyPolicyRoute, page: () => const PricyPolicy()),
-    GetPage(
-        name: downloadedVideosRoute, page: () => const DownloadedVideosPage()),
+    // GetPage(
+    // name: downloadedVideosRoute, page: () => const DownloadedVideosPage()),
   ];
 }

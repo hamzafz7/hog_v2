@@ -6,6 +6,7 @@ import 'package:hog/data/models/download_model.dart';
 import 'package:hog/presentation/course_details/controller/course_details_controller.dart';
 import 'package:hog/presentation/widgets/quality_button.dart';
 
+// ignore: must_be_immutable
 class PickQualityDialog extends StatelessWidget {
   PickQualityDialog({
     super.key,

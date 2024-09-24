@@ -160,6 +160,21 @@ class Utils {
     }
   }
 
+  static String? isPhoneFeildValidated(String? val) {
+    if (val == null || val.isEmpty) {
+      return "هذا الحقل إجباري";
+    }
+    if (val.length != 10) {
+      return "الرجاء ادخال رقم صحيح";
+    }
+    try {
+      double.parse(val);
+      return null;
+    } catch (e) {
+      return "الرجاء إدخال أرقام فقط في هذا الحقل";
+    }
+  }
+
   static String? isNumericFeild(String? val) {
     if (val == null || val.isEmpty) {
       return null;

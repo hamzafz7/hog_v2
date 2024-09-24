@@ -39,8 +39,7 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
   }
 
   Future<void> _onClearDispose(
-      ClearDispose event, Emitter<OfflineVideosState> emit) async {
-  }
+      ClearDispose event, Emitter<OfflineVideosState> emit) async {}
 
   Future<void> _onDownloadYoutubeVideo(
       DownloadYoutubeVideo event, Emitter<OfflineVideosState> emit) async {
@@ -213,7 +212,7 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
       } else {
         emit(state.rebuild((p0) => p0..errorDownloadingVideo = true));
       }
-    } catch (e, s) {
+    } catch (e) {
       Uint8List? data = await _readFileByte(pathToRead);
       File file = await File(fullPath).create();
       if (data != null) {
