@@ -40,78 +40,92 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
       child: BlocBuilder(
         bloc: _bloc,
         builder: (BuildContext context, OfflineVideosState state) {
-          return Scaffold(
-              backgroundColor: AppColors.primaryColor,
-              appBar: PreferredSize(
-                preferredSize: Size.zero,
-                child: AppBar(
-                  backgroundColor: AppColors.primaryColor,
-                  elevation: 0.0,
+          return SafeArea(
+            child: Scaffold(
+                // backgroundColor: AppColors.primaryColor,
+                appBar: PreferredSize(
+                  preferredSize: Size.zero,
+                  child: AppBar(
+                    backgroundColor: AppColors.primaryColor,
+                    elevation: 0.0,
+                  ),
                 ),
-              ),
-              body: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: context.h * 0.2),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(25),
-                              topRight: Radius.circular(25))),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: SafeArea(
-                              child: SizedBox(
-                                width: context.w,
-                                child: Column(
-                                  children: [
-                                    getVideosMaterialsWidget(state),
-                                    Expanded(child: getVideosWidget(state)),
-                                  ],
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {});
+                    _bloc.add(GetOfflineVideos());
+                  },
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: context.h * 0.2),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              // color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                  topRight: Radius.circular(25))),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: SafeArea(
+                                  child: SizedBox(
+                                    width: context.w,
+                                    child: Column(
+                                      children: [
+                                        getVideosMaterialsWidget(state),
+                                        Expanded(child: getVideosWidget(state)),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Expanded(
-                            child: Text(
-                              "في هذه القائمة ستجد الفيديوهات التعليمية التي قمت بتحميلها لمشاهدتها لاحقاً دون الحاجة للاتصال بالانترنت",
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.sp,
-                                color: Colors.white,
-                              ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            height: 150.h,
+                            decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "في هذه القائمة ستجد الفيديوهات التعليمية التي قمت بتحميلها لمشاهدتها لاحقاً دون الحاجة للاتصال بالانترنت",
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.sp,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Image.asset(
+                                    'assets/icons/cloud.png',
+                                    width: context.w * 0.15,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Image.asset(
-                              'assets/icons/cloud.png',
-                              width: context.w * 0.15,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ));
+                )),
+          );
         },
       ),
     );

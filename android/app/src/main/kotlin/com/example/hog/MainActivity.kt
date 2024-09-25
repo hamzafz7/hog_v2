@@ -1,4 +1,4 @@
-package com.example.hog
+package hog.odyssey.dev
 
 import io.flutter.embedding.android.FlutterActivity
 

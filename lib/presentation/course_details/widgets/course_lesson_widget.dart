@@ -93,7 +93,11 @@ class CourseLessonWidget extends StatelessWidget {
             ),
             Spacer(),
             if (lessionModel.type == 'video' &&
-                lessionModel.source != "youtube")
+                    lessionModel.source != "youtube" &&
+                    lessionModel.isOpen! ||
+                controller.courseInfoModel!.course!.isPaid! ||
+                controller.courseInfoModel!.course!.isOpen! ||
+                controller.courseInfoModel!.course!.isTeachWithCourse == true)
               Obx(
                 () => controller.downloadStatus.value ==
                             RequestStatus.loading &&
