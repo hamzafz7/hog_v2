@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hog/offline_videos_feature/helpers/prefs_helper.dart';
+import 'package:hog/offline_videos_feature/helpers/shared_keys.dart';
+import 'package:hog/offline_videos_feature/models/offline_video_model.dart';
 import 'package:hog/presentation/custom_dialogs/pick_quality_dialog.dart';
 import 'package:hog/common/constants/enums/request_enum.dart';
 import 'package:hog/common/utils/utils.dart';
@@ -11,14 +14,45 @@ import 'package:hog/data/models/video_link_response.dart';
 import 'package:hog/data/repositories/category_repo.dart';
 import 'package:hog/presentation/custom_dialogs/custom_dialogs.dart';
 import 'package:hog/presentation/custom_dialogs/pick_quality_from_url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CourseDetailsController extends GetxController {
+  SharedPreferences? shared;
+  PrefsHelper? _helper;
+  List<OfflineVideoModel> offlines = [];
+  List<int> videoIds = [];
+
   @override
   void onInit() {
     _courseModel = Get.arguments;
     getCourseInfo(_courseModel!.id).then((value) {});
     super.onInit();
+    SharedPreferences.getInstance().then((value) {
+      shared = value;
+      _helper = PrefsHelper(shared!);
+
+      getOfflineVideos().then((_) {
+        offlines.forEach((e) {
+          videoIds.add(e.videoId);
+        });
+        print(videoIds);
+      });
+    });
+  }
+
+  bool isLessionExist(int id) {
+    for (int i = 0; i < videoIds.length; i++) {
+      if (id == videoIds[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  Future getOfflineVideos() async {
+    offlines = await _helper!.fetchOfflineVideos();
   }
 
   RxInt currentTabIndex = 0.obs;

@@ -133,7 +133,12 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
 
   Widget getVideosMaterialsWidget(OfflineVideosState state) {
     if (state.videosMaterials.isEmpty) {
-      return Container();
+      return Container(
+        height: 40,
+        child: ListView(
+          children: [],
+        ),
+      );
     } else {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),

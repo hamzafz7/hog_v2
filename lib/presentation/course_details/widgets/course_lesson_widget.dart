@@ -9,6 +9,7 @@ import 'package:hog/common/constants/enums/request_enum.dart';
 import 'package:hog/data/models/lession_model.dart';
 import 'package:hog/data/models/video_model.dart';
 import 'package:hog/data/providers/casheProvider/cashe_provider.dart';
+import 'package:hog/offline_videos_feature/presentation/pages/offline_videos_page.dart';
 import 'package:hog/presentation/course_details/controller/course_details_controller.dart';
 import 'package:hog/presentation/course_details/widgets/course_pdf.dart';
 import 'package:hog/presentation/custom_dialogs/complete_failure.dart';
@@ -56,6 +57,9 @@ class CourseLessonWidget extends StatelessWidget {
                 }
               },
               child: Row(
+                crossAxisAlignment: lessionModel.type == "video"
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsets.all(8.r),
@@ -81,20 +85,43 @@ class CourseLessonWidget extends StatelessWidget {
                             color: kprimaryBlueColor,
                           ),
                   ),
-                  SizedBox(
-                      width: 210.w,
-                      child: Text(
-                        lessionModel.title ?? " ",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                          width: 200.w,
+                          child: Text(
+                            lessionModel.title ?? " ",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                      if (lessionModel.type == "video")
+                        SizedBox(
+                            width: 50.w,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${lessionModel.time?.toString()}د ",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: AppColors.primaryColor),
+                                  ),
+                                  Icon(
+                                    Icons.timelapse,
+                                    size: 15.w,
+                                    color: AppColors.primaryColor,
+                                  )
+                                ])),
+                    ],
+                  ),
                 ],
               ),
             ),
             Spacer(),
-            if (lessionModel.type == 'video' &&
-                    lessionModel.source != "youtube" &&
-                    lessionModel.isOpen! ||
+            if (lessionModel.type == 'video' && lessionModel.isOpen! ||
                 controller.courseInfoModel!.course!.isPaid! ||
                 controller.courseInfoModel!.course!.isOpen! ||
                 controller.courseInfoModel!.course!.isTeachWithCourse == true)
@@ -127,56 +154,44 @@ class CourseLessonWidget extends StatelessWidget {
                       )
                     : IconButton(
                         onPressed: () {
-                          controller.updateCurrentId(lessionModel.id);
-                          controller.downloadVideo(
-                              lessionModel.link!,
-                              context,
-                              controller.courseInfoModel!.course!.name!,
-                              lessionModel.title!,
-                              lessionModel.id,
-                              lessionModel.description,
-                              lessionModel.source!, onRealDownload: (link) {
-                            BlocProvider.of<OfflineVideosBloc>(context)
-                                .add(DownloadYoutubeVideo(
-                              sectionName: lessionModel.title!,
-                              courseName:
-                                  controller.courseInfoModel!.course!.name!,
-                              videoModel: Video(
-                                  courseName:
-                                      controller.courseInfoModel!.course!.name!,
-                                  videoName: lessionModel.title!,
-                                  key: '',
-                                  description: '',
-                                  id: lessionModel.id,
-                                  source: ''),
-                              tilteVideo: lessionModel.title!,
-                              link: link,
-                            ));
-                          });
-
-                          // if ((lessionModel.isOpen! ||
-                          //         controller.courseInfoModel!.course!.isPaid! ||
-                          //         controller.courseInfoModel!.course!.isOpen! ||
-                          //         controller.courseInfoModel!.course!
-                          //                 .isTeachWithCourse ==
-                          //             true ||
-                          //         CacheProvider.getUserType() == 'admin') &&
-                          //     controller.downloadStatus.value !=
-                          //         RequestStatus.loading) {
-                          //   controller.updateCurrentId(lessionModel.id);
-                          //   controller.downloadVideo(
-                          //       lessionModel.link!,
-                          //       context,
-                          //       controller.courseInfoModel!.course!.name!,
-                          //       lessionModel.title!,
-                          //       lessionModel.id,
-                          //       lessionModel.description);
-                          // }
+                          if (!controller.isLessionExist(lessionModel.id)) {
+                            controller.updateCurrentId(lessionModel.id);
+                            controller.downloadVideo(
+                                lessionModel.link!,
+                                context,
+                                controller.courseInfoModel!.course!.name!,
+                                lessionModel.title!,
+                                lessionModel.id,
+                                lessionModel.description,
+                                lessionModel.source!, onRealDownload: (link) {
+                              BlocProvider.of<OfflineVideosBloc>(context)
+                                  .add(DownloadYoutubeVideo(
+                                sectionName: lessionModel.title!,
+                                courseName:
+                                    controller.courseInfoModel!.course!.name!,
+                                videoModel: Video(
+                                    courseName: controller
+                                        .courseInfoModel!.course!.name!,
+                                    videoName: lessionModel.title!,
+                                    key: '',
+                                    description: '',
+                                    id: lessionModel.id,
+                                    source: ''),
+                                tilteVideo: lessionModel.title!,
+                                link: link,
+                              ));
+                            });
+                          }
                         },
-                        icon: Icon(
-                          Icons.download,
-                          color: kprimaryBlueColor,
-                        )),
+                        icon: !controller.isLessionExist(lessionModel.id)
+                            ? Icon(
+                                Icons.download,
+                                color: kprimaryBlueColor,
+                              )
+                            : Icon(
+                                Icons.offline_pin_sharp,
+                                color: kprimaryBlueColor,
+                              )),
               )
           ],
         ),

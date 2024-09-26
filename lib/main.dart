@@ -17,6 +17,7 @@ import 'package:hog/data/httpClient.dart';
 import 'package:hog/data/providers/apiProvider/api_provider.dart';
 import 'package:hog/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog/data/providers/notificationProvider/notification_provider.dart';
+import 'package:hog/firebase_options.dart';
 import 'package:hog/presentation/splashpage/page/splash_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -164,7 +165,7 @@ Future<void> deleteFile(String filePath) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);flu
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await GetStorage.init();
   await CacheProvider.init();
