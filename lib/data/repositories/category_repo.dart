@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:hog/data/endpoints.dart';
 import 'package:hog/data/models/app_response.dart';
@@ -24,9 +26,17 @@ class CategoryRepository {
   }
 
   Future<AppResponse> getCourses(int id) async {
+    String? os;
+    if (Platform.isIOS)
+      os = "ios";
+    else {
+      os = "android";
+    }
     try {
       var response = await ApiProvider.get(
-          url: "$coursesUrl/$id", token: CacheProvider.getAppToken());
+          url: "$coursesUrl/$id",
+          token: CacheProvider.getAppToken(),
+          query: {"os": os});
       return AppResponse(
         errorMessage: null,
         data: response.data,
@@ -62,9 +72,17 @@ class CategoryRepository {
   }
 
   Future<AppResponse> getCourseInfo(int id) async {
+    String? os;
+    if (Platform.isIOS)
+      os = "ios";
+    else {
+      os = "android";
+    }
     try {
       var response = await ApiProvider.get(
-          url: "$showCourseUrl/$id", token: CacheProvider.getAppToken());
+          url: "$showCourseUrl/$id",
+          token: CacheProvider.getAppToken(),
+          query: {"os": os});
       return AppResponse(
         errorMessage: null,
         data: response.data,
