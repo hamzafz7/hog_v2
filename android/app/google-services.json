@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "753641873408",
+    "project_id": "newhouseofgenuses",
+    "storage_bucket": "newhouseofgenuses.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753641873408:android:a82726d1cf0be941c778e5",
+        "android_client_info": {
+          "package_name": "dev.odyessey.hog2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKRkE9JpZt0bxIDUltlu63-ulv8j7vjsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753641873408:android:d6d3164925d1bffdc778e5",
+        "android_client_info": {
+          "package_name": "hog.odyssey.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKRkE9JpZt0bxIDUltlu63-ulv8j7vjsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
