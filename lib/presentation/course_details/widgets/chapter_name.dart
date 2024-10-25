@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/models/chapter_model.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
@@ -26,7 +27,7 @@ class ChapterName extends StatelessWidget {
               width: 10.w,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: !CacheProvider.getAppTheme()
+                  color: !GetIt.instance<CacheProvider>().getAppTheme()
                       ? Colors.black
                       : Colors.white)),
           SizedBox(
@@ -39,10 +40,7 @@ class ChapterName extends StatelessWidget {
               chapterModel!.name ?? "لا يوجد اسم لهذا الفصل",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kprimaryGreyColor),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryGreyColor),
             ),
           )
         ],

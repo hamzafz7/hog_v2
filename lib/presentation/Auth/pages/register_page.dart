@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
@@ -28,9 +29,7 @@ class RegisterPage extends GetView<RegisterationController> {
                 height: 80.h,
               ),
               SizedBox(
-                  height: 200.h,
-                  width: Get.width,
-                  child: Image.asset("assets/images/logo.png")),
+                  height: 200.h, width: Get.width, child: Image.asset("assets/images/logo.png")),
               SizedBox(
                 height: 10.h,
               ),
@@ -55,7 +54,7 @@ class RegisterPage extends GetView<RegisterationController> {
                 hintText: 'الاسم',
                 svgSrc: "assets/icons/person1.svg",
                 validator: (val) {
-                  return Utils.isFeildValidated(val?.trim());
+                  return GetIt.instance<Utils>().isFeildValidated(val?.trim());
                 },
               ),
               SizedBox(
@@ -66,7 +65,7 @@ class RegisterPage extends GetView<RegisterationController> {
                 hintText: 'رقم الهاتف',
                 svgSrc: "assets/icons/Phone1.svg",
                 validator: (val) {
-                  return Utils.isPhoneFeildValidated(val?.trim());
+                  return GetIt.instance<Utils>().isPhoneFeildValidated(val?.trim());
                 },
               ),
               SizedBox(
@@ -77,7 +76,7 @@ class RegisterPage extends GetView<RegisterationController> {
                 hintText: 'كلمة المرور',
                 svgSrc: "assets/icons/Lock.svg",
                 validator: (val) {
-                  return Utils.isPasswordValidated(val?.trim());
+                  return GetIt.instance<Utils>().isPasswordValidated(val?.trim());
                 },
               ),
               SizedBox(
@@ -99,31 +98,23 @@ class RegisterPage extends GetView<RegisterationController> {
                 height: 60.h,
               ),
               Obx(
-                () => controller.registerRequestStatus.value ==
-                        RequestStatus.loading
+                () => controller.registerRequestStatus.value == RequestStatus.loading
                     ? appCircularProgress()
                     : CustomButton(
                         onTap: () {
-                          if (controller.registerPageFormKey.currentState!
-                              .validate()) {
+                          if (controller.registerPageFormKey.currentState!.validate()) {
                             controller.userRegister(
-                                phone: controller.registerPhoneController.text
-                                    .trim(),
-                                password: controller
-                                    .registerPasswordController.text
-                                    .trim(),
-                                fullName:
-                                    controller.nameController.text.trim());
+                                phone: controller.registerPhoneController.text.trim(),
+                                password: controller.registerPasswordController.text.trim(),
+                                fullName: controller.nameController.text.trim());
                           }
                         },
                         height: 55.h,
                         width: 333.w,
                         child: Text(
                           "إنشاء حساب",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.white),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white),
                         ),
                       ),
               ),
@@ -133,20 +124,16 @@ class RegisterPage extends GetView<RegisterationController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("لديك حساب مسبق ؟",
-                      style: Theme.of(context).textTheme.bodySmall),
+                  Text("لديك حساب مسبق ؟", style: Theme.of(context).textTheme.bodySmall),
                   TextButton(
                       onPressed: () {
                         Get.offAllNamed(AppRoute.loginPageRoute);
                       },
                       child: Text("تسجيل الدخول",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                  color: kprimaryBlueColor,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: kprimaryBlueColor))),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: kprimaryBlueColor,
+                              decoration: TextDecoration.underline,
+                              decorationColor: kprimaryBlueColor))),
                 ],
               )
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
@@ -46,9 +46,7 @@ class MyProfilePage extends StatelessWidget {
                         ? const Center(
                             child: Text("حدث خطأ"),
                           )
-                        : Get.find<MyProfileController>()
-                                    .getProfileStatus
-                                    .value ==
+                        : Get.find<MyProfileController>().getProfileStatus.value ==
                                 RequestStatus.noInternentt
                             ? const Center(
                                 child: Text("لا يوجد اتصال في الإننرنت"),
@@ -59,10 +57,8 @@ class MyProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 10.h,
                                   ),
-                                  Text(CacheProvider.getUserName() ?? " ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge),
+                                  Text(GetIt.instance<CacheProvider>().getUserName() ?? " ",
+                                      style: Theme.of(context).textTheme.bodyLarge),
                                   SizedBox(
                                     height: 45.h,
                                   ),
@@ -85,18 +81,15 @@ class MyProfilePage extends StatelessWidget {
                                     height: 30.h,
                                   ),
                                   Obx(
-                                    () => Get.find<MyProfileController>()
-                                                .logOutStatus
-                                                .value ==
+                                    () => Get.find<MyProfileController>().logOutStatus.value ==
                                             RequestStatus.loading
                                         ? appCircularProgress()
                                         : ProfileListItem(
                                             svgUrl: "assets/icons/log-out.svg",
                                             onTap: () {
-                                              CustomDialog(context, child:
-                                                  LogOutDialog(onPressed: () {
-                                                Get.find<MyProfileController>()
-                                                    .logOut();
+                                              CustomDialog(context,
+                                                  child: LogOutDialog(onPressed: () {
+                                                Get.find<MyProfileController>().logOut();
 
                                                 Get.back();
                                               }), height: 250, width: 390);
@@ -120,15 +113,12 @@ class MyProfilePage extends StatelessWidget {
                                                 activeColor: Colors.blue,
                                                 inactiveThumbColor: Colors.blue,
                                                 trackOutlineColor:
-                                                    MaterialStateProperty
-                                                        .resolveWith((states) =>
-                                                            Colors.blue),
-                                                value: cnt.currentTheme ==
-                                                    ThemeMode.dark,
+                                                    MaterialStateProperty.resolveWith(
+                                                        (states) => Colors.blue),
+                                                value: cnt.currentTheme == ThemeMode.dark,
                                                 onChanged: (val) {
                                                   cnt.switchTheme();
-                                                  Get.changeThemeMode(
-                                                      cnt.currentTheme);
+                                                  Get.changeThemeMode(cnt.currentTheme);
                                                 });
                                           }),
                                       SizedBox(
@@ -140,24 +130,21 @@ class MyProfilePage extends StatelessWidget {
                                     height: 30.h,
                                   ),
                                   Obx(
-                                    () => Get.find<MyProfileController>()
-                                                .deleteProfileStatus
-                                                .value ==
-                                            RequestStatus.loading
-                                        ? appCircularProgress()
-                                        : ProfileListItem(
-                                            svgUrl: "assets/icons/x.svg",
-                                            onTap: () {
-                                              CustomDialog(context, child:
-                                                  DeleteProfileDialog(
-                                                      onPressed: () {
-                                                Get.find<MyProfileController>()
-                                                    .deleteProfile();
+                                    () =>
+                                        Get.find<MyProfileController>().deleteProfileStatus.value ==
+                                                RequestStatus.loading
+                                            ? appCircularProgress()
+                                            : ProfileListItem(
+                                                svgUrl: "assets/icons/x.svg",
+                                                onTap: () {
+                                                  CustomDialog(context,
+                                                      child: DeleteProfileDialog(onPressed: () {
+                                                    Get.find<MyProfileController>().deleteProfile();
 
-                                                Get.back();
-                                              }), height: 250, width: 390);
-                                            },
-                                            text: "حذف الحساب"),
+                                                    Get.back();
+                                                  }), height: 250, width: 390);
+                                                },
+                                                text: "حذف الحساب"),
                                   )
                                 ],
                               ),

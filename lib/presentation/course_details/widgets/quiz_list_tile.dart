@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
-
 import 'package:hog_v2/data/models/quiz_model.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog_v2/presentation/course_details/controller/course_details_controller.dart';
@@ -32,7 +32,7 @@ class QuizListTile extends StatelessWidget {
             onTap: () {
               print(quizzModel.description);
               if (quizzModel.isFree == 1 ||
-                  CacheProvider.getUserType() == 'admin' ||
+                  GetIt.instance<CacheProvider>().getUserType() == 'admin' ||
                   controller.courseInfoModel!.course!.isOpen == true ||
                   controller.courseInfoModel!.course!.isPaid == true) {
                 Get.toNamed(AppRoute.quizzPageRoute, arguments: quizzModel);
@@ -44,10 +44,7 @@ class QuizListTile extends StatelessWidget {
                 padding: EdgeInsets.all(8.r),
                 child: Text(
                   "بدء",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.red),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                 )),
           ),
         ],

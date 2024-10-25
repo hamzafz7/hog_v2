@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/utils/utils.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 
@@ -40,8 +41,8 @@ class User {
     return {
       "phone": phone,
       "password": password,
-      "device_id": CacheProvider().getDeviceId(),
-      'device_notification_id': CacheProvider.getdeviceToken()
+      "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
+      'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
   }
 
@@ -50,9 +51,9 @@ class User {
       "full_name": fullName,
       "phone": phone,
       "password": password,
-      "device_id": CacheProvider().getDeviceId(),
+      "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
       "email": "hamzafz888@gmail.com",
-      'device_notification_id': CacheProvider.getdeviceToken()
+      'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
   }
 
@@ -62,7 +63,7 @@ class User {
       "phone": phone,
       if (image != null && image != "")
         'image': await MultipartFile.fromFile(
-            (await Utils.compressImage(File(image!)))!.path)
+            (await GetIt.instance<Utils>().compressImage(File(image!)))!.path)
     };
   }
 }

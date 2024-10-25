@@ -1,10 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hog_v2/offline_videos_feature/helpers/prefs_helper.dart';
-import 'package:hog_v2/offline_videos_feature/helpers/shared_keys.dart';
-import 'package:hog_v2/offline_videos_feature/models/offline_video_model.dart';
-import 'package:hog_v2/presentation/custom_dialogs/pick_quality_dialog.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/common/utils/utils.dart';
 import 'package:hog_v2/data/models/course_info_model.dart';
@@ -12,12 +10,34 @@ import 'package:hog_v2/data/models/courses_model.dart';
 import 'package:hog_v2/data/models/download_model.dart';
 import 'package:hog_v2/data/models/video_link_response.dart';
 import 'package:hog_v2/data/repositories/category_repo.dart';
+import 'package:hog_v2/offline_videos_feature/helpers/prefs_helper.dart';
+import 'package:hog_v2/offline_videos_feature/models/offline_video_model.dart';
 import 'package:hog_v2/presentation/custom_dialogs/custom_dialogs.dart';
+import 'package:hog_v2/presentation/custom_dialogs/pick_quality_dialog.dart';
 import 'package:hog_v2/presentation/custom_dialogs/pick_quality_from_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CourseDetailsController extends GetxController {
+  @override
+  void onClose() {
+    activationController.dispose();
+    isDownloading.close();
+    downloaded.close();
+    fileLength.close();
+    isPaused.close();
+    isReconnecting.close();
+    _retryTimer?.cancel();
+    currentDownloadedVidId.close();
+    downloadStatus.close();
+    getCourseInfoStatus.close();
+    signInCourseStatus.close();
+    currentTabIndex.close();
+    _downloadSubscription?.cancel();
+    _retryTimer?.cancel();
+    super.onClose();
+  }
+
   SharedPreferences? shared;
   PrefsHelper? _helper;
   List<OfflineVideoModel> offlines = [];
@@ -106,11 +126,9 @@ class CourseDetailsController extends GetxController {
 
   final CategoryRepository _categoryRepository = CategoryRepository();
 
-  void updateGetCourseInfo(RequestStatus status) =>
-      getCourseInfoStatus.value = status;
+  void updateGetCourseInfo(RequestStatus status) => getCourseInfoStatus.value = status;
 
-  void updateSignInCourseStatus(RequestStatus status) =>
-      signInCourseStatus.value = status;
+  void updateSignInCourseStatus(RequestStatus status) => signInCourseStatus.value = status;
 
   Future<void> signInCourse(int id, String activationCode) async {
     updateSignInCourseStatus(RequestStatus.loading);
@@ -135,7 +153,7 @@ class CourseDetailsController extends GetxController {
     if (response.success) {
       print(response.data);
       courseInfoModel = CourseInfoResponse.fromJson(response.data);
-      Utils.logPrint(response.data);
+      GetIt.instance<Utils>().logPrint(response.data);
       if (courseInfoModel == null || courseInfoModel!.course == null) {
         updateGetCourseInfo(RequestStatus.noData);
       } else {
@@ -167,8 +185,7 @@ class CourseDetailsController extends GetxController {
   DownloadResponse? downloadResponse;
   var downloadStatus = RequestStatus.begin.obs;
 
-  void updateDownloadStatus(RequestStatus status) =>
-      downloadStatus.value = status;
+  void updateDownloadStatus(RequestStatus status) => downloadStatus.value = status;
 
   RxList<int> currentDownloadedVidId = <int>[].obs;
 
@@ -190,21 +207,14 @@ class CourseDetailsController extends GetxController {
   StreamSubscription<List<int>>? _downloadSubscription;
   Timer? _retryTimer;
 
-  Future<void> downloadVideo(
-      String link,
-      BuildContext context,
-      String courseName,
-      String videoName,
-      int videoId,
-      String? description,
-      String source,
+  Future<void> downloadVideo(String link, BuildContext context, String courseName, String videoName,
+      int videoId, String? description, String source,
       {required Function(String) onRealDownload}) async {
     updateDownloadStatus(RequestStatus.loading);
 
     var response = await _categoryRepository.downloadVideo(link, source);
     if (response.success) {
-      downloadResponse =
-          DownloadResponse.fromJson(response.data["data"]['link']);
+      downloadResponse = DownloadResponse.fromJson(response.data["data"]['link']);
       print("course video :$videoName");
 
       CustomDialog(
@@ -224,13 +234,5 @@ class CourseDetailsController extends GetxController {
       // Handle error if the response is unsuccessful
       updateDownloadStatus(RequestStatus.onError);
     }
-  }
-
-  // Cleanup on disposal
-  @override
-  void onClose() {
-    _downloadSubscription?.cancel();
-    _retryTimer?.cancel();
-    super.onClose();
   }
 }

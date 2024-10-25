@@ -26,25 +26,21 @@ class OfflineVideoModel {
     );
   }
 
-  static Map<String, dynamic> toMap(OfflineVideoModel offlineVideoModel) {
+  Map<String, dynamic> toMap() {
     return {
-      'title': offlineVideoModel.title,
-      'lessonTitle': offlineVideoModel.lessonTitle,
-      'video_id': offlineVideoModel.videoId,
-      'materialTeacherName': offlineVideoModel.materialTeacherName,
-      'materialName': offlineVideoModel.materialName,
+      'title': title,
+      'lessonTitle': lessonTitle,
+      'video_id': videoId,
+      'materialTeacherName': materialTeacherName,
+      'materialName': materialName,
     };
   }
 
   static String encode(List<OfflineVideoModel> videos) => json.encode(
-        videos
-            .map<Map<String, dynamic>>(
-                (video) => OfflineVideoModel.toMap(video))
-            .toList(),
+        videos.map<Map<String, dynamic>>((video) => video.toMap()).toList(),
       );
 
-  static List<OfflineVideoModel> decode(String videos) =>
-      (json.decode(videos) as List<dynamic>)
-          .map<OfflineVideoModel>((item) => OfflineVideoModel.fromJson(item))
-          .toList();
+  static List<OfflineVideoModel> decode(String videos) => (json.decode(videos) as List<dynamic>)
+      .map<OfflineVideoModel>((item) => OfflineVideoModel.fromJson(item))
+      .toList();
 }

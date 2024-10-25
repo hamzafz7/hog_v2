@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/data/models/lession_model.dart';
@@ -38,9 +39,8 @@ class CourseLessonWidget extends StatelessWidget {
                 if (lessionModel.isOpen! ||
                     controller.courseInfoModel!.course!.isPaid! ||
                     controller.courseInfoModel!.course!.isOpen! ||
-                    controller.courseInfoModel!.course!.isTeachWithCourse ==
-                        true ||
-                    CacheProvider.getUserType() == 'admin') {
+                    controller.courseInfoModel!.course!.isTeachWithCourse == true ||
+                    GetIt.instance<CacheProvider>().getUserType() == 'admin') {
                   if (lessionModel.type == 'video') {
                     controller.watchResponseFromUrl(context,
                         link: lessionModel.link!,
@@ -71,13 +71,11 @@ class CourseLessonWidget extends StatelessWidget {
                             : Container(
                                 height: 26.h,
                                 width: 26.w,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green),
+                                decoration:
+                                    BoxDecoration(shape: BoxShape.circle, color: Colors.green),
                                 child: Icon(
                                   Icons.check,
-                                  color:
-                                      const Color.fromARGB(255, 207, 197, 197),
+                                  color: const Color.fromARGB(255, 207, 197, 197),
                                 ),
                               )
                         : const Icon(
@@ -99,22 +97,19 @@ class CourseLessonWidget extends StatelessWidget {
                       if (lessionModel.type == "video")
                         SizedBox(
                             width: 50.w,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${lessionModel.time?.toString()}د ",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor),
-                                  ),
-                                  Icon(
-                                    Icons.timelapse,
-                                    size: 15.w,
-                                    color: AppColors.primaryColor,
-                                  )
-                                ])),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                              Text(
+                                "${lessionModel.time?.toString()}د ",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: AppColors.primaryColor),
+                              ),
+                              Icon(
+                                Icons.timelapse,
+                                size: 15.w,
+                                color: AppColors.primaryColor,
+                              )
+                            ])),
                     ],
                   ),
                 ],
@@ -126,18 +121,15 @@ class CourseLessonWidget extends StatelessWidget {
                 controller.courseInfoModel!.course!.isOpen! ||
                 controller.courseInfoModel!.course!.isTeachWithCourse == true)
               Obx(
-                () => controller.downloadStatus.value ==
-                            RequestStatus.loading &&
-                        controller.currentDownloadedVidId
-                            .contains(lessionModel.id)
+                () => controller.downloadStatus.value == RequestStatus.loading &&
+                        controller.currentDownloadedVidId.contains(lessionModel.id)
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           width: 70.w,
                           height: 40.h,
                           decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 140, 186, 224)
-                                  .withOpacity(0.6),
+                              color: const Color.fromARGB(255, 140, 186, 224).withOpacity(0.6),
                               borderRadius: BorderRadius.circular(10.w)),
                           child: Center(
                             child: Text(
@@ -145,9 +137,7 @@ class CourseLessonWidget extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .copyWith(
-                                      color: kprimaryBlueColor,
-                                      fontSize: 10.sp),
+                                  .copyWith(color: kprimaryBlueColor, fontSize: 10.sp),
                             ),
                           ),
                         ),
@@ -164,14 +154,11 @@ class CourseLessonWidget extends StatelessWidget {
                                 lessionModel.id,
                                 lessionModel.description,
                                 lessionModel.source!, onRealDownload: (link) {
-                              BlocProvider.of<OfflineVideosBloc>(context)
-                                  .add(DownloadYoutubeVideo(
+                              BlocProvider.of<OfflineVideosBloc>(context).add(DownloadYoutubeVideo(
                                 sectionName: lessionModel.title!,
-                                courseName:
-                                    controller.courseInfoModel!.course!.name!,
+                                courseName: controller.courseInfoModel!.course!.name!,
                                 videoModel: Video(
-                                    courseName: controller
-                                        .courseInfoModel!.course!.name!,
+                                    courseName: controller.courseInfoModel!.course!.name!,
                                     videoName: lessionModel.title!,
                                     key: '',
                                     description: '',
@@ -213,8 +200,7 @@ class CourseLessonWidget extends StatelessWidget {
     );
   }
 
-  Widget getDownloadingWidget(
-      Function onCancelDownload, BuildContext context, int videoId) {
+  Widget getDownloadingWidget(Function onCancelDownload, BuildContext context, int videoId) {
     return BlocBuilder(
       bloc: BlocProvider.of<OfflineVideosBloc>(context),
       builder: (BuildContext context, OfflineVideosState state) {
@@ -232,9 +218,7 @@ class CourseLessonWidget extends StatelessWidget {
                 .first
                 .isFetchingAPI) {
           return downloadingWidget(
-              onCancelDownload: () => onCancelDownload(),
-              value: "",
-              percent: null);
+              onCancelDownload: () => onCancelDownload(), value: "", percent: null);
         } else {
           log(state.customVideosDownloading
               .where((element) => element.videoModel.id == videoId)
@@ -256,8 +240,7 @@ class CourseLessonWidget extends StatelessWidget {
                           .first
                           .videoDownloader
                           .newDownloadPercentage,
-                      builder: (BuildContext context,
-                          Map<String, dynamic> value, Widget? child) {
+                      builder: (BuildContext context, Map<String, dynamic> value, Widget? child) {
                         return downloadingWidget(
                             onCancelDownload: () => onCancelDownload(),
                             value: value["value"],
@@ -273,9 +256,7 @@ class CourseLessonWidget extends StatelessWidget {
   }
 
   Widget downloadingWidget(
-      {required Function onCancelDownload,
-      required String value,
-      required double? percent}) {
+      {required Function onCancelDownload, required String value, required double? percent}) {
     return Column(
       children: [
         Container(
@@ -283,9 +264,7 @@ class CourseLessonWidget extends StatelessWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    blurRadius: 5,
-                    offset: const Offset(0, 0),
-                    color: Colors.grey.withOpacity(0.5))
+                    blurRadius: 5, offset: const Offset(0, 0), color: Colors.grey.withOpacity(0.5))
               ],
               borderRadius: const BorderRadius.all(Radius.circular(12))),
           child: Padding(
@@ -299,9 +278,7 @@ class CourseLessonWidget extends StatelessWidget {
                     Text(
                       "جاري تحميل الفيديو",
                       style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.purple),
+                          fontSize: 14.sp, fontWeight: FontWeight.w500, color: Colors.purple),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -319,8 +296,7 @@ class CourseLessonWidget extends StatelessWidget {
                 ),
                 Container(
                   clipBehavior: Clip.hardEdge,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                   child: LinearProgressIndicator(
                     backgroundColor: Colors.grey[300],
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.red),

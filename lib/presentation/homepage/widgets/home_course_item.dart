@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/shimmer_effect.dart';
@@ -62,8 +63,7 @@ class HomeCourseItem extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 SvgPicture.asset(
                   "assets/icons/users.svg",
                   height: 15.h,
@@ -80,9 +80,7 @@ class HomeCourseItem extends StatelessWidget {
                         // padding: EdgeInsets.zero,
                         // itemCount: courseModel.teachers!.length,
                         children: List.generate(
-                            courseModel.teachers!.length > 3
-                                ? 3
-                                : courseModel.teachers!.length,
+                            courseModel.teachers!.length > 3 ? 3 : courseModel.teachers!.length,
                             (index) => Text(
                                   "${courseModel.teachers![index]}${index != courseModel.teachers!.length - 1 ? "," : ""}",
                                   maxLines: 2,
@@ -90,9 +88,7 @@ class HomeCourseItem extends StatelessWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
-                                      .copyWith(
-                                          fontSize: 10.sp,
-                                          color: ksecondaryGreyColor),
+                                      .copyWith(fontSize: 10.sp, color: ksecondaryGreyColor),
                                 ))))
               ]),
             ),
@@ -117,8 +113,7 @@ class HomeCourseItem extends StatelessWidget {
             ),
             CustomButton(
               onTap: () {
-                Get.toNamed(AppRoute.courseDetailsPageRoute,
-                    arguments: courseModel);
+                Get.toNamed(AppRoute.courseDetailsPageRoute, arguments: courseModel);
               },
               height: 40.h,
               width: 110.w,
@@ -128,13 +123,10 @@ class HomeCourseItem extends StatelessWidget {
                         courseModel.isOpen != true &&
                         (courseModel.isTeachWithCourse != true ||
                             courseModel.isTeachWithCourse == null) &&
-                        CacheProvider.getUserType() != 'admin'
+                        GetIt.instance<CacheProvider>().getUserType() != 'admin'
                     ? "انضم الأن"
                     : 'تابع',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
               ),
             )
           ],

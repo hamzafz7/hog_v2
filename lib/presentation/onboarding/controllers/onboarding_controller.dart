@@ -4,6 +4,12 @@ import 'package:hog_v2/data/models/onboarding_model.dart';
 
 class OnBoardingPageController extends GetxController {
   final PageController pageController = PageController(initialPage: 0);
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
+  }
+
   final List<OnBoardingModel> onboardingScreens = [
     OnBoardingModel(
         body:

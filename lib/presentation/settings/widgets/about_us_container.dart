@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 
 class AboutUsConatiner extends StatelessWidget {
@@ -18,7 +19,7 @@ class AboutUsConatiner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: !CacheProvider.getAppTheme() ? Colors.white : null,
+          color: !GetIt.instance<CacheProvider>().getAppTheme() ? Colors.white : null,
           borderRadius: BorderRadius.all(Radius.circular(10.r)),
           boxShadow: const [
             BoxShadow(
@@ -52,16 +53,11 @@ class AboutUsConatiner extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 16.h),
             child: Column(
-                crossAxisAlignment: rightSide
-                    ? CrossAxisAlignment.start
-                    : CrossAxisAlignment.end,
+                crossAxisAlignment: rightSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: color),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: color),
                   ),
                   SizedBox(
                     height: 10.h,

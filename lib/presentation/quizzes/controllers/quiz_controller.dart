@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/data/models/quiz_model.dart';
@@ -24,6 +25,17 @@ class QuizController extends GetxController {
   void onClose() {
     super.onClose();
     timer.value.cancel();
+    _totalTimeInSeconds.close();
+    initalValue.close();
+    totalQuistions.close();
+    currentQuistions.close();
+    finalResults.close();
+    formattedTime.close();
+    skippedQuistions.close();
+    wrongAnswers.close();
+    timeElapsed.close();
+    currentIndex.close();
+    pageController.close();
   }
 
   Rx<String> get formattedTime =>
@@ -83,11 +95,9 @@ class QuizController extends GetxController {
           break;
         }
       }
-      if (userSolutions.containsKey(element.id) &&
-          userSolutions.containsValue(ind)) {
+      if (userSolutions.containsKey(element.id) && userSolutions.containsValue(ind)) {
         finalResults.value += 1 / totalQuistions.value;
-      } else if (userSolutions.containsKey(element.id) &&
-          !userSolutions.containsValue(ind)) {
+      } else if (userSolutions.containsKey(element.id) && !userSolutions.containsValue(ind)) {
         wrongAnswers.value += 1;
       } else if (!userSolutions.containsKey(element.id)) {
         skippedQuistions.value += 1;

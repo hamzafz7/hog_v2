@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
@@ -28,9 +29,7 @@ class LoginPage extends GetView<RegisterationController> {
                 height: 80.h,
               ),
               SizedBox(
-                  height: 200.h,
-                  width: Get.width,
-                  child: Image.asset("assets/images/logo.png")),
+                  height: 200.h, width: Get.width, child: Image.asset("assets/images/logo.png")),
               SizedBox(
                 height: 10.h,
               ),
@@ -55,7 +54,7 @@ class LoginPage extends GetView<RegisterationController> {
                 hintText: 'رقم الهاتف',
                 svgSrc: "assets/icons/Phone1.svg",
                 validator: (val) {
-                  return Utils.isPhoneFeildValidated(val?.trim());
+                  return GetIt.instance<Utils>().isPhoneFeildValidated(val?.trim());
                 },
               ),
               SizedBox(
@@ -75,7 +74,7 @@ class LoginPage extends GetView<RegisterationController> {
                   hintText: 'كلمة المرور',
                   svgSrc: "assets/icons/Lock.svg",
                   validator: (val) {
-                    return Utils.isPasswordValidated(val?.trim());
+                    return GetIt.instance<Utils>().isPasswordValidated(val?.trim());
                   },
                 ),
               ),
@@ -83,29 +82,24 @@ class LoginPage extends GetView<RegisterationController> {
                 height: 70.h,
               ),
               Obx(
-                () =>
-                    controller.loginRequestStatus.value == RequestStatus.loading
-                        ? appCircularProgress()
-                        : CustomButton(
-                            onTap: () {
-                              if (controller.loginPageFormKey.currentState!
-                                  .validate()) {
-                                controller.userLogin(
-                                    phone: controller.loginPhoneController.text,
-                                    password: controller
-                                        .loginPasswordController.text);
-                              }
-                            },
-                            height: 55.h,
-                            width: 333.w,
-                            child: Text(
-                              "تسجيل الدخول",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: Colors.white),
-                            ),
-                          ),
+                () => controller.loginRequestStatus.value == RequestStatus.loading
+                    ? appCircularProgress()
+                    : CustomButton(
+                        onTap: () {
+                          if (controller.loginPageFormKey.currentState!.validate()) {
+                            controller.userLogin(
+                                phone: controller.loginPhoneController.text,
+                                password: controller.loginPasswordController.text);
+                          }
+                        },
+                        height: 55.h,
+                        width: 333.w,
+                        child: Text(
+                          "تسجيل الدخول",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white),
+                        ),
+                      ),
               ),
               SizedBox(
                 height: 15.h,
@@ -113,20 +107,16 @@ class LoginPage extends GetView<RegisterationController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("ليس لديك حساب ؟",
-                      style: Theme.of(context).textTheme.bodySmall),
+                  Text("ليس لديك حساب ؟", style: Theme.of(context).textTheme.bodySmall),
                   TextButton(
                       onPressed: () {
                         Get.toNamed(AppRoute.registerPageRoute);
                       },
                       child: Text("إنشاء حساب",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                  color: kprimaryBlueColor,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: kprimaryBlueColor))),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: kprimaryBlueColor,
+                              decoration: TextDecoration.underline,
+                              decorationColor: kprimaryBlueColor))),
                 ],
               )
             ],

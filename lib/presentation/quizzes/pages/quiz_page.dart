@@ -2,6 +2,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
@@ -19,11 +20,11 @@ class QuizzesPage extends GetView<QuizController> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        backgroundColor: CacheProvider.getAppTheme()
+        backgroundColor: GetIt.instance<CacheProvider>().getAppTheme()
             ? const Color.fromARGB(255, 7, 37, 61)
             : null,
         surfaceTintColor:
-            CacheProvider.getAppTheme() ? kDarkBlueColor : Colors.white,
+            GetIt.instance<CacheProvider>().getAppTheme() ? kDarkBlueColor : Colors.white,
         title: Text(
           controller.model.title ?? "الاختبار",
           style: Theme.of(context).textTheme.labelMedium,
@@ -54,10 +55,8 @@ class QuizzesPage extends GetView<QuizController> {
               child: Center(
                 child: CustomButton(
                   onTap: () {
-                    if (controller.currentQuistions.value !=
-                        controller.totalQuistions.value) {
-                      controller.pageController.value
-                          .jumpToPage(controller.currentIndex.value + 1);
+                    if (controller.currentQuistions.value != controller.totalQuistions.value) {
+                      controller.pageController.value.jumpToPage(controller.currentIndex.value + 1);
                       controller.incrementQuistionsValue();
                     } else {
                       controller.calcResult();
@@ -68,10 +67,7 @@ class QuizzesPage extends GetView<QuizController> {
                   height: 48.h,
                   child: Text(
                     "التالي",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -80,8 +76,7 @@ class QuizzesPage extends GetView<QuizController> {
               child: TextButton(
                   onPressed: () {
                     if (controller.currentQuistions.value > 1) {
-                      controller.pageController.value
-                          .jumpToPage(controller.currentIndex.value - 1);
+                      controller.pageController.value.jumpToPage(controller.currentIndex.value - 1);
                       controller.decrementQuistionsValue();
                     }
                   },

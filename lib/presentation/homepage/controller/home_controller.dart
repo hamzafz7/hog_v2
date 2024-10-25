@@ -15,6 +15,15 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    courseStatus.close();
+    getNewsStatus.close();
+    categoriesStatus.close();
+    currentCategoryIndex.close();
+    super.onClose();
+  }
+
   NewsResponse? newsResponse;
   CategoriesModel? categoriesModel;
   RxInt currentCategoryIndex = 0.obs;
@@ -30,8 +39,7 @@ class HomeController extends GetxController {
 
   var courseStatus = RequestStatus.begin.obs;
   updatecourseStatus(RequestStatus status) => courseStatus.value = status;
-  updateCategoriesStatus(RequestStatus status) =>
-      categoriesStatus.value = status;
+  updateCategoriesStatus(RequestStatus status) => categoriesStatus.value = status;
   final HomeRepository _homeRepository = HomeRepository();
   final CategoryRepository _categoryRepository = CategoryRepository();
   Future<void> getNews() async {
@@ -58,8 +66,7 @@ class HomeController extends GetxController {
     var response = await _categoryRepository.getCategories();
     if (response.success) {
       categoriesModel = CategoriesModel.fromJson(response.data);
-      if (categoriesModel!.categories == null ||
-          categoriesModel!.categories!.isEmpty) {
+      if (categoriesModel!.categories == null || categoriesModel!.categories!.isEmpty) {
         updateCategoriesStatus(RequestStatus.noData);
       } else {
         updateCategoriesStatus(RequestStatus.success);

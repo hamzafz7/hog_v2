@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/common/utils/utils.dart';
@@ -16,32 +17,41 @@ class MyProfileController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    nameController.dispose();
+    phoneController.dispose();
+    addressController.dispose();
+    getProfileStatus.close();
+    logOutStatus.close();
+    deleteProfileStatus.close();
+    updateProfileStatus.close();
+    isEdited.close();
+    imagePicked.close();
+    super.onClose();
+  }
+
   RxBool isEdited = false.obs;
   changeIsEdit() {
     isEdited.value = !isEdited.value;
   }
 
   TextEditingController nameController = TextEditingController(text: "لا يوجد");
-  TextEditingController phoneController =
-      TextEditingController(text: "لا يوجد");
-  TextEditingController addressController =
-      TextEditingController(text: "لا يوجد");
+  TextEditingController phoneController = TextEditingController(text: "لا يوجد");
+  TextEditingController addressController = TextEditingController(text: "لا يوجد");
 
   final getProfileStatus = RequestStatus.begin.obs;
   final logOutStatus = RequestStatus.begin.obs;
   final deleteProfileStatus = RequestStatus.begin.obs;
   final updateProfileStatus = RequestStatus.begin.obs;
-  updateGetProfileStatus(RequestStatus status) =>
-      getProfileStatus.value = status;
+  updateGetProfileStatus(RequestStatus status) => getProfileStatus.value = status;
   updateLogOutStatus(RequestStatus status) => logOutStatus.value = status;
-  updateEditProfileStatus(RequestStatus status) =>
-      updateProfileStatus.value = status;
-  updateDeleteProfileStatus(RequestStatus status) =>
-      deleteProfileStatus.value = status;
+  updateEditProfileStatus(RequestStatus status) => updateProfileStatus.value = status;
+  updateDeleteProfileStatus(RequestStatus status) => deleteProfileStatus.value = status;
 
   RxString imagePicked = "".obs;
   getImagePicked() async {
-    imagePicked.value = await Utils.imagePicker(ImageSource.gallery) ?? "";
+    imagePicked.value = await GetIt.instance<Utils>().imagePicker(ImageSource.gallery) ?? "";
   }
 
   final AccountRepo _repo = AccountRepo();
@@ -51,13 +61,10 @@ class MyProfileController extends GetxController {
     var response = await _repo.getMyProfile();
     if (response.success) {
       prfoileResponse = ProfileResponse.fromJson(response.data);
-      CacheProvider.setUserImage(prfoileResponse!.data.image);
-      phoneController =
-          TextEditingController(text: prfoileResponse!.data.phone ?? "لا يوجد");
-      nameController = TextEditingController(
-          text: prfoileResponse!.data.fullName ?? "لا يوجد");
-      addressController = TextEditingController(
-          text: prfoileResponse!.data.location ?? "لا يوجد");
+      GetIt.instance<CacheProvider>().setUserImage(prfoileResponse!.data.image);
+      phoneController = TextEditingController(text: prfoileResponse!.data.phone ?? "لا يوجد");
+      nameController = TextEditingController(text: prfoileResponse!.data.fullName ?? "لا يوجد");
+      addressController = TextEditingController(text: prfoileResponse!.data.location ?? "لا يوجد");
       updateGetProfileStatus(RequestStatus.success);
       print(response.data);
     } else if (!response.success) {
@@ -73,7 +80,7 @@ class MyProfileController extends GetxController {
   Future<void> updateProfile() async {
     updateEditProfileStatus(RequestStatus.loading);
     User user = User(
-        id: CacheProvider.getUserId(),
+        id: GetIt.instance<CacheProvider>().getUserId(),
         fullName: nameController.text.trim(),
         phone: phoneController.text.trim(),
         image: imagePicked.value);
@@ -81,19 +88,15 @@ class MyProfileController extends GetxController {
     if (response.success) {
       updateEditProfileStatus(RequestStatus.success);
       prfoileResponse = ProfileResponse.fromJson(response.data);
-      CacheProvider.setUserName(prfoileResponse!.data.fullName!);
+      GetIt.instance<CacheProvider>().setUserName(prfoileResponse!.data.fullName!);
 
-      phoneController =
-          TextEditingController(text: prfoileResponse!.data.phone ?? "لا يوجد");
-      nameController = TextEditingController(
-          text: prfoileResponse!.data.fullName ?? "لا يوجد");
-      addressController = TextEditingController(
-          text: prfoileResponse!.data.location ?? "لا يوجد");
+      phoneController = TextEditingController(text: prfoileResponse!.data.phone ?? "لا يوجد");
+      nameController = TextEditingController(text: prfoileResponse!.data.fullName ?? "لا يوجد");
+      addressController = TextEditingController(text: prfoileResponse!.data.location ?? "لا يوجد");
       Get.back();
       getMyProfile();
     } else {
-      Get.snackbar(
-          "حدث خطأ", response.errorMessage ?? "حدث خطأ في الاتصال مع الانترنت");
+      Get.snackbar("حدث خطأ", response.errorMessage ?? "حدث خطأ في الاتصال مع الانترنت");
     }
   }
 
@@ -102,7 +105,7 @@ class MyProfileController extends GetxController {
     var response = await _repo.signOut();
     if (response.success) {
       updateLogOutStatus(RequestStatus.success);
-      CacheProvider.clearAppToken();
+      GetIt.instance<CacheProvider>().clearAppToken();
       Get.offAllNamed(AppRoute.loginPageRoute);
     } else if (!response.success) {
       updateLogOutStatus(RequestStatus.onError);
@@ -115,7 +118,7 @@ class MyProfileController extends GetxController {
     var response = await _repo.deleteProfile();
     if (response.success) {
       updateDeleteProfileStatus(RequestStatus.success);
-      CacheProvider.clearAppToken();
+      GetIt.instance<CacheProvider>().clearAppToken();
       Get.offAllNamed(AppRoute.loginPageRoute);
     } else if (!response.success) {
       updateDeleteProfileStatus(RequestStatus.onError);

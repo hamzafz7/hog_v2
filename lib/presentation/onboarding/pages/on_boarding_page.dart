@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
@@ -28,7 +29,7 @@ class OnBoardingPage extends GetView<OnBoardingPageController> {
             child: TextButton(
                 onPressed: () {
                   Get.offAllNamed(AppRoute.loginPageRoute);
-                  CacheProvider().setIsOnBoardingOpened(true);
+                  GetIt.instance<CacheProvider>().setIsOnBoardingOpened(true);
                 },
                 child: const Text(
                   "تخطي",
@@ -41,14 +42,13 @@ class OnBoardingPage extends GetView<OnBoardingPageController> {
               onPageChanged: (val) {},
               controller: controller.pageController,
               itemCount: controller.onboardingScreens.length,
-              itemBuilder: (context, index) => OnBoardingContainer(
-                  model: controller.onboardingScreens[index]),
+              itemBuilder: (context, index) =>
+                  OnBoardingContainer(model: controller.onboardingScreens[index]),
             ),
           ),
           Center(
               child: SmoothPageIndicator(
-                  effect: WormEffect(
-                      activeDotColor: kprimaryBlueColor, dotHeight: 10.h),
+                  effect: WormEffect(activeDotColor: kprimaryBlueColor, dotHeight: 10.h),
                   controller: controller.pageController,
                   count: 3)),
           SizedBox(
@@ -59,10 +59,9 @@ class OnBoardingPage extends GetView<OnBoardingPageController> {
               onTap: () {
                 if (controller.pageController.page == 2) {
                   Get.offAllNamed(AppRoute.loginPageRoute);
-                  CacheProvider().setIsOnBoardingOpened(true);
+                  GetIt.instance<CacheProvider>().setIsOnBoardingOpened(true);
                 } else {
-                  controller.pageController
-                      .jumpToPage(controller.pageController.page!.toInt() + 1);
+                  controller.pageController.jumpToPage(controller.pageController.page!.toInt() + 1);
                 }
               },
               height: 56.h,

@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog_v2/data/repositories/account_repo.dart';
@@ -15,15 +16,14 @@ class AppInterceptors extends Interceptor {
   AppInterceptors({required this.dio, required this.repo});
 
   @override
-  Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     print("hello from request ");
     debugPrint("request is sending");
     debugPrint("REQUEST[${options.method}] => PATH: $baseUrl${options.path}");
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      return handler.reject(DioException(
-          requestOptions: options, message: "لا يوجد اتصال بالانترنت"));
+      return handler
+          .reject(DioException(requestOptions: options, message: "لا يوجد اتصال بالانترنت"));
     }
 
     return handler.next(options);
@@ -37,13 +37,11 @@ class AppInterceptors extends Interceptor {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       return handler.reject(DioException(
-          requestOptions: response.requestOptions,
-          message: "لا يوجد اتصال بالانترنت"));
+          requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
     }
     if (!response.requestOptions.persistentConnection) {
       return handler.reject(DioException(
-          requestOptions: response.requestOptions,
-          message: "لا يوجد اتصال بالانترنت"));
+          requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
     }
     if ((response.statusCode != 200 &&
             response.statusCode != 201 &&
@@ -52,8 +50,7 @@ class AppInterceptors extends Interceptor {
             response.statusCode != 422) ||
         response.statusCode == null) {
       handler.reject(DioException(
-          requestOptions: response.requestOptions,
-          message: "لا يوجد اتصال بالانترنت"));
+          requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
     } else {
       return handler.next(response);
     }
@@ -80,7 +77,7 @@ class AppInterceptors extends Interceptor {
       );
     } else if (err.response?.statusCode == 404) {
       if (Get.currentRoute != '/login') {
-        CacheProvider.clearAppToken();
+        GetIt.instance<CacheProvider>().clearAppToken();
         Get.offAllNamed(AppRoute.loginPageRoute);
         return handler.next(
           DioException(

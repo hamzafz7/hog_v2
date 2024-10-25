@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/common/utils/utils.dart';
@@ -28,7 +29,7 @@ class CourseDetailsPage extends StatelessWidget {
           (course.isOpen == true ||
               course.isPaid == true ||
               course.isTeachWithCourse == true ||
-              CacheProvider.getUserType() == 'admin');
+              GetIt.instance<CacheProvider>().getUserType() == 'admin');
     }
 
     return Scaffold(
@@ -47,10 +48,8 @@ class CourseDetailsPage extends StatelessWidget {
                         ClipPath(
                           clipper: ContainerCustomClipper(),
                           child: CourseDetailsHeader(
-                            text:
-                                courseController.courseInfoModel!.course!.name,
-                            image:
-                                courseController.courseInfoModel!.course!.image,
+                            text: courseController.courseInfoModel!.course!.name,
+                            image: courseController.courseInfoModel!.course!.image,
                           ),
                         ),
                         CustomTapBar(),
@@ -68,31 +67,25 @@ class CourseDetailsPage extends StatelessWidget {
                           padding: EdgeInsets.all(16.r),
                           child: CustomButton(
                             onTap: () {
-                              if (courseController.courseInfoModel?.course !=
-                                  null) {
+                              if (courseController.courseInfoModel?.course != null) {
                                 if (!isCourseAccessible(courseController)) {
                                   CustomDialog(
                                     context,
                                     child: CodeActivationWidget(
-                                      controller:
-                                          courseController.activationController,
+                                      controller: courseController.activationController,
                                       onValidate: (val) =>
-                                          Utils.isFeildValidated(val),
+                                          GetIt.instance<Utils>().isFeildValidated(val),
                                       onTap: () async {
                                         try {
-                                          if (courseController
-                                              .courseDetailFormKey.currentState!
+                                          if (courseController.courseDetailFormKey.currentState!
                                               .validate()) {
                                             await courseController.signInCourse(
-                                              courseController
-                                                  .courseInfoModel!.course!.id!,
-                                              courseController
-                                                  .activationController.text,
+                                              courseController.courseInfoModel!.course!.id!,
+                                              courseController.activationController.text,
                                             );
                                           }
                                         } catch (e) {
-                                          Get.snackbar(
-                                              "Error", "Failed to sign in: $e");
+                                          Get.snackbar("Error", "Failed to sign in: $e");
                                         }
                                       },
                                     ),
@@ -107,11 +100,9 @@ class CourseDetailsPage extends StatelessWidget {
                             width: 382.w,
                             borderRadius: 17.r,
                             child: Obx(() {
-                              return courseController
-                                          .signInCourseStatus.value ==
+                              return courseController.signInCourseStatus.value ==
                                       RequestStatus.loading
-                                  ? CircularProgressIndicator(
-                                      color: Colors.white)
+                                  ? const CircularProgressIndicator(color: Colors.white)
                                   : Text(
                                       isCourseAccessible(courseController)
                                           ? "تابع المشاهدة"
@@ -119,9 +110,7 @@ class CourseDetailsPage extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
-                                          .copyWith(
-                                              fontSize: 18.sp,
-                                              color: Colors.white),
+                                          .copyWith(fontSize: 18.sp, color: Colors.white),
                                     );
                             }),
                           ),
@@ -133,8 +122,7 @@ class CourseDetailsPage extends StatelessWidget {
               RequestStatus.begin => Container(),
               RequestStatus.loading => Center(child: appCircularProgress()),
               RequestStatus.onError => const Center(child: Text("حدث خطأ")),
-              RequestStatus.noData =>
-                const Center(child: Text("لا يوجد بيانات")),
+              RequestStatus.noData => const Center(child: Text("لا يوجد بيانات")),
               RequestStatus.noInternentt => Container(),
             },
           ),

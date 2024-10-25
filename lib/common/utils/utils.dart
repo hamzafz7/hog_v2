@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
-  static void logPrint(Object? object) async {
+  void logPrint(Object? object) async {
     int defaultPrintLength = 1020;
     if (object == null || object.toString().length <= defaultPrintLength) {
     } else {
@@ -23,20 +24,20 @@ class Utils {
     }
   }
 
-  static bool isUrl(String text) {
+  bool isUrl(String text) {
     final isUrl = Uri.tryParse(text);
     return isUrl != null;
   }
 
-  static String dateFormat(DateTime date, {String expression = "yyyy/MM/dd"}) {
+  String dateFormat(DateTime date, {String expression = "yyyy/MM/dd"}) {
     return DateFormat(expression).format(date);
   }
 
-  static String timeFormat(DateTime date) {
+  String timeFormat(DateTime date) {
     return DateFormat.jm().format(date);
   }
 
-  static String formatTime(DateTime dateTime) {
+  String formatTime(DateTime dateTime) {
     String hour = dateTime.hour.toString().padLeft(2, '0');
     String minute = dateTime.minute.toString().padLeft(2, '0');
     String second = dateTime.second.toString().padLeft(2, '0');
@@ -44,33 +45,32 @@ class Utils {
     return '$hour:$minute:$second';
   }
 
-  static String formatDateForReasonScreen(DateTime date) {
+  String formatDateForReasonScreen(DateTime date) {
     DateTime dateTime = date;
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(dateTime);
     return formattedDate;
   }
 
-  static String formatFullDate(String fullDate) {
-    final inputFormat = DateFormat(
-        'yyyy-MM-ddTHH:mm:ss.SSSSSSZ'); // Adjust the format based on your input
+  String formatFullDate(String fullDate) {
+    final inputFormat =
+        DateFormat('yyyy-MM-ddTHH:mm:ss.SSSSSSZ'); // Adjust the format based on your input
     final outputFormat = DateFormat('dd-MM-yyyy - HH:ss a');
     final date = inputFormat.parse(fullDate);
     return outputFormat.format(date);
   }
 
-  static String maskEmail(String email) {
+  String maskEmail(String email) {
     final parts = email.split('@');
     final username = parts[0];
     final domain = parts[1];
 
-    final maskedUsername =
-        '${username.substring(0, 2)}${'*' * (username.length - 2)}';
+    final maskedUsername = '${username.substring(0, 2)}${'*' * (username.length - 2)}';
 
     return '$maskedUsername@$domain';
   }
 
-  // static void viewImage({required String? path, required bool isNetwork}) {
+  // void viewImage({required String? path, required bool isNetwork}) {
   //   if (path != null) {
   //     String safePath = path;
   //     Get.to(
@@ -84,7 +84,7 @@ class Utils {
   //   }
   // }
 
-  // static void viewFile({required String? path, required bool isNetwork}) {
+  // void viewFile({required String? path, required bool isNetwork}) {
   //   if (path != null && path != "") {
   //     if (path.contains(".pdf")) {
   //       Get.to(
@@ -98,7 +98,7 @@ class Utils {
   //   }
   // }
 
-  // static Future<String?> pickfilefrommemory() async {
+  // Future<String?> pickfilefrommemory() async {
   //   FilePickerResult? result = await FilePicker.platform.pickFiles(
   //     allowedExtensions: ['pdf', 'png', 'jpg', 'jfif', 'HEIC'],
   //     type: FileType.custom,
@@ -111,7 +111,7 @@ class Utils {
   //   return null;
   // }
 
-  // static bool isValidDateFormat(String input) {
+  // bool isValidDateFormat(String input) {
   //   try {
   //     DateTime.parse(input);
   //     return true;
@@ -120,7 +120,7 @@ class Utils {
   //   }
   // }
 
-  // static String? isEmailOptValidated(String? val) {
+  // String? isEmailOptValidated(String? val) {
   //   if (val == null || val.isEmpty) {
   //     return null;
   //   } else if (!GetUtils.isEmail(val)) {
@@ -130,7 +130,7 @@ class Utils {
   //   }
   // }
 
-  static String? isPasswordValidated(String? val) {
+  String? isPasswordValidated(String? val) {
     if (val == null || val.isEmpty) {
       return "يرجى إدخال كلمة المرور";
     } else if (val.length < 8 || val.length > 24) {
@@ -140,7 +140,7 @@ class Utils {
     }
   }
 
-  static String? isFeildValidated(String? val) {
+  String? isFeildValidated(String? val) {
     if (val == null || val.isEmpty) {
       return "هذا الحقل إجباري".tr;
     } else {
@@ -148,7 +148,7 @@ class Utils {
     }
   }
 
-  static String? isNumericFeildValidated(String? val) {
+  String? isNumericFeildValidated(String? val) {
     if (val == null || val.isEmpty) {
       return "هذا الحقل إجباري";
     }
@@ -160,7 +160,7 @@ class Utils {
     }
   }
 
-  static String? isPhoneFeildValidated(String? val) {
+  String? isPhoneFeildValidated(String? val) {
     if (val == null || val.isEmpty) {
       return "هذا الحقل إجباري";
     }
@@ -175,7 +175,7 @@ class Utils {
     }
   }
 
-  static String? isNumericFeild(String? val) {
+  String? isNumericFeild(String? val) {
     if (val == null || val.isEmpty) {
       return null;
     }
@@ -191,7 +191,7 @@ class Utils {
     return const CircularProgressIndicator(color: kprimaryBlueColor);
   }
 
-  static String? isEmailValidated(String? val) {
+  String? isEmailValidated(String? val) {
     if (val == null || val.isEmpty) {
       return "يرجى إدخال البريد الإلكتروني";
     } else if (!GetUtils.isEmail(val)) {
@@ -257,7 +257,7 @@ class Utils {
     }
   }
 
-  static isPhoneValidated(String? val) {
+  isPhoneValidated(String? val) {
     if (val == null || val.isEmpty) {
       return " الهاتف المحمول حقل إجباري";
     } else if (val.length < 10 || val.length > 10) {
@@ -267,7 +267,7 @@ class Utils {
     }
   }
 
-  static Future<String?> imagePicker(ImageSource imageSource) async {
+  Future<String?> imagePicker(ImageSource imageSource) async {
     final pickedImage = await ImagePicker().pickImage(source: imageSource);
     if (pickedImage != null) {
       return pickedImage.path;
@@ -276,7 +276,7 @@ class Utils {
     }
   }
 
-  static Future<File?> compressImage(File file) async {
+  Future<File?> compressImage(File file) async {
     try {
       final filePath = file.path;
       final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));

@@ -2,14 +2,19 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
+
+import 'package:async/async.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:encrypt/encrypt.dart' as enc;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/common/themes/themes.dart';
@@ -22,18 +27,15 @@ import 'package:hog_v2/data/repositories/account_repo.dart';
 import 'package:hog_v2/firebase_options.dart';
 import 'package:hog_v2/presentation/splashpage/page/splash_page.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'offline_videos_feature/dependency_injection/injection_container.dart';
 import 'offline_videos_feature/presentation/bloc/offline_videos_bloc.dart';
 import 'offline_videos_feature/presentation/controllers/video_downloader.dart';
-import 'package:async/async.dart';
-import 'package:encrypt/encrypt.dart' as enc;
 
 @pragma('vm:entry-point')
 void writeVideoBytes(List arg) async {
   SendPort? sendPort = IsolateNameServer.lookupPortByName("iso_${arg[0]}");
-  String basePath =
-      await VideoDownloader().createBasePathFolder("hog_v2 Offline Videos");
+  String basePath = await VideoDownloader().createBasePathFolder("hog_v2 Offline Videos");
 
   const keyEnc = "we4RYhsG7DFOdCfEDKjSLsOXcvXsdA3=";
 
@@ -46,10 +48,9 @@ void writeVideoBytes(List arg) async {
   deleteFile('$basePath/video${arg[0]}.professor');
   final key = enc.Key.fromUtf8(keyEnc);
   final iv = enc.IV.fromUtf8("e16ce888a20dadb8");
-  final encrypter =
-      enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
+  final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
 
-  print("DDDDDD");
+  debugPrint("DDDDDD");
   int offset = 0;
   final dio = Dio(BaseOptions(
     connectTimeout: const Duration(hours: 1),
@@ -72,9 +73,7 @@ void writeVideoBytes(List arg) async {
           return status! < 500;
         }),
   ).then((value) async {
-    int fileSize =
-        int.tryParse((value.headers.map['content-length'])?.first ?? '-1') ??
-            -1;
+    int fileSize = int.tryParse((value.headers.map['content-length'])?.first ?? '-1') ?? -1;
     reader = ChunkedStreamReader((value.data as ResponseBody).stream);
     try {
       Uint8List buffer;
@@ -108,14 +107,12 @@ void decryptFile(List arg) async {
     const keyEnc = "we4RYhsG7DFOdCfEDKjSLsOXcvXsdA3=";
     final key = enc.Key.fromUtf8(keyEnc);
     final iv = enc.IV.fromUtf8("e16ce888a20dadb8");
-    final encrypter =
-        enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
+    final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
     Uint8List buffer;
     ChunkedStreamReader<int>? reader;
     var tempDir = await getApplicationDocumentsDirectory();
     String fullPath = "${tempDir.path}/test.mp4";
-    String basePath =
-        await VideoDownloader().createBasePathFolder("hog_v2 Offline Videos");
+    String basePath = await VideoDownloader().createBasePathFolder("hog_v2 Offline Videos");
     String pathToRead = "$basePath/video${arg[0]}.professor";
     Uri myUri = Uri.parse(pathToRead);
     File eFile = File.fromUri(myUri);
@@ -167,22 +164,27 @@ Future<void> deleteFile(String filePath) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  HttpOverrides.global = MyHttpOverrides();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await GetStorage.init();
-  await CacheProvider.init();
-  HttpOverrides.global = MyHttpOverrides();
-  await ApiProvider.init();
+
+  await init();
+
+  await GetIt.instance<CacheProvider>().init();
+
+  await GetIt.instance<ApiProvider>().init();
   // checkSecurityFromApi();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await FireBaseAPi().initNotifications();
   secureScreen();
 
   await checkSecurityFromApi();
 
-  if (CacheProvider().getDeviceId() == null) {
-    await CacheProvider().setDeviceId();
+  if (GetIt.instance<CacheProvider>().getDeviceId() == null) {
+    await GetIt.instance<CacheProvider>().setDeviceId();
     await setupDi();
     runApp(const MyApp());
   } else {
@@ -197,18 +199,18 @@ checkSecurityFromApi() async {
   if (Platform.isIOS) {
     if (response.success) {
       if (response.data["screenshot"] == true) {
-        ScreenSecurity.toggleScreenSecurity(true);
+        GetIt.instance<ScreenSecurity>().toggleScreenSecurity(true);
       } else {
-        ScreenSecurity.toggleScreenSecurity(false);
+        GetIt.instance<ScreenSecurity>().toggleScreenSecurity(false);
       }
     } else {
-      ScreenSecurity.toggleScreenSecurity(true);
+      GetIt.instance<ScreenSecurity>().toggleScreenSecurity(true);
     }
   }
 }
 
 Future<void> secureScreen() async {
-  await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  await FlutterWindowManagerPlus.addFlags(FlutterWindowManagerPlus.FLAG_SECURE);
 }
 
 class MyApp extends StatefulWidget {
@@ -224,8 +226,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<OfflineVideosBloc>(
-            create: (context) => getIt<OfflineVideosBloc>()),
+        BlocProvider<OfflineVideosBloc>(create: (context) => getIt<OfflineVideosBloc>()),
       ],
       child: FutureBuilder(
           future: _isRealDevice(),
@@ -235,7 +236,7 @@ class _MyAppState extends State<MyApp> {
                     debugShowCheckedModeBanner: false,
                     theme: lighttheme,
                     darkTheme: darkTheme,
-                    themeMode: CacheProvider.getAppTheme()
+                    themeMode: GetIt.instance<CacheProvider>().getAppTheme()
                         ? ThemeMode.dark
                         : ThemeMode.light,
                     locale: const Locale('ar'),
@@ -249,7 +250,7 @@ class _MyAppState extends State<MyApp> {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Theme.of(context).platform == TargetPlatform.android) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.isPhysicalDevice ?? false;
+      return androidInfo.isPhysicalDevice;
     } else if (Theme.of(context).platform == TargetPlatform.iOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       return iosInfo.isPhysicalDevice;

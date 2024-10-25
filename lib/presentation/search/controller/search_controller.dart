@@ -8,6 +8,13 @@ class SearchPageController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final CategoryRepository _categoryRepository = CategoryRepository();
 
+  @override
+  void onClose() {
+    searchController.dispose();
+    courseStatus.close();
+    super.onClose();
+  }
+
   var courseStatus = RequestStatus.begin.obs;
   updatecourseStatus(RequestStatus status) => courseStatus.value = status;
   CoursesModel? coursesModel;

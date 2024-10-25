@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/models/quiz_model.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
@@ -16,11 +17,11 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CacheProvider.getAppTheme()
+        backgroundColor: GetIt.instance<CacheProvider>().getAppTheme()
             ? const Color.fromARGB(255, 7, 37, 61)
             : null,
         surfaceTintColor:
-            CacheProvider.getAppTheme() ? kDarkBlueColor : Colors.white,
+            GetIt.instance<CacheProvider>().getAppTheme() ? kDarkBlueColor : Colors.white,
         title: Text(
           "نتائج ${model!.title ?? " "} ",
           style: Theme.of(context).textTheme.bodyMedium,
@@ -30,9 +31,8 @@ class ResultPage extends StatelessWidget {
       body: ListView.builder(
           itemCount: controller.model.questions!.length,
           itemBuilder: (context, index) => QuestionResultWidget(
-                isTrue:
-                    controller.rightSolutions[model!.questions![index].id] ==
-                        controller.userSolutions[model!.questions![index].id],
+                isTrue: controller.rightSolutions[model!.questions![index].id] ==
+                    controller.userSolutions[model!.questions![index].id],
                 index: index,
                 model: controller.model.questions![index],
               )),

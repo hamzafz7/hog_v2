@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
@@ -28,13 +29,12 @@ class UserInfoPage extends StatelessWidget {
       body: SizedBox(
         width: Get.width,
         child: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             SizedBox(
               height: 20.h,
             ),
             ProfileImageEdit(),
-            Text(CacheProvider.getUserName() ?? "لا يوجد",
+            Text(GetIt.instance<CacheProvider>().getUserName() ?? "لا يوجد",
                 style: Theme.of(context).textTheme.bodyLarge),
             SizedBox(
               height: 30.h,
@@ -43,8 +43,7 @@ class UserInfoPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 28.w),
               child: Row(
                 children: [
-                  Text('المعلومات الشخصية',
-                      style: Theme.of(context).textTheme.labelMedium!),
+                  Text('المعلومات الشخصية', style: Theme.of(context).textTheme.labelMedium!),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -56,18 +55,14 @@ class UserInfoPage extends StatelessWidget {
                       }
                     },
                     child: Obx(
-                      () => controller.updateProfileStatus.value ==
-                              RequestStatus.loading
+                      () => controller.updateProfileStatus.value == RequestStatus.loading
                           ? appCircularProgress()
                           : Text(!controller.isEdited.value ? 'تعديل' : 'حفظ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      fontSize: 14.sp,
-                                      color: kprimaryBlueColor,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: kprimaryBlueColor)),
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontSize: 14.sp,
+                                  color: kprimaryBlueColor,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: kprimaryBlueColor)),
                     ),
                   )
                 ],
@@ -82,7 +77,7 @@ class UserInfoPage extends StatelessWidget {
                   titleText: "الاسم الكامل",
                   controller: controller.nameController,
                   onValidate: (val) {
-                    return Utils.isFeildValidated(val?.trim());
+                    return GetIt.instance<Utils>().isFeildValidated(val?.trim());
                   }),
             ),
             SizedBox(
@@ -94,7 +89,7 @@ class UserInfoPage extends StatelessWidget {
                   titleText: "رقم الهاتف",
                   controller: controller.phoneController,
                   onValidate: (val) {
-                    return Utils.isPhoneValidated(val?.trim());
+                    return GetIt.instance<Utils>().isPhoneValidated(val?.trim());
                   }),
             ),
             SizedBox(

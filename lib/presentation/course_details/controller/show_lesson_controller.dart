@@ -1,18 +1,14 @@
-import "dart:io";
 import 'package:get/get.dart';
 import "package:hog_v2/common/constants/enums/request_enum.dart";
 import "package:hog_v2/data/repositories/category_repo.dart";
-import "package:path_provider/path_provider.dart";
 import 'package:pod_player/pod_player.dart';
-import 'package:http/http.dart' as http;
 
 class ShowLessonController extends GetxController {
   final CategoryRepository _categoryRepository = CategoryRepository();
   PodPlayerController? podPlayerController;
   var watchVideoStatus = RequestStatus.begin.obs;
 
-  updateWatchVideoStatus(RequestStatus status) =>
-      watchVideoStatus.value = status;
+  updateWatchVideoStatus(RequestStatus status) => watchVideoStatus.value = status;
 
   @override
   void onInit() {
@@ -56,6 +52,7 @@ class ShowLessonController extends GetxController {
   void onClose() {
     disposePodPlayerController();
     Get.delete<ShowLessonController>(force: true);
+    watchVideoStatus.close();
     super.onClose();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/endpoints.dart';
 import 'package:hog_v2/data/providers/apiProvider/interceptor.dart';
 import 'package:hog_v2/data/repositories/account_repo.dart';
@@ -6,14 +7,13 @@ import 'package:hog_v2/data/repositories/account_repo.dart';
 // ignore: library_prefixes
 
 class ApiProvider {
-  static Dio? dio;
-  static AccountRepo repository = AccountRepo();
+  Dio? dio;
 
-  static init() {
+  init() {
     dio = Dio(
       BaseOptions(
-        connectTimeout: const Duration(milliseconds: 50000),
-        receiveTimeout: const Duration(milliseconds: 30000),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
         baseUrl: baseUrl,
         headers: {
           'Content-Type': 'application/json',
@@ -24,12 +24,12 @@ class ApiProvider {
     dio!.interceptors.add(
       AppInterceptors(
         dio: dio,
-        repo: repository,
+        repo: GetIt.instance<AccountRepo>(),
       ),
     );
   }
 
-  static Future<Response> get({
+  Future<Response> get({
     required String url,
     Map<String, dynamic>? data,
     String token = "",
@@ -44,7 +44,7 @@ class ApiProvider {
     return await dio!.get(url, queryParameters: query);
   }
 
-  static Future<Response> post({
+  Future<Response> post({
     required String url,
     Map<String, dynamic>? query,
     Object? body,
@@ -55,6 +55,7 @@ class ApiProvider {
       'Accept': 'application/json',
       'Authorization': token != "" ? " Bearer $token" : "",
     };
+    print("Post body: ${body.toString()}");
     return await dio!.post(
       url,
       queryParameters: query,
@@ -62,7 +63,7 @@ class ApiProvider {
     );
   }
 
-  static Future<Response> patch({
+  Future<Response> patch({
     required String url,
     Map<String, dynamic>? query,
     Map<String, dynamic>? body,
@@ -80,7 +81,7 @@ class ApiProvider {
     );
   }
 
-  static Future<Response> put({
+  Future<Response> put({
     required String url,
     Map<String, dynamic>? query,
     Map<String, dynamic>? body,
@@ -97,7 +98,7 @@ class ApiProvider {
     );
   }
 
-  static Future<Response> delete({
+  Future<Response> delete({
     required String url,
     Map<String, dynamic>? query,
     Map<String, dynamic>? body,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog_v2/presentation/course_details/controller/course_details_controller.dart';
@@ -13,9 +14,9 @@ class CustomTapBar extends StatelessWidget {
     return Container(
       padding: REdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: !CacheProvider.getAppTheme()
+        color: !GetIt.instance<CacheProvider>().getAppTheme()
             ? Colors.white
-            : Color.fromARGB(255, 187, 212, 233),
+            : const Color.fromARGB(255, 187, 212, 233),
         borderRadius: BorderRadius.circular(15),
         // border: Border.all(color: kprimaryBlueColor)),
       ),

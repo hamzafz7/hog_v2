@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
@@ -11,13 +12,12 @@ class FireBaseAPi {
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
     debugPrint(fcmToken);
-    CacheProvider.setdeviceToken(fcmToken);
+    GetIt.instance<CacheProvider>().setdeviceToken(fcmToken);
     initpushnotification();
   }
 
-  static Future initpushnotification() async {
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+  Future initpushnotification() async {
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
