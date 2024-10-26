@@ -17,7 +17,6 @@ class LoginPage extends GetView<RegisterationController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(RegisterationController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -81,8 +80,8 @@ class LoginPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 70.h,
               ),
-              Obx(
-                () => controller.loginRequestStatus.value == RequestStatus.loading
+              GetBuilder<RegisterationController>(
+                builder: (_) => controller.loginRequestStatus == RequestStatus.loading
                     ? appCircularProgress()
                     : CustomButton(
                         onTap: () {

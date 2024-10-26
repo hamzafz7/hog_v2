@@ -22,11 +22,10 @@ import '../../../offline_videos_feature/presentation/bloc/offline_videos_event.d
 import '../../../offline_videos_feature/presentation/bloc/offline_videos_state.dart';
 import '../../../offline_videos_feature/presentation/controllers/video_downloader.dart';
 
-class CourseLessonWidget extends StatelessWidget {
-  CourseLessonWidget({super.key, required this.lessionModel});
+class CourseLessonWidget extends GetView<CourseDetailsController> {
+  const CourseLessonWidget({super.key, required this.lessionModel});
 
   final LessionModel lessionModel;
-  final controller = Get.find<CourseDetailsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class CourseLessonWidget extends StatelessWidget {
                     // print(lessionModel.link);
                   }
                 } else {
-                  CustomDialog(context, child: const CompleteFailureWidget());
+                  customDialog(context, child: const CompleteFailureWidget());
                 }
               },
               child: Row(
@@ -71,11 +70,11 @@ class CourseLessonWidget extends StatelessWidget {
                             : Container(
                                 height: 26.h,
                                 width: 26.w,
-                                decoration:
-                                    BoxDecoration(shape: BoxShape.circle, color: Colors.green),
-                                child: Icon(
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle, color: Colors.green),
+                                child: const Icon(
                                   Icons.check,
-                                  color: const Color.fromARGB(255, 207, 197, 197),
+                                  color: Color.fromARGB(255, 207, 197, 197),
                                 ),
                               )
                         : const Icon(
@@ -115,13 +114,13 @@ class CourseLessonWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             if (lessionModel.type == 'video' && lessionModel.isOpen! ||
                 controller.courseInfoModel!.course!.isPaid! ||
                 controller.courseInfoModel!.course!.isOpen! ||
                 controller.courseInfoModel!.course!.isTeachWithCourse == true)
-              Obx(
-                () => controller.downloadStatus.value == RequestStatus.loading &&
+              GetBuilder<CourseDetailsController>(
+                builder: (_) => controller.downloadStatus == RequestStatus.loading &&
                         controller.currentDownloadedVidId.contains(lessionModel.id)
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -171,18 +170,18 @@ class CourseLessonWidget extends StatelessWidget {
                           }
                         },
                         icon: !controller.isLessionExist(lessionModel.id)
-                            ? Icon(
+                            ? const Icon(
                                 Icons.download,
                                 color: kprimaryBlueColor,
                               )
-                            : Icon(
+                            : const Icon(
                                 Icons.offline_pin_sharp,
                                 color: kprimaryBlueColor,
                               )),
               )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         getDownloadingWidget(() {
@@ -284,7 +283,7 @@ class CourseLessonWidget extends StatelessWidget {
                       onTap: () {
                         onCancelDownload();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.close,
                         color: Colors.red,
                       ),
@@ -299,7 +298,7 @@ class CourseLessonWidget extends StatelessWidget {
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                   child: LinearProgressIndicator(
                     backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
                     minHeight: 10.0,
                     value: percent,
                   ),

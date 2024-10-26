@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/endpoints.dart';
 import 'package:hog_v2/data/models/app_response.dart';
@@ -20,9 +21,21 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -40,9 +53,21 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -60,9 +85,21 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message ?? e.toString(),
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -80,9 +117,21 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message ?? e.toString(),
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -100,15 +149,30 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message ?? e.toString(),
         data: null,
         success: false,
       );
-    } on HttpException catch (e) {
+    } on HttpException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -127,9 +191,21 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message ?? e.toString(),
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -146,15 +222,30 @@ class AccountRepo {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message ?? e.toString(),
         data: null,
         success: false,
       );
-    } on HttpException catch (e) {
+    } on HttpException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );

@@ -11,7 +11,6 @@ class SettingsPage extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SettingController());
     return Scaffold(
       appBar: const CustomAppBar(text: "الإعدادات"),
       body: Column(

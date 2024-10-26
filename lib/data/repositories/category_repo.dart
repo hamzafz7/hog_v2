@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/endpoints.dart';
 import 'package:hog_v2/data/models/app_response.dart';
@@ -17,9 +18,21 @@ class CategoryRepository {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -28,40 +41,74 @@ class CategoryRepository {
 
   Future<AppResponse> getCourses(int id) async {
     String? os;
-    if (Platform.isIOS)
+    if (Platform.isIOS) {
       os = "ios";
-    else {
+    } else {
       os = "android";
     }
     try {
-      var response = await GetIt.instance<ApiProvider>()
-          .get(url: "$coursesUrl/$id", token: GetIt.instance<CacheProvider>().getAppToken() ?? "", query: {"os": os});
+      var response = await GetIt.instance<ApiProvider>().get(
+          url: "$coursesUrl/$id",
+          token: GetIt.instance<CacheProvider>().getAppToken() ?? "",
+          query: {"os": os});
       return AppResponse(
         errorMessage: null,
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
     }
   }
 
-  Future<AppResponse> searchCourses(String searchText) async {
+  Future<AppResponse> searchCourses(String searchText, CancelToken cancelToken) async {
     try {
       var response = await GetIt.instance<ApiProvider>().get(
-          url: searchCoursesUrl, token: GetIt.instance<CacheProvider>().getAppToken(), query: {"search": searchText});
+          cancelToken: cancelToken,
+          url: searchCoursesUrl,
+          token: GetIt.instance<CacheProvider>().getAppToken(),
+          query: {"search": searchText});
       return AppResponse(
         errorMessage: null,
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      if (CancelToken.isCancel(e)) {
+        if (kDebugMode) {
+          print('Request was cancelled');
+        }
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -70,22 +117,36 @@ class CategoryRepository {
 
   Future<AppResponse> getCourseInfo(int id) async {
     String? os;
-    if (Platform.isIOS)
+    if (Platform.isIOS) {
       os = "ios";
-    else {
+    } else {
       os = "android";
     }
     try {
-      var response = await GetIt.instance<ApiProvider>()
-          .get(url: "$showCourseUrl/$id", token: GetIt.instance<CacheProvider>().getAppToken(), query: {"os": os});
+      var response = await GetIt.instance<ApiProvider>().get(
+          url: "$showCourseUrl/$id",
+          token: GetIt.instance<CacheProvider>().getAppToken(),
+          query: {"os": os});
       return AppResponse(
         errorMessage: null,
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -101,9 +162,21 @@ class CategoryRepository {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -121,9 +194,21 @@ class CategoryRepository {
         data: response.data,
         success: true,
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(
         errorMessage: e.message,
+        data: null,
+        success: false,
+      );
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
         data: null,
         success: false,
       );
@@ -132,15 +217,31 @@ class CategoryRepository {
 
   Future<AppResponse> watchVideo(String link, String source) async {
     try {
-      print(GetIt.instance<CacheProvider>().getAppToken());
+      if (kDebugMode) {
+        print(GetIt.instance<CacheProvider>().getAppToken());
+      }
       var body = {"link": link, "source": source};
-      print(body);
+      if (kDebugMode) {
+        print(body);
+      }
 
       var appResponse = await GetIt.instance<ApiProvider>()
           .post(url: watchVidUrl, token: GetIt.instance<CacheProvider>().getAppToken(), body: body);
       return AppResponse(success: true, data: appResponse.data, errorMessage: null);
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(success: true, data: null, errorMessage: e.message ?? e.toString());
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
+        data: null,
+        success: false,
+      );
     }
   }
 
@@ -151,8 +252,20 @@ class CategoryRepository {
           token: GetIt.instance<CacheProvider>().getAppToken(),
           body: {"link": link, "source": source});
       return AppResponse(success: true, data: appResponse.data, errorMessage: null);
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(success: true, data: null, errorMessage: e.message ?? e.toString());
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
+        data: null,
+        success: false,
+      );
     }
   }
 
@@ -163,8 +276,20 @@ class CategoryRepository {
         token: GetIt.instance<CacheProvider>().getAppToken(),
       );
       return AppResponse(success: true, data: appResponse.data, errorMessage: null);
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
       return AppResponse(success: true, data: null, errorMessage: e.message ?? e.toString());
+    } catch (e, s) {
+      if (kDebugMode) {
+        print("Exception: $e \n $s");
+      }
+      return AppResponse(
+        errorMessage: 'خطأ غير متوقع, يرجا المحاولة لاحقا',
+        data: null,
+        success: false,
+      );
     }
   }
 }

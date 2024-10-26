@@ -9,17 +9,14 @@ import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/explaination_widget.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/result_list_tile.dart';
 
-// ignore: must_be_immutable
-class QuestionResultWidget extends StatelessWidget {
-  QuestionResultWidget(
-      {super.key,
-      required this.index,
-      required this.isTrue,
-      required this.model});
+class QuestionResultWidget extends GetView<QuizController> {
+  const QuestionResultWidget(
+      {super.key, required this.index, required this.isTrue, required this.model});
+
   final int index;
-  var controller = Get.find<QuizController>();
+
   final bool isTrue;
-  QuestionModel model;
+  final QuestionModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +33,7 @@ class QuestionResultWidget extends StatelessWidget {
                   border: Border.all(color: isTrue ? Colors.green : Colors.red),
                   boxShadow: const [
                     BoxShadow(
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                        color: Color.fromARGB(255, 231, 231, 231))
+                        blurRadius: 1, spreadRadius: 1, color: Color.fromARGB(255, 231, 231, 231))
                   ]),
               child: Padding(
                 padding: EdgeInsets.all(20.0.r),
@@ -47,10 +42,7 @@ class QuestionResultWidget extends StatelessWidget {
                   children: [
                     Text(
                       "السؤال ${index + 1}:",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -87,18 +79,15 @@ class QuestionResultWidget extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: model.choices!.length,
               itemBuilder: (context, index) => ResultListTile(
-                userSolution: controller.userSolutions
-                    .containsValue(model.choices![index].id),
+                userSolution: controller.userSolutions.containsValue(model.choices![index].id),
                 choiceModel: model.choices![index],
                 value:
                     // controller.userSolutions
                     //         .containsValue(model.choices![index].id) &&
-                    controller.rightSolutions
-                        .containsValue(model.choices![index].id),
+                    controller.rightSolutions.containsValue(model.choices![index].id),
               ),
             ),
-            if (model.clarificationImage != null ||
-                model.clarificationText != null)
+            if (model.clarificationImage != null || model.clarificationText != null)
               ExplainationWidget(
                 image: model.clarificationImage,
                 text: model.clarificationText,

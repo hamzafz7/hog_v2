@@ -12,9 +12,9 @@ import 'package:hog_v2/presentation/userinfo/widgets/profile_image_edit.dart';
 import 'package:hog_v2/presentation/userinfo/widgets/profile_text_feild.dart';
 import 'package:hog_v2/presentation/widgets/custom_appbar.dart';
 
-class UserInfoPage extends StatelessWidget {
-  UserInfoPage({super.key});
-  final controller = Get.find<MyProfileController>();
+class UserInfoPage extends GetView<MyProfileController> {
+  const UserInfoPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +33,7 @@ class UserInfoPage extends StatelessWidget {
             SizedBox(
               height: 20.h,
             ),
-            ProfileImageEdit(),
+            const ProfileImageEdit(),
             Text(GetIt.instance<CacheProvider>().getUserName() ?? "لا يوجد",
                 style: Theme.of(context).textTheme.bodyLarge),
             SizedBox(
@@ -54,8 +54,8 @@ class UserInfoPage extends StatelessWidget {
                         controller.changeIsEdit();
                       }
                     },
-                    child: Obx(
-                      () => controller.updateProfileStatus.value == RequestStatus.loading
+                    child: GetBuilder<MyProfileController>(
+                      builder: (_) => controller.updateProfileStatus == RequestStatus.loading
                           ? appCircularProgress()
                           : Text(!controller.isEdited.value ? 'تعديل' : 'حفظ',
                               style: Theme.of(context).textTheme.bodyMedium!.copyWith(

@@ -94,9 +94,9 @@ class CacheProvider {
   Future<void> setDeviceId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
-      const _androidIdPlugin = AndroidId();
+      const androidIdPlugin = AndroidId();
 
-      final String? androidId = await _androidIdPlugin.getId();
+      final String? androidId = await androidIdPlugin.getId();
       await _getStorage.write("device_id", androidId);
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;

@@ -11,10 +11,9 @@ import 'package:hog_v2/presentation/course_details/controller/course_details_con
 import 'package:hog_v2/presentation/custom_dialogs/complete_failure.dart';
 import 'package:hog_v2/presentation/custom_dialogs/custom_dialogs.dart';
 
-class QuizListTile extends StatelessWidget {
-  QuizListTile({super.key, required this.quizzModel});
+class QuizListTile extends GetView<CourseDetailsController> {
+  const QuizListTile({super.key, required this.quizzModel});
   final QuizzModel quizzModel;
-  final controller = Get.find<CourseDetailsController>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,7 +36,7 @@ class QuizListTile extends StatelessWidget {
                   controller.courseInfoModel!.course!.isPaid == true) {
                 Get.toNamed(AppRoute.quizzPageRoute, arguments: quizzModel);
               } else {
-                CustomDialog(context, child: const CompleteFailureWidget());
+                customDialog(context, child: const CompleteFailureWidget());
               }
             },
             child: Padding(

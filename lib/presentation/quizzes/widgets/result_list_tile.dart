@@ -7,10 +7,7 @@ import 'package:hog_v2/data/models/choice_model.dart';
 
 class ResultListTile extends StatelessWidget {
   const ResultListTile(
-      {super.key,
-      required this.choiceModel,
-      required this.value,
-      this.userSolution});
+      {super.key, required this.choiceModel, required this.value, this.userSolution});
   final ChoiceModel choiceModel;
   final bool value;
   final bool? userSolution;
@@ -31,7 +28,7 @@ class ResultListTile extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4.0.r),
               ),
-              side: MaterialStateBorderSide.resolveWith((states) {
+              side: WidgetStateBorderSide.resolveWith((states) {
                 if (value) {
                   return const BorderSide(width: 1.0, color: Colors.green);
                 } else if (userSolution == true && !value) {

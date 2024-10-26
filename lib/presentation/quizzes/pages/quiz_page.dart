@@ -16,7 +16,6 @@ class QuizzesPage extends GetView<QuizController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(QuizController());
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
@@ -34,13 +33,13 @@ class QuizzesPage extends GetView<QuizController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ProgressHeaderWidget(),
+            const ProgressHeaderWidget(),
             GetBuilder<QuizController>(
               builder: (_) => ExpandablePageView.builder(
                 onPageChanged: (val) {},
                 physics: const NeverScrollableScrollPhysics(),
                 animationDuration: const Duration(milliseconds: 0),
-                controller: controller.pageController.value,
+                controller: controller.pageController,
                 itemCount: controller.model.questions!.length,
                 itemBuilder: (context, index) {
                   return QuestionPage(
@@ -55,8 +54,8 @@ class QuizzesPage extends GetView<QuizController> {
               child: Center(
                 child: CustomButton(
                   onTap: () {
-                    if (controller.currentQuistions.value != controller.totalQuistions.value) {
-                      controller.pageController.value.jumpToPage(controller.currentIndex.value + 1);
+                    if (controller.currentQuistions != controller.totalQuistions) {
+                      controller.pageController.jumpToPage(controller.currentIndex + 1);
                       controller.incrementQuistionsValue();
                     } else {
                       controller.calcResult();
@@ -75,8 +74,8 @@ class QuizzesPage extends GetView<QuizController> {
             Center(
               child: TextButton(
                   onPressed: () {
-                    if (controller.currentQuistions.value > 1) {
-                      controller.pageController.value.jumpToPage(controller.currentIndex.value - 1);
+                    if (controller.currentQuistions > 1) {
+                      controller.pageController.jumpToPage(controller.currentIndex - 1);
                       controller.decrementQuistionsValue();
                     }
                   },

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,17 +7,14 @@ import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/presentation/profile/controllers/profile_controller.dart';
 
-// ignore: must_be_immutable
-class MyProfileImage extends StatelessWidget {
-  MyProfileImage({super.key});
-
-  var controller = Get.find<MyProfileController>();
+class MyProfileImage extends GetView<MyProfileController> {
+  const MyProfileImage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          shape: BoxShape.circle, border: Border.all(color: kprimaryBlueColor)),
+      decoration:
+          BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kprimaryBlueColor)),
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Obx(

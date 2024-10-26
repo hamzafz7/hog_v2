@@ -10,10 +10,8 @@ import 'package:hog_v2/presentation/widgets/custom_button.dart';
 
 class CodeActivationWidget extends StatelessWidget {
   const CodeActivationWidget(
-      {super.key,
-      required this.controller,
-      required this.onValidate,
-      this.onTap});
+      {super.key, required this.controller, required this.onValidate, this.onTap});
+
   final TextEditingController controller;
   final String? Function(String?) onValidate;
   final Function()? onTap;
@@ -29,18 +27,12 @@ class CodeActivationWidget extends StatelessWidget {
         ),
         Text('انضم الآن ',
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: kprimaryBlueColor)),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: kprimaryBlueColor)),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text('قم بكتابة كود التفعيل الخاص بك للانضمام إلى الكورس',
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kprimaryGreyColor)),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryGreyColor)),
         ),
         SizedBox(
           height: 15.h,
@@ -57,8 +49,8 @@ class CodeActivationWidget extends StatelessWidget {
         SizedBox(
           height: 15.h,
         ),
-        Obx(() =>
-            Get.find<CourseDetailsController>().signInCourseStatus.value ==
+        GetBuilder<CourseDetailsController>(
+            builder: (_) => Get.find<CourseDetailsController>().signInCourseStatus ==
                     RequestStatus.loading
                 ? Center(
                     child: appCircularProgress(),
@@ -69,10 +61,7 @@ class CodeActivationWidget extends StatelessWidget {
                     onTap: onTap,
                     child: Text(
                       "ادخل الرمز",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.white),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white),
                     ),
                   ))
       ],

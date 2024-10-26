@@ -16,7 +16,6 @@ class OnBoardingPage extends GetView<OnBoardingPageController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OnBoardingPageController());
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,

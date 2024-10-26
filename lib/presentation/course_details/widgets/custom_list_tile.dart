@@ -10,6 +10,7 @@ import 'course_lesson_widget.dart';
 
 class CustomListTile extends StatefulWidget {
   const CustomListTile({super.key, required this.chapterModel});
+
   final ChapterModel chapterModel;
 
   @override
@@ -17,8 +18,8 @@ class CustomListTile extends StatefulWidget {
 }
 
 class _CustomListTileState extends State<CustomListTile> {
-  // ignore: prefer_typing_uninitialized_variables
-  var list1, list2;
+  late final List<Widget> list1, list2;
+
   @override
   void initState() {
     list1 = List.generate(

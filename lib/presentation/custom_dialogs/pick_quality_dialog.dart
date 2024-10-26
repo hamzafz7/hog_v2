@@ -6,9 +6,8 @@ import 'package:hog_v2/data/models/download_model.dart';
 import 'package:hog_v2/presentation/course_details/controller/course_details_controller.dart';
 import 'package:hog_v2/presentation/widgets/quality_button.dart';
 
-// ignore: must_be_immutable
-class PickQualityDialog extends StatelessWidget {
-  PickQualityDialog({
+class PickQualityDialog extends GetView<CourseDetailsController> {
+  const PickQualityDialog({
     super.key,
     required this.response,
     required this.videoName,
@@ -23,8 +22,7 @@ class PickQualityDialog extends StatelessWidget {
   final String? description;
   final int videoId;
   final String courseName;
-  final controller = Get.find<CourseDetailsController>();
-  Function(String) onRealDownload;
+  final Function(String) onRealDownload;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +32,7 @@ class PickQualityDialog extends StatelessWidget {
           padding: EdgeInsets.all(16.r),
           child: Text(
             "اختر الدقة المناسبة:",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: kDarkBlueColor),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kDarkBlueColor),
           ),
         ),
         Expanded(

@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
@@ -17,7 +17,9 @@ class AppInterceptors extends Interceptor {
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    print("hello from request ");
+    if (kDebugMode) {
+      print("hello from request ");
+    }
     debugPrint("request is sending");
     debugPrint("REQUEST[${options.method}] => PATH: $baseUrl${options.path}");
     final connectivityResult = await (Connectivity().checkConnectivity());
@@ -31,8 +33,11 @@ class AppInterceptors extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
-    print("zzz");
+    if (kDebugMode) {
+      print("zzz");
+    }
     debugPrint("response is getting");
+    debugPrint(response.data.toString());
 
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -58,9 +63,13 @@ class AppInterceptors extends Interceptor {
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    print(err);
+    if (kDebugMode) {
+      print(err);
+    }
     if (err.response?.data == null) {
-      print("hello from error");
+      if (kDebugMode) {
+        print("hello from error");
+      }
       return handler.next(
         DioException(
           requestOptions: err.requestOptions,

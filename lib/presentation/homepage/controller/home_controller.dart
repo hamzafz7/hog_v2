@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/data/models/categories_model.dart';
@@ -11,42 +12,37 @@ class HomeController extends GetxController {
   void onInit() {
     getNews();
     getCategories();
-
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    courseStatus.close();
-    getNewsStatus.close();
-    categoriesStatus.close();
-    currentCategoryIndex.close();
-    super.onClose();
   }
 
   NewsResponse? newsResponse;
   CategoriesModel? categoriesModel;
-  RxInt currentCategoryIndex = 0.obs;
+  int currentCategoryIndex = 0;
 
   changeCurrentIndex(int ind, int courseId) {
-    currentCategoryIndex.value = ind;
+    currentCategoryIndex = ind;
     getCourses(courseId);
   }
 
-  var getNewsStatus = RequestStatus.begin.obs;
-  var categoriesStatus = RequestStatus.begin.obs;
-  updateGetNewsStatus(RequestStatus status) => getNewsStatus.value = status;
+  var getNewsStatus = RequestStatus.begin;
+  var categoriesStatus = RequestStatus.begin;
+  updateGetNewsStatus(RequestStatus status) => getNewsStatus = status;
 
-  var courseStatus = RequestStatus.begin.obs;
-  updatecourseStatus(RequestStatus status) => courseStatus.value = status;
-  updateCategoriesStatus(RequestStatus status) => categoriesStatus.value = status;
+  var courseStatus = RequestStatus.begin;
+  updatecourseStatus(RequestStatus status) => courseStatus = status;
+  updateCategoriesStatus(RequestStatus status) => categoriesStatus = status;
   final HomeRepository _homeRepository = HomeRepository();
   final CategoryRepository _categoryRepository = CategoryRepository();
+
   Future<void> getNews() async {
     updateGetNewsStatus(RequestStatus.loading);
+    update();
     var response = await _homeRepository.getNews();
     if (response.success) {
       newsResponse = NewsResponse.fromJson(response.data);
+      if (kDebugMode) {
+        print('newsResponse?.news ${newsResponse?.news}');
+      }
       if (newsResponse!.news.isEmpty) {
         updateGetNewsStatus(RequestStatus.noData);
       } else {
@@ -59,10 +55,12 @@ class HomeController extends GetxController {
         updateGetNewsStatus(RequestStatus.onError);
       }
     }
+    update();
   }
 
   Future<void> getCategories() async {
     updateCategoriesStatus(RequestStatus.loading);
+    update();
     var response = await _categoryRepository.getCategories();
     if (response.success) {
       categoriesModel = CategoriesModel.fromJson(response.data);
@@ -79,16 +77,20 @@ class HomeController extends GetxController {
         updateCategoriesStatus(RequestStatus.onError);
       }
     }
+    update();
   }
 
   CoursesModel? coursesModel;
 
   Future<void> getCourses(int id) async {
     updatecourseStatus(RequestStatus.loading);
+    update();
     var response = await _categoryRepository.getCourses(id);
     if (response.success) {
       coursesModel = CoursesModel.fromJson(response.data);
-      print(response.data);
+      if (kDebugMode) {
+        print(response.data);
+      }
       if (coursesModel!.courses == null || coursesModel!.courses!.isEmpty) {
         updatecourseStatus(RequestStatus.noData);
       } else {
@@ -101,5 +103,6 @@ class HomeController extends GetxController {
         updatecourseStatus(RequestStatus.onError);
       }
     }
+    update();
   }
 }

@@ -6,11 +6,9 @@ import 'package:hog_v2/presentation/profile/controllers/profile_controller.dart'
 import 'package:hog_v2/presentation/profile/widgets/my_profile_image.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
-// ignore: must_be_immutable
-class ProfileImageEdit extends StatelessWidget {
-  ProfileImageEdit({super.key});
+class ProfileImageEdit extends GetView<MyProfileController> {
+  const ProfileImageEdit({super.key});
 
-  var controller = Get.find<MyProfileController>();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -18,7 +16,7 @@ class ProfileImageEdit extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(height: 125.h, child: MyProfileImage()),
+          SizedBox(height: 125.h, child: const MyProfileImage()),
           IconButton(
               onPressed: () {
                 if (!controller.isEdited.value) {

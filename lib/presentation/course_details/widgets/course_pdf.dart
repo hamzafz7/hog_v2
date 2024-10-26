@@ -5,9 +5,9 @@ class FileViewWidget extends StatefulWidget {
   final String imagePath;
 
   const FileViewWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
-  }) : super(key: key);
+  });
 
   @override
   State<FileViewWidget> createState() => _FileViewWidgetState();

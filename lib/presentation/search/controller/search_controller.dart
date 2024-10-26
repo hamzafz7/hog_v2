@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
@@ -7,21 +10,28 @@ import 'package:hog_v2/data/repositories/category_repo.dart';
 class SearchPageController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final CategoryRepository _categoryRepository = CategoryRepository();
+  final CancelToken cancelToken = CancelToken();
+  Timer? debounceTimer;
 
   @override
   void onClose() {
     searchController.dispose();
-    courseStatus.close();
     super.onClose();
   }
 
-  var courseStatus = RequestStatus.begin.obs;
-  updatecourseStatus(RequestStatus status) => courseStatus.value = status;
+  var courseStatus = RequestStatus.begin;
+
+  updatecourseStatus(RequestStatus status) {
+    courseStatus = status;
+    update();
+    return courseStatus;
+  }
+
   CoursesModel? coursesModel;
 
   Future<void> searchCourse(String searchText) async {
     updatecourseStatus(RequestStatus.loading);
-    var response = await _categoryRepository.searchCourses(searchText);
+    var response = await _categoryRepository.searchCourses(searchText, cancelToken);
     if (response.success) {
       coursesModel = CoursesModel.fromJson(response.data);
       if (coursesModel!.courses == null || coursesModel!.courses!.isEmpty) {

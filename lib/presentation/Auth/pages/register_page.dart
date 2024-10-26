@@ -17,7 +17,6 @@ class RegisterPage extends GetView<RegisterationController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(RegisterationController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -97,8 +96,8 @@ class RegisterPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 60.h,
               ),
-              Obx(
-                () => controller.registerRequestStatus.value == RequestStatus.loading
+              GetBuilder<RegisterationController>(
+                builder: (_) => controller.registerRequestStatus == RequestStatus.loading
                     ? appCircularProgress()
                     : CustomButton(
                         onTap: () {

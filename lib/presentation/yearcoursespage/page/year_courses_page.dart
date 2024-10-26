@@ -5,9 +5,9 @@ import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/presentation/homepage/controller/home_controller.dart';
 import 'package:hog_v2/presentation/homepage/widgets/home_course_item.dart';
 
-// ignore: must_be_immutable
-class YearsCoursesPage extends StatelessWidget {
+class YearsCoursesPage extends GetView<HomeController> {
   const YearsCoursesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +15,8 @@ class YearsCoursesPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          "${Get.find<HomeController>().categoriesModel!.categories![Get.find<HomeController>().currentCategoryIndex.value].name}",
-          style:
-              Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 20.sp),
+          "${controller.categoriesModel!.categories![controller.currentCategoryIndex].name}",
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 20.sp),
         ),
       ),
       body: SingleChildScrollView(
@@ -47,11 +46,7 @@ class YearsCoursesPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        Get.find<HomeController>()
-                            .coursesModel!
-                            .courses!
-                            .length
-                            .toString(),
+                        controller.coursesModel!.courses!.length.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium!
@@ -70,18 +65,19 @@ class YearsCoursesPage extends StatelessWidget {
           SizedBox(
             height: 36.h,
           ),
-          GridView.count(
-            childAspectRatio: 1 / 1.7,
+          GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1 / 1.7,
+            ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            children: List.generate(
-                Get.find<HomeController>().coursesModel!.courses!.length,
-                (index) => HomeCourseItem(
-                      courseModel: Get.find<HomeController>()
-                          .coursesModel!
-                          .courses![index],
-                    )),
+            itemCount: controller.coursesModel!.courses!.length,
+            itemBuilder: (context, index) {
+              return HomeCourseItem(
+                courseModel: controller.coursesModel!.courses![index],
+              );
+            },
           )
         ]),
       ),

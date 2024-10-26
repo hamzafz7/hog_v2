@@ -5,10 +5,9 @@ import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/presentation/course_details/controller/course_details_controller.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
 
-// ignore: must_be_immutable
-class CustomPickButton extends StatelessWidget {
-  CustomPickButton({super.key});
-  var controller = Get.find<CourseDetailsController>();
+class CustomPickButton extends GetView<CourseDetailsController> {
+  const CustomPickButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,15 +24,15 @@ class CustomPickButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Obx(
-              () => CustomButton(
-                bottomColor: controller.currentWidgetIndex.value == 0
+            GetBuilder<CourseDetailsController>(
+              builder: (_) => CustomButton(
+                bottomColor: controller.currentWidgetIndex == 0
                     ? kprimaryBlueColor
                     : ksecondaryBlueColor.withOpacity(0.008),
                 width: 110.w,
                 height: 48.h,
                 onTap: () {
-                  controller.changeCurrentWidgetIndx(0);
+                  controller.changeCurrentWidgetIndex(0);
                 },
                 borderRadius: 13.r,
                 child: Text(
@@ -51,15 +50,15 @@ class CustomPickButton extends StatelessWidget {
             SizedBox(
               width: 5.w,
             ),
-            Obx(
-              () => CustomButton(
-                bottomColor: controller.currentWidgetIndex.value == 1
+            GetBuilder<CourseDetailsController>(
+              builder: (_) => CustomButton(
+                bottomColor: controller.currentWidgetIndex == 1
                     ? kprimaryBlueColor
                     : ksecondaryBlueColor.withOpacity(0.008),
                 width: 110.w,
                 height: 48.h,
                 onTap: () {
-                  controller.changeCurrentWidgetIndx(1);
+                  controller.changeCurrentWidgetIndex(1);
                 },
                 borderRadius: 13.r,
                 child: Text("المنهاج",
@@ -75,15 +74,15 @@ class CustomPickButton extends StatelessWidget {
             SizedBox(
               width: 5.w,
             ),
-            Obx(
-              () => CustomButton(
-                bottomColor: controller.currentWidgetIndex.value == 2
+            GetBuilder<CourseDetailsController>(
+              builder: (_) => CustomButton(
+                bottomColor: controller.currentWidgetIndex == 2
                     ? kprimaryBlueColor
                     : ksecondaryBlueColor.withOpacity(0.008),
                 width: 110.w,
                 height: 48.h,
                 onTap: () {
-                  controller.changeCurrentWidgetIndx(2);
+                  controller.changeCurrentWidgetIndex(2);
                 },
                 borderRadius: 13.r,
                 child: Text("المحفوظات",

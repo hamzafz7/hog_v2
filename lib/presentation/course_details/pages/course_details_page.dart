@@ -16,13 +16,11 @@ import 'package:hog_v2/presentation/custom_dialogs/code_activate_dialog.dart';
 import 'package:hog_v2/presentation/custom_dialogs/custom_dialogs.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
 
-class CourseDetailsPage extends StatelessWidget {
+class CourseDetailsPage extends GetView<CourseDetailsController> {
   const CourseDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final courseController = Get.find<CourseDetailsController>();
-
     bool isCourseAccessible(CourseDetailsController controller) {
       final course = controller.courseInfoModel?.course;
       return course != null &&
@@ -37,10 +35,10 @@ class CourseDetailsPage extends StatelessWidget {
         length: 2,
         child: SizedBox(
           width: Get.width,
-          child: Obx(
-            () => switch (courseController.getCourseInfoStatus.value) {
+          child: GetBuilder<CourseDetailsController>(
+            builder: (_) => switch (controller.getCourseInfoStatus) {
               RequestStatus.success => Form(
-                  key: courseController.courseDetailFormKey,
+                  key: controller.courseDetailFormKey,
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,15 +46,15 @@ class CourseDetailsPage extends StatelessWidget {
                         ClipPath(
                           clipper: ContainerCustomClipper(),
                           child: CourseDetailsHeader(
-                            text: courseController.courseInfoModel!.course!.name,
-                            image: courseController.courseInfoModel!.course!.image,
+                            text: controller.courseInfoModel!.course!.name,
+                            image: controller.courseInfoModel!.course!.image,
                           ),
                         ),
-                        CustomTapBar(),
-                        Obx(
-                          () => IndexedStack(
-                            index: courseController.currentTabIndex.value,
-                            children: [
+                        const CustomTapBar(),
+                        GetBuilder<CourseDetailsController>(
+                          builder: (_) => IndexedStack(
+                            index: controller.currentTabIndex,
+                            children: const [
                               CourseDescribtionWidget(),
                               CourseCurriculum(),
                             ],
@@ -67,21 +65,21 @@ class CourseDetailsPage extends StatelessWidget {
                           padding: EdgeInsets.all(16.r),
                           child: CustomButton(
                             onTap: () {
-                              if (courseController.courseInfoModel?.course != null) {
-                                if (!isCourseAccessible(courseController)) {
-                                  CustomDialog(
+                              if (controller.courseInfoModel?.course != null) {
+                                if (!isCourseAccessible(controller)) {
+                                  customDialog(
                                     context,
                                     child: CodeActivationWidget(
-                                      controller: courseController.activationController,
+                                      controller: controller.activationController,
                                       onValidate: (val) =>
                                           GetIt.instance<Utils>().isFeildValidated(val),
                                       onTap: () async {
                                         try {
-                                          if (courseController.courseDetailFormKey.currentState!
+                                          if (controller.courseDetailFormKey.currentState!
                                               .validate()) {
-                                            await courseController.signInCourse(
-                                              courseController.courseInfoModel!.course!.id!,
-                                              courseController.activationController.text,
+                                            await controller.signInCourse(
+                                              controller.courseInfoModel!.course!.id!,
+                                              controller.activationController.text,
                                             );
                                           }
                                         } catch (e) {
@@ -92,19 +90,18 @@ class CourseDetailsPage extends StatelessWidget {
                                     height: 380,
                                   );
                                 } else {
-                                  courseController.changeCurrentWidgetIndx(1);
+                                  controller.changeCurrentWidgetIndex(1);
                                 }
                               }
                             },
                             height: 50.h,
                             width: 382.w,
                             borderRadius: 17.r,
-                            child: Obx(() {
-                              return courseController.signInCourseStatus.value ==
-                                      RequestStatus.loading
+                            child: GetBuilder<CourseDetailsController>(builder: (_) {
+                              return controller.signInCourseStatus == RequestStatus.loading
                                   ? const CircularProgressIndicator(color: Colors.white)
                                   : Text(
-                                      isCourseAccessible(courseController)
+                                      isCourseAccessible(controller)
                                           ? "تابع المشاهدة"
                                           : "ٍسجل الآن",
                                       style: Theme.of(context)

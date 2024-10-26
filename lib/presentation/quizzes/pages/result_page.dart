@@ -7,11 +7,10 @@ import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/quistion_result.dart';
 
-// ignore: must_be_immutable
-class ResultPage extends StatelessWidget {
-  ResultPage({super.key, this.model});
-  var controller = Get.find<QuizController>();
-  QuizzModel? model;
+class ResultPage extends GetView<QuizController> {
+  const ResultPage({super.key, required this.model});
+
+  final QuizzModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class ResultPage extends StatelessWidget {
         surfaceTintColor:
             GetIt.instance<CacheProvider>().getAppTheme() ? kDarkBlueColor : Colors.white,
         title: Text(
-          "نتائج ${model!.title ?? " "} ",
+          "نتائج ${model.title ?? " "} ",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         centerTitle: true,
@@ -31,8 +30,8 @@ class ResultPage extends StatelessWidget {
       body: ListView.builder(
           itemCount: controller.model.questions!.length,
           itemBuilder: (context, index) => QuestionResultWidget(
-                isTrue: controller.rightSolutions[model!.questions![index].id] ==
-                    controller.userSolutions[model!.questions![index].id],
+                isTrue: controller.rightSolutions[model.questions![index].id] ==
+                    controller.userSolutions[model.questions![index].id],
                 index: index,
                 model: controller.model.questions![index],
               )),

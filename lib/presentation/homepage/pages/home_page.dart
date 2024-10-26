@@ -9,9 +9,8 @@ import 'package:hog_v2/presentation/homepage/widgets/courses.dart';
 import 'package:hog_v2/presentation/homepage/widgets/home_stack_header.dart';
 import 'package:hog_v2/presentation/homepage/widgets/year_button.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
-  final homeController = Get.put(HomeController());
+class HomePage extends GetView<HomeController> {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +18,8 @@ class HomePage extends StatelessWidget {
       child: RefreshIndicator(
         color: kprimaryBlueColor,
         onRefresh: () async {
-          homeController.getNews();
-          homeController.getCategories();
+          controller.getNews();
+          controller.getCategories();
         },
         child: Scaffold(
           body: SingleChildScrollView(
@@ -28,7 +27,7 @@ class HomePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(width: Get.width, child: HomeStackHeader()),
+                SizedBox(width: Get.width, child: const HomeStackHeader()),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -36,55 +35,48 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 14.w),
                   child: Text('التصنيفات الرئيسية',
                       textAlign: TextAlign.right,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 20.sp, fontWeight: FontWeight.w600)),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600)),
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
                 SizedBox(
                   height: 70.h,
-                  child:
-                      Obx(() => switch (homeController.categoriesStatus.value) {
-                            RequestStatus.success =>
-                              homeController.categoriesModel != null &&
-                                      homeController.categoriesModel!
-                                          .categories!.isNotEmpty
-                                  ? ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: homeController
-                                          .categoriesModel!.categories!.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsets.all(8.0.r),
-                                          child: YearButton(
-                                            index: index,
-                                            onPressed: () {
-                                              homeController.changeCurrentIndex(
-                                                  index,
-                                                  homeController
-                                                      .categoriesModel!
-                                                      .categories![index]
-                                                      .id!);
-                                            },
-                                            categoryModel: homeController
-                                                .categoriesModel!
-                                                .categories![index],
-                                          ),
-                                        );
-                                      })
-                                  : Container(),
+                  child: GetBuilder<HomeController>(
+                      builder: (_) => switch (controller.categoriesStatus) {
+                            RequestStatus.success => controller.categoriesModel != null &&
+                                    controller.categoriesModel!.categories != null &&
+                                    controller.categoriesModel!.categories!.isNotEmpty
+                                ? ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: controller.categoriesModel!.categories!.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.all(8.0.r),
+                                        child: YearButton(
+                                          index: index,
+                                          onPressed: () {
+                                            controller.changeCurrentIndex(index,
+                                                controller.categoriesModel!.categories![index].id!);
+                                          },
+                                          categoryModel:
+                                              controller.categoriesModel!.categories![index],
+                                        ),
+                                      );
+                                    })
+                                : Container(),
                             RequestStatus.begin => Container(),
                             RequestStatus.loading => Center(
                                 child: appCircularProgress(),
                               ),
                             RequestStatus.onError => const Center(
-                                child: SizedBox(
-                                    height: 70, child: Text("حدث خطأ")),
+                                child: SizedBox(height: 70, child: Text("حدث خطأ")),
                               ),
                             RequestStatus.noData => const Center(
-                                child: SizedBox(
-                                    height: 70, child: Text("لا يوجد بيانات")),
+                                child: SizedBox(height: 70, child: Text("لا يوجد بيانات")),
                               ),
                             RequestStatus.noInternentt => const Center(
                                 child: Text("لا يوجد اتصال بالانترنت"),
@@ -94,26 +86,27 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 30.h,
                 ),
-                Obx(() => switch (homeController.courseStatus.value) {
-                      RequestStatus.success =>
-                        homeController.coursesModel!.courses!.isNotEmpty ||
-                                homeController.coursesModel!.courses != null
-                            ? CoursesWidget()
-                            : Container(),
-                      RequestStatus.begin => Container(),
-                      RequestStatus.loading => Center(
-                          child: appCircularProgress(),
-                        ),
-                      RequestStatus.onError => const Center(
-                          child: Text("حدث خطأ"),
-                        ),
-                      RequestStatus.noData => const Center(
-                          child: Text("لا يوجد بيانات"),
-                        ),
-                      RequestStatus.noInternentt => const Center(
-                          child: Text("لا يوجد اتصال بالانترنت"),
-                        ),
-                    }),
+                GetBuilder<HomeController>(
+                    builder: (_) => switch (controller.courseStatus) {
+                          RequestStatus.success => controller.coursesModel != null &&
+                                  controller.coursesModel!.courses != null &&
+                                  controller.coursesModel!.courses!.isNotEmpty
+                              ? const CoursesWidget()
+                              : Container(),
+                          RequestStatus.begin => Container(),
+                          RequestStatus.loading => Center(
+                              child: appCircularProgress(),
+                            ),
+                          RequestStatus.onError => const Center(
+                              child: Text("حدث خطأ"),
+                            ),
+                          RequestStatus.noData => const Center(
+                              child: Text("لا يوجد بيانات"),
+                            ),
+                          RequestStatus.noInternentt => const Center(
+                              child: Text("لا يوجد اتصال بالانترنت"),
+                            ),
+                        }),
               ],
             ),
           ),

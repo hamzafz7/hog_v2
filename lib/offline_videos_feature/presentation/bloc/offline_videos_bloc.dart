@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
@@ -10,6 +11,7 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pod_player/pod_player.dart';
+
 import '../../../../main.dart';
 import '../../helpers/prefs_helper.dart';
 import '../../models/custom_video_model.dart';
@@ -38,14 +40,12 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
     on<ClearDispose>(_onClearDispose);
   }
 
-  Future<void> _onClearDispose(
-      ClearDispose event, Emitter<OfflineVideosState> emit) async {}
+  Future<void> _onClearDispose(ClearDispose event, Emitter<OfflineVideosState> emit) async {}
 
   Future<void> _onDownloadYoutubeVideo(
       DownloadYoutubeVideo event, Emitter<OfflineVideosState> emit) async {
-    emit(state.rebuild((p) => p
-      ..customVideosDownloading!
-          .add(CustomVideoModel(videoModel: event.videoModel))));
+    emit(state.rebuild(
+        (p) => p..customVideosDownloading!.add(CustomVideoModel(videoModel: event.videoModel))));
     state.customVideosDownloading
         .where((element) => element.videoModel.id == event.videoModel.id)
         .first
@@ -96,8 +96,8 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
           .first
           .isDownloading = false;
       state.rebuild((p) => p
-        ..customVideosDownloading!.removeWhere(
-            (element) => element.videoModel.id == event.videoModel.id));
+        ..customVideosDownloading!
+            .removeWhere((element) => element.videoModel.id == event.videoModel.id));
       state.rebuild((p) => p..newVideoAddedToDownload = true);
     }, onChange: (Map<String, dynamic> map) {
       if (state.customVideosDownloading
@@ -114,8 +114,7 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
     _onUpdateVideosCount(UpdateVideosCount(), emit);
   }
 
-  Future<void> _onCancelDownload(
-      CancelDownload event, Emitter<OfflineVideosState> emit) async {
+  Future<void> _onCancelDownload(CancelDownload event, Emitter<OfflineVideosState> emit) async {
     state.customVideosDownloading
         .where((element) => element.videoModel.id == event.videoModel.id)
         .first
@@ -126,8 +125,8 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
         .first
         .isDownloading = false;
     emit(state.rebuild((p) => p
-      ..customVideosDownloading!.removeWhere(
-          (element) => element.videoModel.id == event.videoModel.id)));
+      ..customVideosDownloading!
+          .removeWhere((element) => element.videoModel.id == event.videoModel.id)));
     emit(state.rebuild((p) => p..newVideoAddedToDownload = true));
   }
 
@@ -147,13 +146,11 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
   Future<void> _onRemoveVideoFromCustomList(
       RemoveVideoFromCustomList event, Emitter<OfflineVideosState> emit) async {
     emit(state.rebuild((p) => p
-      ..customVideosDownloading!
-          .removeWhere((element) => element.videoModel.id == event.videoId)
+      ..customVideosDownloading!.removeWhere((element) => element.videoModel.id == event.videoId)
       ..videoRemovedFromList = true));
   }
 
-  Future<void> _onGetOfflineVideos(
-      GetOfflineVideos event, Emitter<OfflineVideosState> emit) async {
+  Future<void> _onGetOfflineVideos(GetOfflineVideos event, Emitter<OfflineVideosState> emit) async {
     emit(state.rebuild((p0) => p0..isLoadingVideos = true));
     final result = await prefsHelper.fetchOfflineVideos();
     emit(state.rebuild((p0) => p0
@@ -232,8 +229,8 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
       File file = await File(fullPath).create();
       if (data != null) {
         file.writeAsBytesSync(data);
-        PodPlayerController playerController = PodPlayerController(
-            playVideoFrom: PlayVideoFrom.file(File(fullPath)));
+        PodPlayerController playerController =
+            PodPlayerController(playVideoFrom: PlayVideoFrom.file(File(fullPath)));
         emit(state.rebuild((p0) => p0
           ..isLoadingOfflineVideo = false
           ..offlineVideoLoaded = true
@@ -242,9 +239,8 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
     }
   }
 
-  Future<void> _onPlayOfflineVideo(
-      PlayOfflineVideo event, Emitter<OfflineVideosState> emit) async {
-    state..podController!.play();
+  Future<void> _onPlayOfflineVideo(PlayOfflineVideo event, Emitter<OfflineVideosState> emit) async {
+    state.podController!.play();
     emit(state.rebuild((p0) => p0..offlineVideoLoaded = false));
   }
 
@@ -266,12 +262,9 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
 
   Future<void> _onSelectVideoMaterial(
       SelectVideoMaterial event, Emitter<OfflineVideosState> emit) async {
-    List<OfflineVideoModel> filteredVideos =
-        await prefsHelper.fetchOfflineVideos();
-    filteredVideos = filteredVideos
-        .where((element) => element.materialName == event.material)
-        .toSet()
-        .toList();
+    List<OfflineVideoModel> filteredVideos = await prefsHelper.fetchOfflineVideos();
+    filteredVideos =
+        filteredVideos.where((element) => element.materialName == event.material).toSet().toList();
     emit(state.rebuild((p0) => p0
       ..selectedVideoMaterial = event.material
       ..filteredOfflineVideos = filteredVideos));
@@ -290,31 +283,26 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
       deleteFile(pathToRead);
       prefsHelper.deleteVideoFromShared(event.videoId);
       emit(state.rebuild((p0) => p0
-        ..filteredOfflineVideos!
-            .removeWhere((element) => element.videoId == event.videoId)
+        ..filteredOfflineVideos!.removeWhere((element) => element.videoId == event.videoId)
         ..offlineItemIsDeleted = true));
     } else {
       emit(state.rebuild((p0) => p0
-        ..offlineVideos!
-            .where((element) => element.videoId == event.videoId)
-            .first
-            .isDeleting = true));
+        ..offlineVideos!.where((element) => element.videoId == event.videoId).first.isDeleting =
+            true));
       String basePath = await createBasePathFolder("Hog Offline Videos");
       String pathToRead = "$basePath/video${event.videoId}.professor";
       deleteFile(pathToRead);
       prefsHelper.deleteVideoFromShared(event.videoId);
       emit(state.rebuild((p0) => p0
-        ..offlineVideos!
-            .removeWhere((element) => element.videoId == event.videoId)
+        ..offlineVideos!.removeWhere((element) => element.videoId == event.videoId)
         ..offlineItemIsDeleted = true));
     }
   }
 
   Future<String> createBasePathFolder(String cow) async {
-    final dir = Directory(
-        '${(Platform.isAndroid ? await getExternalStorageDirectory() //FOR ANDROID
-                : await getApplicationSupportDirectory() //FOR IOS
-            )!.path}/$cow');
+    final dir = Directory('${(Platform.isAndroid ? await getExternalStorageDirectory() //FOR ANDROID
+            : await getApplicationSupportDirectory() //FOR IOS
+        )!.path}/$cow');
     var status = await Permission.storage.status;
     if (!status.isGranted) {
       await Permission.storage.request();

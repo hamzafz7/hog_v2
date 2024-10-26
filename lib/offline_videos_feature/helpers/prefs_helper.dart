@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:hog_v2/offline_videos_feature/helpers/shared_keys.dart';
 import 'package:injectable/injectable.dart';
@@ -13,13 +14,11 @@ class PrefsHelper extends ChangeNotifier {
   PrefsHelper(this.prefs);
 
   Future<List<String>> getVideosMaterials() async {
-    final String? videosStr =
-        await prefs.getString(SharedPreferencesKeys.offlineVideos);
+    final String? videosStr = prefs.getString(SharedPreferencesKeys.offlineVideos);
     if (videosStr == null) {
       return [];
     } else {
-      final List<OfflineVideoModel> videos =
-          OfflineVideoModel.decode(videosStr);
+      final List<OfflineVideoModel> videos = OfflineVideoModel.decode(videosStr);
       List<String> materials = [];
       for (var item in videos) {
         if (!materials.contains(item.materialName)) {
@@ -31,13 +30,11 @@ class PrefsHelper extends ChangeNotifier {
   }
 
   Future<List<OfflineVideoModel>> fetchOfflineVideos() async {
-    final String? videosStr =
-        prefs.getString(SharedPreferencesKeys.offlineVideos);
+    final String? videosStr = prefs.getString(SharedPreferencesKeys.offlineVideos);
     if (videosStr == null) {
       return [];
     } else {
-      final List<OfflineVideoModel> videos =
-          OfflineVideoModel.decode(videosStr);
+      final List<OfflineVideoModel> videos = OfflineVideoModel.decode(videosStr);
       return videos;
     }
   }
@@ -50,8 +47,7 @@ class PrefsHelper extends ChangeNotifier {
   }
 
   List<int> getStoredVideosIds() {
-    List<String> mList =
-        (prefs.getStringList(SharedPreferencesKeys.offlineVideosIds) ?? []);
+    List<String> mList = (prefs.getStringList(SharedPreferencesKeys.offlineVideosIds) ?? []);
     return mList.map((i) => int.parse(i)).toList();
   }
 
@@ -80,8 +76,7 @@ class PrefsHelper extends ChangeNotifier {
     notifyListeners();
   }
 
-  void storeGBytesVideo(
-      {required List<int> videoBytes, required int videoId}) async {
+  void storeGBytesVideo({required List<int> videoBytes, required int videoId}) async {
     Map<String, dynamic> selectedTimes = {
       "videoId": videoId,
       "bytes": videoBytes.map((i) => i.toString()).toList(),
@@ -93,8 +88,7 @@ class PrefsHelper extends ChangeNotifier {
   List getGBytesVideo({required int videoId}) {
     String? encodedMap = prefs.getString('videoId=$videoId');
     Map<String, dynamic> decodedMap = json.decode(encodedMap!);
-    List data =
-        decodedMap['bytes'].map((e) => int.parse(e.toString())).toList();
+    List data = decodedMap['bytes'].map((e) => int.parse(e.toString())).toList();
     return data;
   }
 }

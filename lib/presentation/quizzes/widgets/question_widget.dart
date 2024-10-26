@@ -6,11 +6,11 @@ import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/answer_widget.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/question_header_widget.dart';
 
-// ignore: must_be_immutable
-class QuestionPage extends StatelessWidget {
-  QuestionPage({super.key, required this.index, required this.questionModel});
+class QuestionPage extends GetView<QuizController> {
+  const QuestionPage({super.key, required this.index, required this.questionModel});
+
   final int index;
-  var controller = Get.find<QuizController>();
+
   final QuestionModel? questionModel;
 
   @override
@@ -39,8 +39,7 @@ class QuestionPage extends StatelessWidget {
             height: 10.h,
           ),
           ListView.builder(
-              controller: ScrollController(
-                  initialScrollOffset: 0.0, keepScrollOffset: true),
+              controller: ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true),
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: questionModel!.choices!.length,

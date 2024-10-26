@@ -6,17 +6,17 @@ import 'package:hog_v2/data/models/quiz_model.dart';
 
 class QuizController extends GetxController {
   late QuizzModel model;
-  RxInt _totalTimeInSeconds = 3600.obs;
-  RxDouble initalValue = (1 / 3).obs;
-  late RxInt totalQuistions;
-  RxInt currentQuistions = 1.obs;
-  RxDouble finalResults = 0.0.obs;
+  int _totalTimeInSeconds = 3600;
+  double initalValue = (1 / 3);
+  late int totalQuistions;
+  int currentQuistions = 1;
+  double finalResults = 0.0;
 
   @override
   void onInit() {
     model = Get.arguments;
-    totalQuistions = model.questions?.length.obs ?? 1.obs;
-    initalValue.value = (1 / totalQuistions.value);
+    totalQuistions = model.questions?.length ?? 1;
+    initalValue = (1 / totalQuistions);
     startCountdown();
     super.onInit();
   }
@@ -24,25 +24,14 @@ class QuizController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    timer.value.cancel();
-    _totalTimeInSeconds.close();
-    initalValue.close();
-    totalQuistions.close();
-    currentQuistions.close();
-    finalResults.close();
     formattedTime.close();
-    skippedQuistions.close();
-    wrongAnswers.close();
-    timeElapsed.close();
-    currentIndex.close();
-    pageController.close();
   }
 
   Rx<String> get formattedTime =>
       "${(_totalTimeInSeconds ~/ 60).toString().padLeft(2, '0')}:${(_totalTimeInSeconds % 60).toString().padLeft(2, '0')}"
           .obs;
 
-  late Rx<Timer> timer;
+  late Timer timer;
 
   void startCountdown() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -51,41 +40,42 @@ class QuizController extends GetxController {
       } else {
         timer.cancel();
       }
-      update();
-    }).obs;
+    });
   }
 
-  Rx<PageController> pageController = PageController().obs;
-  Rx<int> currentIndex = 0.obs;
+  PageController pageController = PageController();
+  int currentIndex = 0;
 
   incrementQuistionsValue() {
-    if (currentQuistions.value < totalQuistions.value) {
-      initalValue.value = initalValue.value + 1 / totalQuistions.value;
-      currentQuistions.value++;
-      currentIndex.value++;
+    if (currentQuistions < totalQuistions) {
+      initalValue = initalValue + 1 / totalQuistions;
+      currentQuistions++;
+      currentIndex++;
     }
+    update();
   }
 
   decrementQuistionsValue() {
-    if (currentQuistions.value > 1) {
-      initalValue.value = initalValue.value - 1 / totalQuistions.value;
-      currentQuistions.value--;
-      currentIndex.value--;
+    if (currentQuistions > 1) {
+      initalValue = initalValue - 1 / totalQuistions;
+      currentQuistions--;
+      currentIndex--;
     }
+    update();
   }
 
   Map<int, int> userSolutions = {};
   Map<int, int> rightSolutions = {};
-  RxInt skippedQuistions = 0.obs;
-  RxInt wrongAnswers = 0.obs;
-  RxInt timeElapsed = 0.obs;
+  int skippedQuistions = 0;
+  int wrongAnswers = 0;
+  int timeElapsed = 0;
 
   calcResult() {
-    timer.value.cancel();
-    timeElapsed.value = (timer.value.tick / 60).ceil();
-    finalResults.value = 0.0;
-    skippedQuistions.value = 0;
-    wrongAnswers.value = 0;
+    timer.cancel();
+    timeElapsed = (timer.tick / 60).ceil();
+    finalResults = 0.0;
+    skippedQuistions = 0;
+    wrongAnswers = 0;
     for (var element in model.questions!) {
       int ind = 0;
       for (int i = 0; i < element.choices!.length; i++) {
@@ -96,11 +86,11 @@ class QuizController extends GetxController {
         }
       }
       if (userSolutions.containsKey(element.id) && userSolutions.containsValue(ind)) {
-        finalResults.value += 1 / totalQuistions.value;
+        finalResults += 1 / totalQuistions;
       } else if (userSolutions.containsKey(element.id) && !userSolutions.containsValue(ind)) {
-        wrongAnswers.value += 1;
+        wrongAnswers += 1;
       } else if (!userSolutions.containsKey(element.id)) {
-        skippedQuistions.value += 1;
+        skippedQuistions += 1;
       }
     }
   }
@@ -111,15 +101,14 @@ class QuizController extends GetxController {
   }
 
   clearSolutions() {
-    _totalTimeInSeconds.value = 3600;
-    timeElapsed.value = 0;
+    _totalTimeInSeconds = 3600;
+    timeElapsed = 0;
     startCountdown();
-    currentIndex.value = 0;
-    currentQuistions.value = 1;
-    initalValue.value = 1 / totalQuistions.value;
+    currentIndex = 0;
+    currentQuistions = 1;
+    initalValue = 1 / totalQuistions;
     userSolutions = {};
-    pageController.value.jumpToPage(0);
-
+    pageController.jumpToPage(0);
     update();
   }
 }

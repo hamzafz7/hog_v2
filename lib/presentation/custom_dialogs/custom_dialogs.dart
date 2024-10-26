@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Custom dialog function with options for customization
-Future<T?> CustomDialog<T>(
+Future<T?> customDialog<T>(
   BuildContext context, {
   required Widget child,
   double height = 350,
@@ -13,8 +13,7 @@ Future<T?> CustomDialog<T>(
 }) {
   return showDialog<T>(
     context: context,
-    barrierDismissible:
-        barrierDismissible, // Controls if tapping outside will close the dialog
+    barrierDismissible: barrierDismissible, // Controls if tapping outside will close the dialog
     builder: (context) => Dialog(
       shape: shape ??
           RoundedRectangleBorder(

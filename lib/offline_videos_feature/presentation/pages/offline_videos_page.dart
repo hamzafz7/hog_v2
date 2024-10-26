@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/offline_videos_feature/presentation/pages/play_offline_video_page.dart';
+
 import '../../dependency_injection/injection_container.dart';
 import '../bloc/offline_videos_bloc.dart';
 import '../bloc/offline_videos_event.dart';
 import '../bloc/offline_videos_state.dart';
 
 class OfflineVideosPage extends StatefulWidget {
-  const OfflineVideosPage({Key? key}) : super(key: key);
+  const OfflineVideosPage({super.key});
 
   @override
   State<OfflineVideosPage> createState() => _OfflineVideosPageState();
 }
 
-class _OfflineVideosPageState extends State<OfflineVideosPage>
-    with TickerProviderStateMixin {
+class _OfflineVideosPageState extends State<OfflineVideosPage> with TickerProviderStateMixin {
   final _bloc = getIt<OfflineVideosBloc>();
 
   @override
@@ -62,8 +62,7 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                           decoration: const BoxDecoration(
                               // color: Colors.white,
                               borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  topRight: Radius.circular(25))),
+                                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
                           child: Column(
                             children: [
                               Expanded(
@@ -132,10 +131,10 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
 
   Widget getVideosMaterialsWidget(OfflineVideosState state) {
     if (state.videosMaterials.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 40,
         child: ListView(
-          children: [],
+          children: const [],
         ),
       );
     } else {
@@ -143,7 +142,7 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Padding(
           padding: const EdgeInsets.only(top: 16.0),
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: 35,
             child: Row(
@@ -157,23 +156,19 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                         itemCount: state.videosMaterials.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 3.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 3.0),
                             child: GestureDetector(
                               onTap: () {
-                                _bloc.add(SelectVideoMaterial(
-                                    state.videosMaterials[index]));
+                                _bloc.add(SelectVideoMaterial(state.videosMaterials[index]));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: state.selectedVideoMaterial ==
-                                            state.videosMaterials[index]
-                                        ? AppColors.primaryColor
-                                        : null,
-                                    border: Border.all(
-                                        color: AppColors.primaryColor),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(12))),
+                                    color:
+                                        state.selectedVideoMaterial == state.videosMaterials[index]
+                                            ? AppColors.primaryColor
+                                            : null,
+                                    border: Border.all(color: AppColors.primaryColor),
+                                    borderRadius: const BorderRadius.all(Radius.circular(12))),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -201,12 +196,9 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: state.selectedVideoMaterial == "All"
-                            ? AppColors.primaryColor
-                            : null,
+                        color: state.selectedVideoMaterial == "All" ? AppColors.primaryColor : null,
                         border: Border.all(color: AppColors.primaryColor),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12))),
+                        borderRadius: const BorderRadius.all(Radius.circular(12))),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -271,8 +263,7 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
           padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Color(0xffF4F6FA)),
+                borderRadius: BorderRadius.all(Radius.circular(12)), color: Color(0xffF4F6FA)),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -285,14 +276,13 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                               onTap: () {
                                 _bloc.add(DeleteOfflineVideo(index,
                                     fromFilter: false,
-                                    videoId:
-                                        state.offlineVideos[index].videoId));
+                                    videoId: state.offlineVideos[index].videoId));
                                 setState(() {});
                               },
-                              child: Container(
+                              child: const SizedBox(
                                   width: 40,
                                   height: 40,
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.delete,
                                     color: Colors.red,
                                   )),
@@ -303,14 +293,13 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                               onTap: () {
                                 _bloc.add(DeleteOfflineVideo(index,
                                     fromFilter: true,
-                                    videoId: state
-                                        .filteredOfflineVideos[index].videoId));
+                                    videoId: state.filteredOfflineVideos[index].videoId));
                                 setState(() {});
                               },
-                              child: Container(
+                              child: const SizedBox(
                                   width: 40,
                                   height: 40,
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.delete,
                                     color: Colors.red,
                                   )),
@@ -324,17 +313,13 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                               ? state.offlineVideos[index].lessonTitle == null
                                   ? ""
                                   : state.offlineVideos[index].lessonTitle!
-                              : state.filteredOfflineVideos[index]
-                                          .lessonTitle ==
-                                      null
+                              : state.filteredOfflineVideos[index].lessonTitle == null
                                   ? ""
-                                  : state.filteredOfflineVideos[index]
-                                      .lessonTitle!,
+                                  : state.filteredOfflineVideos[index].lessonTitle!,
                           textAlign: TextAlign.end,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: AppColors.primaryColor, fontSize: 12.sp),
+                          style: TextStyle(color: AppColors.primaryColor, fontSize: 12.sp),
                         ),
                       ],
                     ),
@@ -342,7 +327,7 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                   const SizedBox(
                     width: 10,
                   ),
-                  Container(
+                  SizedBox(
                     width: context.w * 0.26,
                     height: context.w * 0.2,
                     child: Stack(
@@ -357,8 +342,7 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
                             ),
                           ),
                           child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
+                              borderRadius: const BorderRadius.all(Radius.circular(5)),
                               child: Image.asset(
                                 'assets/icons/logo.png',
                               )),

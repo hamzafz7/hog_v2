@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -17,8 +18,6 @@ class RegisterationController extends GetxController {
     confirmPasswordController.dispose();
     loginPhoneController.dispose();
     registerPhoneController.dispose();
-    loginRequestStatus.close();
-    registerRequestStatus.close();
     isloginpasswordShown.close();
     super.onClose();
   }
@@ -33,11 +32,12 @@ class RegisterationController extends GetxController {
   var loginPageFormKey = GlobalKey<FormState>();
   var registerPageFormKey = GlobalKey<FormState>();
 
-  var loginRequestStatus = RequestStatus.begin.obs;
-  var registerRequestStatus = RequestStatus.begin.obs;
+  var loginRequestStatus = RequestStatus.begin;
+  var registerRequestStatus = RequestStatus.begin;
 
-  uptateLoginRequestStatus(RequestStatus val) => loginRequestStatus.value = val;
-  uptateRegisterRequestStatus(RequestStatus val) => registerRequestStatus.value = val;
+  uptateLoginRequestStatus(RequestStatus val) => loginRequestStatus = val;
+
+  uptateRegisterRequestStatus(RequestStatus val) => registerRequestStatus = val;
 
   RxBool isloginpasswordShown = false.obs;
 
@@ -51,13 +51,15 @@ class RegisterationController extends GetxController {
 
   Future<void> userLogin({required String phone, required String password}) async {
     uptateLoginRequestStatus(RequestStatus.loading);
-
+    update();
     User user = User(password: password.trim(), phone: phone.trim());
 
     var response = await _repo.userLogin(user);
     if (response.success) {
       authResponse = AuthResponse.fromJson(response.data);
-      print(authResponse!.data!.token!);
+      if (kDebugMode) {
+        print(authResponse!.data!.token!);
+      }
 
       Get.snackbar("مرحباً !!", authResponse!.message!);
       GetIt.instance<CacheProvider>().setUserId(authResponse!.data!.user!.id!);
@@ -70,12 +72,13 @@ class RegisterationController extends GetxController {
       uptateLoginRequestStatus(RequestStatus.onError);
       Get.snackbar("حدث خطأ", response.errorMessage!);
     }
+    update();
   }
 
   Future<void> userRegister(
       {required String phone, required String password, required String fullName}) async {
     uptateRegisterRequestStatus(RequestStatus.loading);
-
+    update();
     User user = User(password: password.trim(), phone: phone.trim(), fullName: fullName.trim());
 
     var response = await _repo.userRegister(user);
@@ -93,5 +96,6 @@ class RegisterationController extends GetxController {
       uptateRegisterRequestStatus(RequestStatus.onError);
       Get.snackbar("حدث خطأ", response.errorMessage!);
     }
+    update();
   }
 }

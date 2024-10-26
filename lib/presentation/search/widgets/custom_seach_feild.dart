@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 
-class CustomSearchFeild extends StatelessWidget {
-  const CustomSearchFeild(
-      {super.key, required this.searchController, this.onChanged});
+class CustomSearchFeild extends StatelessWidget implements PreferredSizeWidget {
+  const CustomSearchFeild({super.key, required this.searchController, this.onChanged});
+
   final TextEditingController searchController;
   final Function(String)? onChanged;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,4 +37,7 @@ class CustomSearchFeild extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(50.h);
 }

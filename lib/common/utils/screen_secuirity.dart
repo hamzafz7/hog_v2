@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class ScreenSecurity {
@@ -8,7 +9,9 @@ class ScreenSecurity {
     try {
       await platform.invokeMethod('toggleScreenSecurity', {'isSecure': isSecure});
     } on PlatformException catch (e) {
-      print("Failed to toggle screen security: '${e.message}'.");
+      if (kDebugMode) {
+        print("Failed to toggle screen security: '${e.message}'.");
+      }
     }
   }
 }

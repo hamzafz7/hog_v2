@@ -2,20 +2,21 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:flutter/material.dart';
+
+import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:hog_v2/offline_videos_feature/presentation/bloc/offline_videos_event.dart';
 import 'package:path_provider/path_provider.dart';
+
 import '../../../main.dart';
-import 'package:bot_toast/bot_toast.dart';
 import '../../dependency_injection/injection_container.dart';
 import '../bloc/offline_videos_bloc.dart';
 
 enum DownloadStatus { init, downloading, downloaded, videoExist }
 
 class VideoDownloader {
-  final ValueNotifier<DownloadStatus> downloadStatus =
-      ValueNotifier(DownloadStatus.init);
+  final ValueNotifier<DownloadStatus> downloadStatus = ValueNotifier(DownloadStatus.init);
 
   ValueNotifier<Map<String, dynamic>> newDownloadPercentage =
       ValueNotifier({"percent": 0.0, "value": "0%"});
@@ -36,9 +37,11 @@ class VideoDownloader {
       // print("Start downloading.... download2");
       receivePort = ReceivePort("iso_$videoId");
       // RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-      IsolateNameServer.registerPortWithName(
-          receivePort!.sendPort, "iso_$videoId");
-      print("QQQQQ");
+      IsolateNameServer.registerPortWithName(receivePort!.sendPort, "iso_$videoId");
+
+      if (kDebugMode) {
+        print("QQQQQ");
+      }
       receivePort!.listen((message) {
         if (message == "done") {
           // print("DONOONO");
@@ -64,7 +67,9 @@ class VideoDownloader {
           newDownloadPercentage.value = {"percent": 0.0, "value": "0%"};
           onDone();
           if (myIsolate != null) {
-            print("KKKKK");
+            if (kDebugMode) {
+              print("KKKKK");
+            }
 
             myIsolate = null;
           }
@@ -81,10 +86,14 @@ class VideoDownloader {
         }
       });
 
-      print("SSSS");
+      if (kDebugMode) {
+        print("SSSS");
+      }
       myIsolate = await FlutterIsolate.spawn(writeVideoBytes, [videoId, url]);
-      print("WWWWW");
-    } catch (e, s) {
+      if (kDebugMode) {
+        print("WWWWW");
+      }
+    } catch (e) {
       // Catcher2.reportCheckedError(e, s);
       downloadStatus.value = DownloadStatus.init;
       newDownloadPercentage.value = {"percent": 0.0, "value": "0%"};
@@ -102,10 +111,9 @@ class VideoDownloader {
   }
 
   Future<String> createBasePathFolder(String cow) async {
-    final dir = Directory(
-        '${(Platform.isAndroid ? await getExternalStorageDirectory() //FOR ANDROID
-                : await getApplicationSupportDirectory() //FOR IOS
-            )!.path}/$cow');
+    final dir = Directory('${(Platform.isAndroid ? await getExternalStorageDirectory() //FOR ANDROID
+            : await getApplicationSupportDirectory() //FOR IOS
+        )!.path}/$cow');
 
     if ((await dir.exists())) {
       return dir.path;

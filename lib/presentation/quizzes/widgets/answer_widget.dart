@@ -7,11 +7,11 @@ import 'package:hog_v2/common/constants/shimmer_effect.dart';
 import 'package:hog_v2/data/models/choice_model.dart';
 import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 
-// ignore: must_be_immutable
-class AnswerWidget extends StatelessWidget {
-  AnswerWidget({super.key, this.choice});
-  var controller = Get.find<QuizController>();
-  ChoiceModel? choice;
+class AnswerWidget extends GetView<QuizController> {
+  const AnswerWidget({super.key, required this.choice});
+
+  final ChoiceModel choice;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<QuizController>(
@@ -30,25 +30,24 @@ class AnswerWidget extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4.0.r),
                 ),
-                side: MaterialStateBorderSide.resolveWith(
+                side: WidgetStateBorderSide.resolveWith(
                   (states) => const BorderSide(width: 1.0, color: Colors.blue),
                 ),
-                value:
-                    controller.userSolutions.containsKey(choice!.questionId!) &&
-                        controller.userSolutions.containsValue(choice!.id!),
+                value: controller.userSolutions.containsKey(choice.questionId!) &&
+                    controller.userSolutions.containsValue(choice.id!),
                 onChanged: (value) {
-                  controller.provideSolution(choice!.questionId!, choice!.id!);
+                  controller.provideSolution(choice.questionId!, choice.id!);
                 },
               ),
             ),
             Column(
               children: [
-                if (choice!.image != null)
+                if (choice.image != null)
                   CachedNetworkImage(
                     width: 260.w,
                     height: 200.h,
                     fit: BoxFit.fill,
-                    imageUrl: choice!.image!,
+                    imageUrl: choice.image!,
                     placeholder: ((context, url) => ShimmerPlaceholder(
                           child: Container(
                             height: 150.h,
@@ -59,7 +58,7 @@ class AnswerWidget extends StatelessWidget {
                   ),
                 SizedBox(
                   width: 280.w,
-                  child: Text(choice!.title ?? ""),
+                  child: Text(choice.title ?? ""),
                 ),
               ],
             )

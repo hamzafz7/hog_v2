@@ -8,6 +8,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/common/themes/themes.dart';
 import 'package:hog_v2/common/utils/screen_secuirity.dart';
-import 'package:hog_v2/data/httpClient.dart';
+import 'package:hog_v2/data/http_client.dart';
 import 'package:hog_v2/data/providers/apiProvider/api_provider.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog_v2/data/providers/notificationProvider/notification_provider.dart';
@@ -89,7 +90,9 @@ void writeVideoBytes(List arg) async {
     } catch (error, s) {
       await file.delete();
 
-      print("error = ${error.toString()}");
+      if (kDebugMode) {
+        print("error = ${error.toString()}");
+      }
       sendPort?.send("error");
     } finally {
       reader?.cancel();

@@ -3,8 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SettingController extends GetxController {
   void launchTelegramURL() async {
-    const url =
-        'https://t.me/Mk_0934'; // Replace with your actual Telegram link
+    const url = 'https://t.me/Mk_0934'; // Replace with your actual Telegram link
     // ignore: deprecated_member_use
     if (await canLaunch(url)) {
       // ignore: deprecated_member_use
@@ -16,10 +15,10 @@ class SettingController extends GetxController {
 
   void launchWhatsAppURL() async {
     const phoneNumber = '0945364375';
-    final url = 'whatsapp://send?phone=$phoneNumber';
+    const url = 'whatsapp://send?phone=$phoneNumber';
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }

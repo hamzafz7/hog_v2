@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -22,16 +23,14 @@ class MyProfileController extends GetxController {
     nameController.dispose();
     phoneController.dispose();
     addressController.dispose();
-    getProfileStatus.close();
-    logOutStatus.close();
-    deleteProfileStatus.close();
-    updateProfileStatus.close();
+
     isEdited.close();
     imagePicked.close();
     super.onClose();
   }
 
   RxBool isEdited = false.obs;
+
   changeIsEdit() {
     isEdited.value = !isEdited.value;
   }
@@ -40,24 +39,31 @@ class MyProfileController extends GetxController {
   TextEditingController phoneController = TextEditingController(text: "لا يوجد");
   TextEditingController addressController = TextEditingController(text: "لا يوجد");
 
-  final getProfileStatus = RequestStatus.begin.obs;
-  final logOutStatus = RequestStatus.begin.obs;
-  final deleteProfileStatus = RequestStatus.begin.obs;
-  final updateProfileStatus = RequestStatus.begin.obs;
-  updateGetProfileStatus(RequestStatus status) => getProfileStatus.value = status;
-  updateLogOutStatus(RequestStatus status) => logOutStatus.value = status;
-  updateEditProfileStatus(RequestStatus status) => updateProfileStatus.value = status;
-  updateDeleteProfileStatus(RequestStatus status) => deleteProfileStatus.value = status;
+  RequestStatus getProfileStatus = RequestStatus.begin;
+  RequestStatus logOutStatus = RequestStatus.begin;
+  RequestStatus deleteProfileStatus = RequestStatus.begin;
+  RequestStatus updateProfileStatus = RequestStatus.begin;
+
+  updateGetProfileStatus(RequestStatus status) => getProfileStatus = status;
+
+  updateLogOutStatus(RequestStatus status) => logOutStatus = status;
+
+  updateEditProfileStatus(RequestStatus status) => updateProfileStatus = status;
+
+  updateDeleteProfileStatus(RequestStatus status) => deleteProfileStatus = status;
 
   RxString imagePicked = "".obs;
+
   getImagePicked() async {
     imagePicked.value = await GetIt.instance<Utils>().imagePicker(ImageSource.gallery) ?? "";
   }
 
   final AccountRepo _repo = AccountRepo();
   ProfileResponse? prfoileResponse;
+
   Future<void> getMyProfile() async {
     updateGetProfileStatus(RequestStatus.loading);
+    update();
     var response = await _repo.getMyProfile();
     if (response.success) {
       prfoileResponse = ProfileResponse.fromJson(response.data);
@@ -66,7 +72,9 @@ class MyProfileController extends GetxController {
       nameController = TextEditingController(text: prfoileResponse!.data.fullName ?? "لا يوجد");
       addressController = TextEditingController(text: prfoileResponse!.data.location ?? "لا يوجد");
       updateGetProfileStatus(RequestStatus.success);
-      print(response.data);
+      if (kDebugMode) {
+        print(response.data);
+      }
     } else if (!response.success) {
       if (response.errorMessage == "لا يوجد اتصال بالانترنت") {
         updateGetProfileStatus(RequestStatus.noInternentt);
@@ -75,10 +83,12 @@ class MyProfileController extends GetxController {
       }
       Get.snackbar("حدث خطأ", response.errorMessage!);
     }
+    update();
   }
 
   Future<void> updateProfile() async {
     updateEditProfileStatus(RequestStatus.loading);
+    update();
     User user = User(
         id: GetIt.instance<CacheProvider>().getUserId(),
         fullName: nameController.text.trim(),
@@ -89,19 +99,22 @@ class MyProfileController extends GetxController {
       updateEditProfileStatus(RequestStatus.success);
       prfoileResponse = ProfileResponse.fromJson(response.data);
       GetIt.instance<CacheProvider>().setUserName(prfoileResponse!.data.fullName!);
-
+      update();
       phoneController = TextEditingController(text: prfoileResponse!.data.phone ?? "لا يوجد");
       nameController = TextEditingController(text: prfoileResponse!.data.fullName ?? "لا يوجد");
       addressController = TextEditingController(text: prfoileResponse!.data.location ?? "لا يوجد");
       Get.back();
       getMyProfile();
     } else {
+      updateEditProfileStatus(RequestStatus.begin);
+      update();
       Get.snackbar("حدث خطأ", response.errorMessage ?? "حدث خطأ في الاتصال مع الانترنت");
     }
   }
 
   Future<void> logOut() async {
     updateLogOutStatus(RequestStatus.loading);
+    update();
     var response = await _repo.signOut();
     if (response.success) {
       updateLogOutStatus(RequestStatus.success);
@@ -110,11 +123,13 @@ class MyProfileController extends GetxController {
     } else if (!response.success) {
       updateLogOutStatus(RequestStatus.onError);
       Get.snackbar("حدث خطأ", response.errorMessage!);
+      update();
     }
   }
 
   Future<void> deleteProfile() async {
     updateDeleteProfileStatus(RequestStatus.loading);
+    update();
     var response = await _repo.deleteProfile();
     if (response.success) {
       updateDeleteProfileStatus(RequestStatus.success);
@@ -123,6 +138,7 @@ class MyProfileController extends GetxController {
     } else if (!response.success) {
       updateDeleteProfileStatus(RequestStatus.onError);
       Get.snackbar("حدث خطأ", response.errorMessage!);
+      update();
     }
   }
 }

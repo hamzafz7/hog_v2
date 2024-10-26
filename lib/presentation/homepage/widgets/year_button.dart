@@ -5,9 +5,8 @@ import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/models/categories_model.dart';
 import 'package:hog_v2/presentation/homepage/controller/home_controller.dart';
 
-// ignore: must_be_immutable
-class YearButton extends StatelessWidget {
-  YearButton({
+class YearButton extends GetView<HomeController> {
+  const YearButton({
     super.key,
     required this.index,
     required this.onPressed,
@@ -17,20 +16,17 @@ class YearButton extends StatelessWidget {
   final CategoryModel categoryModel;
   final Function()? onPressed;
   // final bool isPressed;
-  var controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      child: Obx(
-        () => Container(
+      child: GetBuilder<HomeController>(
+        builder: (_) => Container(
           width: 146.w,
           height: 70.h,
           decoration: ShapeDecoration(
-            color: index == controller.currentCategoryIndex.value
-                ? kprimaryBlueColor
-                : Colors.white,
+            color: index == controller.currentCategoryIndex ? kprimaryBlueColor : Colors.white,
             shape: RoundedRectangleBorder(
               side: const BorderSide(width: 1, color: kprimaryBlueColor),
               borderRadius: BorderRadius.circular(6.r),
@@ -44,7 +40,7 @@ class YearButton extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: controller.currentCategoryIndex.value == index
+                    color: controller.currentCategoryIndex == index
                         ? Colors.white
                         : kprimaryBlueColor),
               ),

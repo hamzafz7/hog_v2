@@ -7,10 +7,8 @@ import 'package:hog_v2/presentation/course_details/widgets/chapter_name.dart';
 import 'package:hog_v2/presentation/course_details/widgets/course_def_title.dart';
 import 'package:hog_v2/presentation/course_details/widgets/custom_name_text.dart';
 
-// ignore: must_be_immutable
-class CourseDescribtionWidget extends StatelessWidget {
-  CourseDescribtionWidget({super.key});
-  var controller = Get.find<CourseDetailsController>();
+class CourseDescribtionWidget extends GetView<CourseDetailsController> {
+  const CourseDescribtionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +24,8 @@ class CourseDescribtionWidget extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: controller.courseInfoModel!.course!.teachers!.length,
-          itemBuilder: (context, index) => CustomNameText(
-              name: controller.courseInfoModel!.course!.teachers![index]),
+          itemBuilder: (context, index) =>
+              CustomNameText(name: controller.courseInfoModel!.course!.teachers![index]),
         ),
         CourseDefineTitle(titleName: "الفصول الرئيسية ", width: 145.w),
         ListView.builder(
@@ -35,9 +33,8 @@ class CourseDescribtionWidget extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: controller.courseInfoModel!.course!.chapters!.length,
-          itemBuilder: (context, index) => ChapterName(
-              chapterModel:
-                  controller.courseInfoModel!.course!.chapters![index]),
+          itemBuilder: (context, index) =>
+              ChapterName(chapterModel: controller.courseInfoModel!.course!.chapters![index]),
         ),
         SizedBox(
           height: 15.h,
@@ -49,8 +46,7 @@ class CourseDescribtionWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: controller.courseInfoModel!.course!.valuesOfCourse!.length,
           itemBuilder: (context, index) => AcquiredLessonsText(
-              lesson:
-                  controller.courseInfoModel!.course!.valuesOfCourse![index]),
+              lesson: controller.courseInfoModel!.course!.valuesOfCourse![index]),
         ),
         SizedBox(
           height: 15.h,
@@ -60,14 +56,14 @@ class CourseDescribtionWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Row(
               children: [
-                Text("رابط القناة"),
+                const Text("رابط القناة"),
                 SizedBox(
                   width: 240.w,
                 ),
                 GestureDetector(
                   onTap: () {
-                    controller.launchTelegramURL(controller
-                        .courseInfoModel!.course!.telegramChannelLink);
+                    controller
+                        .launchTelegramURL(controller.courseInfoModel!.course!.telegramChannelLink);
                   },
                   child: Image.asset(
                     "assets/images/telegram.png",

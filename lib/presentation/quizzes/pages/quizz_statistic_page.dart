@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,10 +10,9 @@ import 'package:hog_v2/presentation/quizzes/widgets/quiz_info_widget.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/result_button_widget.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/result_grade_Stack.dart';
 
-// ignore: must_be_immutable
-class QuizStatisticPage extends StatelessWidget {
-  QuizStatisticPage({super.key});
-  var controller = Get.find<QuizController>();
+class QuizStatisticPage extends GetView<QuizController> {
+  const QuizStatisticPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +33,7 @@ class QuizStatisticPage extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: kprimaryBlueColor,
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(25.r),
-                        bottomRight: Radius.circular(25.r))),
+                        bottomLeft: Radius.circular(25.r), bottomRight: Radius.circular(25.r))),
               ),
               Positioned(
                   top: 0,
@@ -45,14 +41,10 @@ class QuizStatisticPage extends StatelessWidget {
                   left: 30,
                   bottom: 500.h,
                   child: ResultGradeStack(
-                    res: controller.finalResults.value,
+                    res: controller.finalResults,
                   )),
               Positioned(
-                  top: 320.h,
-                  bottom: 320.h,
-                  right: 30,
-                  left: 30,
-                  child: QuizInfoWidget()),
+                  top: 320.h, bottom: 320.h, right: 30, left: 30, child: const QuizInfoWidget()),
               Positioned(
                 bottom: 60.h,
                 child: SizedBox(
@@ -78,10 +70,8 @@ class QuizStatisticPage extends StatelessWidget {
                           ),
                           ResultButtonWidget(
                               ontap: () {
-                                CustomDialog(context,
-                                    child: TimeElapsedDialog(
-                                        timeElapsed:
-                                            controller.timeElapsed.value));
+                                customDialog(context,
+                                    child: TimeElapsedDialog(timeElapsed: controller.timeElapsed));
                               },
                               color: ksecondaryColor,
                               svgURL: "assets/images/clock (1).svg",
