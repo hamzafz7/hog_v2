@@ -1,7 +1,4 @@
-import 'dart:io';
-
-import 'package:android_id/android_id.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_storage/get_storage.dart';
 
 class CacheProvider {
@@ -92,15 +89,15 @@ class CacheProvider {
   }
 
   Future<void> setDeviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      const androidIdPlugin = AndroidId();
-
-      final String? androidId = await androidIdPlugin.getId();
-      await _getStorage.write("device_id", androidId);
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      await _getStorage.write("device_id", iosInfo.identifierForVendor);
-    }
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // if (Platform.isAndroid) {
+    //   const androidIdPlugin = AndroidId();
+    //
+    //   final String? androidId = await androidIdPlugin.getId();
+    //   await _getStorage.write("device_id", androidId);
+    // } else if (Platform.isIOS) {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   await _getStorage.write("device_id", iosInfo.identifierForVendor);
+    // }
   }
 }

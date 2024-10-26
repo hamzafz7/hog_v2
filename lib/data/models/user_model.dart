@@ -41,7 +41,8 @@ class User {
     return {
       "phone": phone,
       "password": password,
-      "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
+      // "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
+      "device_id": 'GetIt.instance<CacheProvider>().getDeviceId()',
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
   }
@@ -51,7 +52,8 @@ class User {
       "full_name": fullName,
       "phone": phone,
       "password": password,
-      "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
+      // "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
+      "device_id": 'GetIt.instance<CacheProvider>().getDeviceId()',
       "email": "hamzafz888@gmail.com",
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };

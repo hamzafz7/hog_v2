@@ -25,14 +25,15 @@ class SearchPage extends GetView<SearchPageController> {
         title: TextFormField(
           style: Theme.of(context).textTheme.bodyMedium,
           controller: controller.searchController,
-          onChanged: (val) {
+          autofocus: true,
+          onChanged: (val) async {
             if (controller.debounceTimer != null) controller.debounceTimer?.cancel();
-            controller.debounceTimer = Timer(const Duration(milliseconds: 500), () {
+            controller.debounceTimer = Timer(const Duration(milliseconds: 500), () async {
               if (val.isNotEmpty && controller.searchController.text.isNotEmpty) {
                 controller.cancelToken.cancel();
                 debugPrint('Request was cancelled');
                 debugPrint('Search again');
-                controller.searchCourse(val);
+                await controller.searchCourse(val);
               }
               if (val.isEmpty || controller.searchController.text.isEmpty) {
                 controller.updatecourseStatus(RequestStatus.begin);

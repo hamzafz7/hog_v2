@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:async/async.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 import 'package:firebase_core/firebase_core.dart';
@@ -250,15 +250,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<bool> _isRealDevice() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Theme.of(context).platform == TargetPlatform.android) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.isPhysicalDevice;
-    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.isPhysicalDevice;
-    } else {
-      return false;
-    }
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // if (Theme.of(context).platform == TargetPlatform.android) {
+    // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   return androidInfo.isPhysicalDevice;
+    // } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   return iosInfo.isPhysicalDevice;
+    // } else {
+    //   return false;
+    // }
+    return true;
   }
 }
