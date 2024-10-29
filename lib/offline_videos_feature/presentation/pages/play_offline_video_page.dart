@@ -91,7 +91,8 @@ class _PlayOfflineVideoPageState extends State<PlayOfflineVideoPage> {
                                   ),
                                 );
                               })
-                          : PodVideoPlayer(controller: state.podController!)),
+                          : PodVideoPlayer(
+                                  controller: state.podController!)),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Align(

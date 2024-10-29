@@ -245,28 +245,27 @@ class _OfflineVideosPageState extends State<OfflineVideosPage>
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: videoWidget(index, state),
+              child: videoWidget(index, state, onTap: () {
+                Get.to(PlayOfflineVideoPage(
+                  offlineVideoModel: state.selectedVideoMaterial == "All"
+                      ? state.offlineVideos[index]
+                      : state.filteredOfflineVideos[index],
+                ));
+              }),
             );
           });
     }
   }
 
-  Widget videoWidget(int index, OfflineVideosState state) {
+  Widget videoWidget(int index, OfflineVideosState state,
+      {required Function onTap}) {
     debugPrint(
         "state.offlineVideos[index].lessonTitle! = ${state.offlineVideos[index].lessonTitle!}");
     return Directionality(
       textDirection: TextDirection.ltr,
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => PlayOfflineVideoPage(
-          //               offlineVideoModel: state.offlineVideos[index],
-          //             )));
-          Get.to(PlayOfflineVideoPage(
-            offlineVideoModel: state.offlineVideos[index],
-          ));
+          onTap();
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),

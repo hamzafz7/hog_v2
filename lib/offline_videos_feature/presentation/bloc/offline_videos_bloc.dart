@@ -235,8 +235,10 @@ class OfflineVideosBloc extends Bloc<OfflineVideosEvent, OfflineVideosState> {
 
   Future<void> _onDisposeVideoController(
       DisposeVideoController event, Emitter<OfflineVideosState> emit) async {
-    state.podController!.dispose();
-    emit(state.rebuild((p0) => p0..podController!.dispose()));
+    if(state.podController != null){
+      state.podController!.dispose();
+      emit(state.rebuild((p0) => p0..podController!.dispose()));
+    }
   }
 
   Future<void> _onGetVideosMaterials(
