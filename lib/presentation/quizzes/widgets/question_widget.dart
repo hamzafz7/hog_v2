@@ -21,6 +21,7 @@ class QuestionPage extends GetView<QuizController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           QuestionHeaderWidget(
+            imageExist: questionModel!.imageExist,
             index: index,
             title: questionModel!.title,
             image: questionModel!.image,

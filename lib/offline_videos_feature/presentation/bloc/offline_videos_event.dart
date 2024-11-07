@@ -17,8 +17,7 @@ class DeleteOfflineVideo extends OfflineVideosEvent {
   final int videoId;
   final bool fromFilter;
 
-  DeleteOfflineVideo(this.index,
-      {required this.fromFilter, required this.videoId});
+  DeleteOfflineVideo(this.index, {required this.fromFilter, required this.videoId});
 }
 
 class SelectVideoMaterial extends OfflineVideosEvent {

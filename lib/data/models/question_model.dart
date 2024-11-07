@@ -5,7 +5,9 @@ class QuestionModel {
   int? id;
   String? title;
   String? image;
+  bool? imageExist;
   String? clarificationImage;
+  bool? clarificationImageExist;
   String? clarificationText;
   List<ChoiceModel>? choices;
   QuestionQuiz? questionQuiz;
@@ -13,11 +15,12 @@ class QuestionModel {
     id = json['id'];
     title = json['title'];
     image = json['image'];
+    imageExist = false;
+    clarificationImageExist = false;
     clarificationImage = json['clarification_image'];
     clarificationText = json['clarification_text'];
     choices = json['choices'] != null
-        ? List<ChoiceModel>.from(
-            json['choices'].map((e) => ChoiceModel.fromJson(e)))
+        ? List<ChoiceModel>.from(json['choices'].map((e) => ChoiceModel.fromJson(e)))
         : [];
     questionQuiz = QuestionQuiz.fromJson(json['questionQuiz']);
   }

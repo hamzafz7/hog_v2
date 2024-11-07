@@ -13,11 +13,13 @@ class User {
   final String? password;
   final bool? isBlocked;
   final String? image;
+  bool? imageExist;
   final String? type;
   final String? location;
 
   User(
       {this.id,
+      this.imageExist,
       this.fullName,
       this.email,
       this.phone,
@@ -29,21 +31,22 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['id'],
-        fullName: json['full_name'],
-        email: json['email'],
-        phone: json['phone'],
-        isBlocked: json['is_blocked'],
-        type: json['type'],
-        image: json['image']);
+      id: json['id'],
+      fullName: json['full_name'],
+      email: json['email'],
+      phone: json['phone'],
+      isBlocked: json['is_blocked'],
+      type: json['type'],
+      image: json['image'],
+      imageExist: false,
+    );
   }
 
   Map<String, dynamic> loginUserToJson() {
     return {
       "phone": phone,
       "password": password,
-      // "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
-      "device_id": 'GetIt.instance<CacheProvider>().getDeviceId()',
+      "device_id": GetIt.instance<CacheProvider>().getOrCreateUUID(),
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
   }
@@ -53,8 +56,7 @@ class User {
       "full_name": fullName,
       "phone": phone,
       "password": password,
-      // "device_id": GetIt.instance<CacheProvider>().getDeviceId(),
-      "device_id": 'GetIt.instance<CacheProvider>().getDeviceId()',
+      "device_id": GetIt.instance<CacheProvider>().getOrCreateUUID(),
       "email": "hamzafz888@gmail.com",
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };

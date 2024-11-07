@@ -1,16 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
 import 'package:hog_v2/data/models/choice_model.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 
 class ResultListTile extends StatelessWidget {
   const ResultListTile(
       {super.key, required this.choiceModel, required this.value, this.userSolution});
+
   final ChoiceModel choiceModel;
   final bool value;
   final bool? userSolution;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -44,18 +45,11 @@ class ResultListTile extends StatelessWidget {
           Column(
             children: [
               if (choiceModel.image != null)
-                CachedNetworkImage(
-                  width: 280.w,
-                  height: 200.h,
-                  fit: BoxFit.fill,
+                CachedImageWithFallback(
+                  imageFound: choiceModel.imageExist!,
                   imageUrl: choiceModel.image!,
-                  placeholder: ((context, url) => ShimmerPlaceholder(
-                        child: Container(
-                          height: 150.h,
-                          width: 200.w,
-                          color: Colors.black,
-                        ),
-                      )),
+                  height: 200.h,
+                  width: 280.w,
                 ),
               SizedBox(
                 width: 280.w,

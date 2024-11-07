@@ -1,21 +1,26 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/models/courses_model.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
-class HomeCourseItem extends StatelessWidget {
+class HomeCourseItem extends StatefulWidget {
   const HomeCourseItem({super.key, required this.courseModel});
+
   final CourseModel courseModel;
 
+  @override
+  State<HomeCourseItem> createState() => _HomeCourseItemState();
+}
+
+class _HomeCourseItemState extends State<HomeCourseItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,25 +42,12 @@ class HomeCourseItem extends StatelessWidget {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(10.r),
-              child: CachedNetworkImage(
-                imageUrl: courseModel.image ?? defPic,
+              child: CachedImageWithFallback(
+                imageFound:
+                    widget.courseModel.image != null ? widget.courseModel.imageExist! : defPicExist,
+                imageUrl: widget.courseModel.image ?? defPic,
                 height: 136.h,
                 width: 166.w,
-                fit: BoxFit.fill,
-                placeholder: (context, string) {
-                  return ShimmerPlaceholder(
-                      child: Container(
-                    height: 136.h,
-                    color: Colors.black,
-                  ));
-                },
-                errorWidget: (context, url, obj) {
-                  return ShimmerPlaceholder(
-                      child: Container(
-                    height: 136.h,
-                    color: Colors.black,
-                  ));
-                },
               ),
             ),
             SizedBox(
@@ -80,9 +72,11 @@ class HomeCourseItem extends StatelessWidget {
                         // padding: EdgeInsets.zero,
                         // itemCount: courseModel.teachers!.length,
                         children: List.generate(
-                            courseModel.teachers!.length > 3 ? 3 : courseModel.teachers!.length,
+                            widget.courseModel.teachers!.length > 3
+                                ? 3
+                                : widget.courseModel.teachers!.length,
                             (index) => Text(
-                                  "${courseModel.teachers![index]}${index != courseModel.teachers!.length - 1 ? "," : ""}",
+                                  "${widget.courseModel.teachers![index]}${index != widget.courseModel.teachers!.length - 1 ? "," : ""}",
                                   maxLines: 2,
                                   overflow: TextOverflow.fade,
                                   style: Theme.of(context)
@@ -100,7 +94,7 @@ class HomeCourseItem extends StatelessWidget {
               child: SizedBox(
                 width: 150.w,
                 child: Text(
-                  courseModel.name ?? "لا يوجد اسم لهذا الكورس",
+                  widget.courseModel.name ?? "لا يوجد اسم لهذا الكورس",
                   textAlign: TextAlign.right,
                   style: Theme.of(context).textTheme.bodyMedium,
                   maxLines: 3,
@@ -113,16 +107,16 @@ class HomeCourseItem extends StatelessWidget {
             ),
             CustomButton(
               onTap: () {
-                Get.toNamed(AppRoute.courseDetailsPageRoute, arguments: courseModel);
+                Get.toNamed(AppRoute.courseDetailsPageRoute, arguments: widget.courseModel);
               },
               height: 40.h,
               width: 110.w,
               borderRadius: 6.r,
               child: Text(
-                courseModel.isPaid != true &&
-                        courseModel.isOpen != true &&
-                        (courseModel.isTeachWithCourse != true ||
-                            courseModel.isTeachWithCourse == null) &&
+                widget.courseModel.isPaid != true &&
+                        widget.courseModel.isOpen != true &&
+                        (widget.courseModel.isTeachWithCourse != true ||
+                            widget.courseModel.isTeachWithCourse == null) &&
                         GetIt.instance<CacheProvider>().getUserType() != 'admin'
                     ? "انضم الأن"
                     : 'تابع',

@@ -1,5 +1,7 @@
 // import 'package:device_info_plus/device_info_plus.dart';
+import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class CacheProvider {
   late GetStorage _getStorage;
@@ -88,16 +90,19 @@ class CacheProvider {
     return _getStorage.read("type");
   }
 
-  Future<void> setDeviceId() async {
-    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    // if (Platform.isAndroid) {
-    //   const androidIdPlugin = AndroidId();
-    //
-    //   final String? androidId = await androidIdPlugin.getId();
-    //   await _getStorage.write("device_id", androidId);
-    // } else if (Platform.isIOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   await _getStorage.write("device_id", iosInfo.identifierForVendor);
-    // }
+  Future<void> setDeviceId(String uuid) async {
+    await _getStorage.write("device_id", uuid);
+  }
+
+  Future<String> getOrCreateUUID() async {
+    String? uuid = GetIt.instance<CacheProvider>().getDeviceId();
+    if (uuid == null) {
+      uuid = Uuid().v4();
+      String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      uuid = "$uuid-$timestamp";
+      await setDeviceId(uuid);
+    }
+
+    return uuid;
   }
 }

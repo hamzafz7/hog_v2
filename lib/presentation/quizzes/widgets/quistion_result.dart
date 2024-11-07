@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
 import 'package:hog_v2/data/models/question_model.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/explaination_widget.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/result_list_tile.dart';
@@ -57,17 +56,12 @@ class QuestionResultWidget extends GetView<QuizController> {
                     if (model.image != null)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          height: 200.h,
-                          width: 300.w,
+                        child: CachedImageWithFallback(
+                          imageFound: model.imageExist!,
                           imageUrl: model.image!,
-                          placeholder: (context, v) => ShimmerPlaceholder(
-                              child: Container(
-                            height: 100.h,
-                            width: 300.w,
-                            color: Colors.black,
-                          )),
+                          height: 136.h,
+                          width: 166.w,
+                          fit: BoxFit.cover,
                         ),
                       )
                   ],
@@ -89,6 +83,7 @@ class QuestionResultWidget extends GetView<QuizController> {
             ),
             if (model.clarificationImage != null || model.clarificationText != null)
               ExplainationWidget(
+                imageExist: model.clarificationImageExist,
                 image: model.clarificationImage,
                 text: model.clarificationText,
               )

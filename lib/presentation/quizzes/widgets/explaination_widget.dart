@@ -1,11 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 
 class ExplainationWidget extends StatelessWidget {
-  const ExplainationWidget({super.key, this.image, this.text});
+  const ExplainationWidget({super.key, this.image, this.text, this.imageExist});
+
   final String? image;
+  final bool? imageExist;
   final String? text;
 
   @override
@@ -17,18 +18,11 @@ class ExplainationWidget extends StatelessWidget {
         children: [
           const Text("التوضيح :"),
           if (image != null)
-            CachedNetworkImage(
-              width: 260.w,
-              height: 200.h,
-              fit: BoxFit.fill,
+            CachedImageWithFallback(
+              imageFound: imageExist!,
               imageUrl: image!,
-              placeholder: ((context, url) => ShimmerPlaceholder(
-                    child: Container(
-                      height: 150.h,
-                      width: 200.w,
-                      color: Colors.black,
-                    ),
-                  )),
+              height: 200.h,
+              width: 260.w,
             ),
           SizedBox(
             width: 280.w,

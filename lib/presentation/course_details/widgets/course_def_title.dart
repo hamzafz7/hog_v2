@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 
 class CourseDefineTitle extends StatelessWidget {
-  const CourseDefineTitle(
-      {super.key, required this.titleName, required this.width});
+  const CourseDefineTitle({super.key, required this.titleName, required this.width});
   final String titleName;
   final double width;
 
@@ -16,8 +15,7 @@ class CourseDefineTitle extends StatelessWidget {
         Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.w),
             child: Text(titleName,
-                textAlign: TextAlign.right,
-                style: Theme.of(context).textTheme.bodyMedium!)),
+                textAlign: TextAlign.right, style: Theme.of(context).textTheme.bodyMedium!)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -29,8 +27,7 @@ class CourseDefineTitle extends StatelessWidget {
             Container(
               height: 3.h,
               width: 3.w,
-              decoration: const BoxDecoration(
-                  color: kprimaryBlueColor, shape: BoxShape.circle),
+              decoration: const BoxDecoration(color: kprimaryBlueColor, shape: BoxShape.circle),
             )
           ],
         )

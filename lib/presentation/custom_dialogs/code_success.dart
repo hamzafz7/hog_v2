@@ -22,8 +22,7 @@ class CodeSuccessWidget extends StatelessWidget {
                 height: 86.75.h,
                 decoration: BoxDecoration(
                   gradient: RadialGradient(
-                      radius: 0.7.r,
-                      colors: const [Color(0x0F0794EB), Color(0x000794EB)]),
+                      radius: 0.7.r, colors: const [Color(0x0F0794EB), Color(0x000794EB)]),
                   shape: BoxShape.circle,
                 ),
                 child: SvgPicture.asset(
@@ -58,10 +57,7 @@ class CodeSuccessWidget extends StatelessWidget {
                 .copyWith(fontSize: 18.sp, color: kprimaryBlueColor)),
         Text('تم التحقق من الرمز المدخل وانضمامك ضمن هذا الكورس بنجاح',
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: kprimaryGreyColor)),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryGreyColor)),
         SizedBox(
           height: 15.h,
         ),

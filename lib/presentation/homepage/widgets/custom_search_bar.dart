@@ -9,6 +9,7 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printError(info: 'CustomSearchBar Build');
     return GestureDetector(
       onTap: () {
         Get.toNamed(AppRoute.searchPageRoute);
@@ -19,9 +20,7 @@ class CustomSearchBar extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.grey[50],
             borderRadius: BorderRadius.circular(40.r),
-            boxShadow: const [
-              BoxShadow(blurRadius: 1, spreadRadius: 1, color: Colors.grey)
-            ]),
+            boxShadow: const [BoxShadow(blurRadius: 1, spreadRadius: 1, color: Colors.grey)]),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -31,10 +30,7 @@ class CustomSearchBar extends StatelessWidget {
             ),
             Text(
               "ابحث عن المزيد من الكورسات",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: kprimaryGreyColor),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryGreyColor),
             ),
           ]),
         ),

@@ -1,11 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/endpoints.dart';
 import 'package:hog_v2/data/providers/apiProvider/interceptor.dart';
-import 'package:hog_v2/data/repositories/account_repo.dart';
-
-// ignore: library_prefixes
 
 class ApiProvider {
   Dio? dio;
@@ -25,7 +21,7 @@ class ApiProvider {
     dio!.interceptors.add(
       AppInterceptors(
         dio: dio,
-        repo: GetIt.instance<AccountRepo>(),
+        // repo: GetIt.instance<AccountRepo>(),
       ),
     );
   }
@@ -43,7 +39,7 @@ class ApiProvider {
       'Authorization': token != "" ? " Bearer $token" : "",
     };
     if (kDebugMode) {
-      print("Post body: ${query.toString()}");
+      print("get body: ${query.toString()}");
     }
     return await dio!.get(url, queryParameters: query);
   }
@@ -81,10 +77,10 @@ class ApiProvider {
       'Authorization': token != "" ? " Bearer $token" : "",
     };
     if (kDebugMode) {
-      print("Post body: ${body.toString()}");
+      print("patch body: ${body.toString()}");
     }
     if (kDebugMode) {
-      print("Post query: ${query.toString()}");
+      print("patch query: ${query.toString()}");
     }
     return await dio!.patch(
       url,
@@ -104,10 +100,10 @@ class ApiProvider {
       'Authorization': token != "" ? " Bearer $token" : "",
     };
     if (kDebugMode) {
-      print("Post body: ${body.toString()}");
+      print("put body: ${body.toString()}");
     }
     if (kDebugMode) {
-      print("Post query: ${query.toString()}");
+      print("put query: ${query.toString()}");
     }
     return await dio!.put(
       url,
@@ -127,10 +123,10 @@ class ApiProvider {
       'Authorization': token != "" ? " Bearer $token" : "",
     };
     if (kDebugMode) {
-      print("Post body: ${body.toString()}");
+      print("delete body: ${body.toString()}");
     }
     if (kDebugMode) {
-      print("Post query: ${query.toString()}");
+      print("delete query: ${query.toString()}");
     }
     return await dio!.delete(
       url,

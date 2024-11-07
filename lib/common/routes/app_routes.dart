@@ -82,7 +82,11 @@ class AppRoute {
     ),
     GetPage(name: aboutUsPageRoute, page: () => const AboutUsPage()),
 
-    GetPage(name: mainPageRoute, page: () => const MainPage(), binding: MainPageBinding()),
+    GetPage(
+      name: mainPageRoute,
+      page: () => KeepAlivePage(child: const MainPage()),
+      binding: MainPageBinding(),
+    ),
     GetPage(name: yearsPageRoute, page: () => const YearsCoursesPage()),
     GetPage(
         name: courseDetailsPageRoute,
@@ -106,7 +110,7 @@ class AppRoute {
     // GetPage(name: quizResultPageRoute, page: () => ResultPage()),
     GetPage(
       name: searchPageRoute,
-      page: () => const SearchPage(),
+      page: () => KeepAlivePage(child: const SearchPage()),
       binding: BindingsBuilder(
         () {
           Get.put(SearchPageController());

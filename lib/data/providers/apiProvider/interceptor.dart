@@ -5,15 +5,18 @@ import 'package:get/get.dart' hide Response;
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog_v2/data/repositories/account_repo.dart';
 
 import '../../endpoints.dart';
 
 class AppInterceptors extends Interceptor {
   final Dio? dio;
-  final AccountRepo? repo;
 
-  AppInterceptors({required this.dio, required this.repo});
+  // final AccountRepo? repo;
+
+  AppInterceptors({
+    required this.dio,
+    // required this.repo,
+  });
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {

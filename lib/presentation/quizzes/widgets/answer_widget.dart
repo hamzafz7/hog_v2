@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
 import 'package:hog_v2/data/models/choice_model.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 
 class AnswerWidget extends GetView<QuizController> {
@@ -43,18 +42,11 @@ class AnswerWidget extends GetView<QuizController> {
             Column(
               children: [
                 if (choice.image != null)
-                  CachedNetworkImage(
-                    width: 260.w,
-                    height: 200.h,
-                    fit: BoxFit.fill,
+                  CachedImageWithFallback(
+                    imageFound: choice.imageExist!,
                     imageUrl: choice.image!,
-                    placeholder: ((context, url) => ShimmerPlaceholder(
-                          child: Container(
-                            height: 150.h,
-                            width: 200.w,
-                            color: Colors.black,
-                          ),
-                        )),
+                    height: 200.h,
+                    width: 260.w,
                   ),
                 SizedBox(
                   width: 280.w,

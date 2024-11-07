@@ -22,10 +22,7 @@ class CompleteFailureWidget extends StatelessWidget {
           ),
           Text(
             "عذراً",
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: Colors.black),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black),
           ),
           Align(
             alignment: Alignment.center,

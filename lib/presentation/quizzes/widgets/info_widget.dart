@@ -3,11 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 
 class InfoWidget extends StatelessWidget {
-  const InfoWidget(
-      {super.key,
-      required this.color,
-      required this.text,
-      required this.number});
+  const InfoWidget({super.key, required this.color, required this.text, required this.number});
   final String text;
   final Color color;
   final String number;
@@ -27,8 +23,7 @@ class InfoWidget extends StatelessWidget {
                 Container(
                   height: 12.h,
                   width: 12.w,
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: color),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: color),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -42,10 +37,7 @@ class InfoWidget extends StatelessWidget {
           ),
           Text(
             text,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: kDarkBlueColor),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kDarkBlueColor),
           )
         ],
       ),

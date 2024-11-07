@@ -16,11 +16,13 @@ class QuizStatisticPage extends GetView<QuizController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          Get.back();
-          controller.clearSolutions();
-          return true;
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            Get.back();
+            controller.clearSolutions();
+          }
         },
         child: SizedBox(
           height: Get.height,

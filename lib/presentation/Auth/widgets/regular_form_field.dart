@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
+import 'package:hog_v2/data/providers/keyboard_service.dart';
 import 'package:svg_flutter/svg.dart';
 
-class RegularFormField extends StatelessWidget {
+class RegularFormField extends StatefulWidget {
   const RegularFormField({
     super.key,
     required this.svgSrc,
@@ -18,6 +19,11 @@ class RegularFormField extends StatelessWidget {
   final TextEditingController controller;
 
   @override
+  State<RegularFormField> createState() => _RegularFormFieldState();
+}
+
+class _RegularFormFieldState extends State<RegularFormField> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 333.w,
@@ -30,21 +36,25 @@ class RegularFormField extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 8.w),
         child: TextFormField(
+          onTap: () async {
+            await KeyboardService.showKeyboard();
+          },
+          enableInteractiveSelection: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: controller,
-          validator: validator,
+          controller: widget.controller,
+          validator: widget.validator,
           style: Theme.of(context)
               .textTheme
               .bodyMedium!
               .copyWith(fontSize: 18.sp, color: kDarkBlueColor),
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: widget.hintText,
             hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryGreyColor),
             border: InputBorder.none,
             prefixIcon: Padding(
               padding: EdgeInsets.all(10.0.r),
               child: SvgPicture.asset(
-                svgSrc,
+                widget.svgSrc,
               ),
             ),
           ),

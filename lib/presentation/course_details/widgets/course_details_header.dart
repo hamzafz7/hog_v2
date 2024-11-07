@@ -1,36 +1,32 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/constants.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 
 class CourseDetailsHeader extends StatelessWidget {
-  const CourseDetailsHeader({super.key, this.image, this.text});
+  const CourseDetailsHeader({super.key, this.image, this.text, this.imageExist});
+
   final String? image;
+  final bool? imageExist;
   final String? text;
 
   @override
   Widget build(BuildContext context) {
+    print("image $image");
+    print("imageExist $imageExist");
+    print("defPicExist $defPicExist");
+    print("image != null ? imageExist! : defPicExist ${image != null ? imageExist! : defPicExist}");
     return SizedBox(
       height: 337.h,
       width: Get.width,
       child: Stack(
         children: [
-          SizedBox(
-            width: Get.width,
+          CachedImageWithFallback(
+            imageUrl: image ?? defPic,
+            imageFound: image != null ? imageExist! : defPicExist,
             height: Get.height * 0.4,
-            child: CachedNetworkImage(
-              imageUrl: image ?? defPic,
-              fit: BoxFit.fill,
-              placeholder: (context, url) {
-                return ShimmerPlaceholder(
-                    child: Container(
-                  height: Get.height * 0.4,
-                  color: Colors.black,
-                ));
-              },
-            ),
+            width: Get.width,
           ),
           SizedBox(
             width: Get.width,

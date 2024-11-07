@@ -21,19 +21,13 @@ class DeleteProfileDialog extends StatelessWidget {
         ),
         Text('حذف الحساب',
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: ksecondaryColor)),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: ksecondaryColor)),
         SizedBox(
           height: 30.h,
         ),
         Text('هل أنت متأكد من رغبتك في حذف حسابك؟',
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium!
-                .copyWith(color: kDarkBlueColor)),
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: kDarkBlueColor)),
         SizedBox(
           height: 30.h,
         ),
@@ -52,10 +46,8 @@ class DeleteProfileDialog extends StatelessWidget {
                 height: 45.h,
                 child: Text(
                   "الرجوع",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: ksecondaryGreyColor),
+                  style:
+                      Theme.of(context).textTheme.bodyMedium!.copyWith(color: ksecondaryGreyColor),
                 ),
               ),
               SizedBox(
@@ -69,10 +61,7 @@ class DeleteProfileDialog extends StatelessWidget {
                 height: 45.h,
                 child: Text(
                   "نعم",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white),
                 ),
               )
             ],

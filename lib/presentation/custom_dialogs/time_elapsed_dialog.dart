@@ -20,8 +20,7 @@ class TimeElapsedDialog extends StatelessWidget {
               shape: BoxShape.circle,
               color: ksecondaryColor,
             ),
-            child:
-                Center(child: SvgPicture.asset("assets/images/clock (1).svg")),
+            child: Center(child: SvgPicture.asset("assets/images/clock (1).svg")),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -37,8 +36,7 @@ class TimeElapsedDialog extends StatelessWidget {
                 style: DefaultTextStyle.of(context).style,
                 children: <TextSpan>[
                   const TextSpan(
-                    text:
-                        'الوقت التقريبي المستغرق  خلال  إجراء الاختبار الأول  هو ',
+                    text: 'الوقت التقريبي المستغرق  خلال  إجراء الاختبار الأول  هو ',
                     style: TextStyle(color: kprimaryGreyColor),
                   ),
                   TextSpan(

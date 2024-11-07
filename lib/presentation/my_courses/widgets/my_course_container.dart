@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,10 +5,12 @@ import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/models/courses_model.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 class MyCourseCotainer extends StatelessWidget {
   const MyCourseCotainer({super.key, required this.courseModel});
+
   final CourseModel courseModel;
 
   @override
@@ -42,12 +43,26 @@ class MyCourseCotainer extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
-                  child: CachedNetworkImage(
+                  child: CachedImageWithFallback(
                     imageUrl: courseModel.image ?? defPic,
+                    imageFound: courseModel.image != null ? courseModel.imageExist! : defPicExist,
                     height: 105.h,
                     width: 114.w,
-                    fit: BoxFit.fill,
                   ),
+                  // CachedNetworkImage(
+                  //   imageUrl: courseModel.image ?? defPic,
+                  //   height: 105.h,
+                  //   width: 114.w,
+                  //   fit: BoxFit.fill,
+                  //   progressIndicatorBuilder: (___, __, _) => ShimmerPlaceholder(
+                  //     child: Container(
+                  //       height: 105.h,
+                  //       width: 114.w,
+                  //       color: Colors.black,
+                  //     ),
+                  //   ),
+                  //   errorWidget: (context, url, error) => const Icon(Icons.error),
+                  // ),
                 ),
               ),
               SizedBox(
@@ -80,17 +95,13 @@ class MyCourseCotainer extends StatelessWidget {
                           width: 95.w,
                           child: Wrap(
                             children: List.generate(
-                                courseModel.teachers!.length > 3
-                                    ? 3
-                                    : courseModel.teachers!.length,
+                                courseModel.teachers!.length > 3 ? 3 : courseModel.teachers!.length,
                                 (index) => Text(
                                       courseModel.teachers![index],
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
-                                          .copyWith(
-                                              fontSize: 10.sp,
-                                              color: kprimaryGreyColor),
+                                          .copyWith(fontSize: 10.sp, color: kprimaryGreyColor),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     )),

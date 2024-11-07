@@ -14,6 +14,7 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    printError(info: 'HomePage Build');
     return SafeArea(
       child: RefreshIndicator(
         color: kprimaryBlueColor,

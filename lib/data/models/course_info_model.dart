@@ -4,8 +4,7 @@ import 'package:hog_v2/data/models/value_of_course_modrel.dart';
 class CourseInfoResponse {
   CourseInfoModel? course;
   CourseInfoResponse.fromJson(Map<String, dynamic> json) {
-    course =
-        json['data'] != null ? CourseInfoModel.fromJson(json['data']) : null;
+    course = json['data'] != null ? CourseInfoModel.fromJson(json['data']) : null;
   }
 }
 
@@ -13,6 +12,7 @@ class CourseInfoModel {
   int? id;
   String? name;
   String? image;
+  bool? imageExist;
   String? telegramChannelLink;
   bool? isOpen;
   bool? isVisible;
@@ -27,21 +27,19 @@ class CourseInfoModel {
     id = json['id'];
     name = json['name'];
     image = json['image'];
+    imageExist = false;
     telegramChannelLink = json['telegram_channel_link'];
     isOpen = json['is_open'];
     isVisible = json['is_visible'];
     isPaid = json['is_paid'];
     totalTime = json['total_time'];
     isTeachWithCourse = json['is_teach_this_course'];
-    teachers =
-        json['teachers'] != null ? List<String>.from(json['teachers']) : [];
+    teachers = json['teachers'] != null ? List<String>.from(json['teachers']) : [];
     chapters = json['chapters'] != null
-        ? List<ChapterModel>.from(
-            json['chapters'].map((e) => ChapterModel.formJson(e)))
+        ? List<ChapterModel>.from(json['chapters'].map((e) => ChapterModel.formJson(e)))
         : [];
     valuesOfCourse = json['values_of_course'] != null
-        ? List<ValueOfCourse>.from(
-            json['values_of_course'].map((e) => ValueOfCourse.fromJson(e)))
+        ? List<ValueOfCourse>.from(json['values_of_course'].map((e) => ValueOfCourse.fromJson(e)))
         : [];
 
     message = json['message'];

@@ -5,11 +5,7 @@ import 'package:hog_v2/common/constants/colors.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 class ProfileListItem extends StatelessWidget {
-  const ProfileListItem(
-      {super.key,
-      required this.svgUrl,
-      required this.onTap,
-      required this.text});
+  const ProfileListItem({super.key, required this.svgUrl, required this.onTap, required this.text});
   final String text;
   final Function()? onTap;
   final String svgUrl;

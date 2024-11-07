@@ -15,6 +15,7 @@ class HomeStackHeader extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    printError(info: 'HomeStackHeader Build');
     return Container(
       decoration: BoxDecoration(
         color: GetIt.instance<CacheProvider>().getAppTheme()

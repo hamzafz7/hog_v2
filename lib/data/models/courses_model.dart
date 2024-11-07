@@ -7,8 +7,7 @@ class CoursesModel {
   CoursesModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     courses = json['data'] != null
-        ? List<CourseModel>.from(
-            json['data'].map((e) => CourseModel.fromJson(e)))
+        ? List<CourseModel>.from(json['data'].map((e) => CourseModel.fromJson(e)))
         : null;
   }
 }
@@ -17,6 +16,7 @@ class CourseModel {
   final int id;
   final String? name;
   final String? image;
+  bool? imageExist;
   final String? telegramChannelLink;
   final bool? isOpen;
   List<String>? teachers;
@@ -28,6 +28,7 @@ class CourseModel {
     required this.id,
     required this.name,
     required this.image,
+    this.imageExist = false,
     required this.telegramChannelLink,
     required this.isOpen,
     required this.isVisible,
@@ -41,14 +42,13 @@ class CourseModel {
         id: json['id'],
         name: json['name'],
         image: json['image'],
+        imageExist: false,
         telegramChannelLink: json['telegram_channel_link'],
         isOpen: json['is_open'],
         isVisible: json['is_visible'],
         isPaid: json['is_paid'],
         isTeachWithCourse: json['is_teach_this_course'],
-        teachers: json['teachers'] != null
-            ? List<String>.from(json['teachers'])
-            : []);
+        teachers: json['teachers'] != null ? List<String>.from(json['teachers']) : []);
   }
 
   Map<String, dynamic> toMap() {
@@ -69,6 +69,7 @@ class CourseModel {
       id: map['id'],
       name: map['name'],
       image: map['image'],
+      imageExist: false,
       telegramChannelLink: map['telegram_channel_link'],
       isOpen: map['is_open'] == 1,
       isVisible: map['is_visible'] == 1,

@@ -38,9 +38,7 @@ class ResultGradeStack extends StatelessWidget {
                 Text(
                   "نتيجتك",
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: kprimaryBlueColor,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold),
+                      color: kprimaryBlueColor, fontSize: 16.sp, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "${(res * 100).toInt()}",

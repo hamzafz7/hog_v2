@@ -1,15 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/common/constants/shimmer_effect.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/quizzes/pages/quiz_image_full_screen.dart';
 
 class QuestionHeaderWidget extends StatelessWidget {
   const QuestionHeaderWidget(
-      {super.key, required this.index, this.title, this.image});
+      {super.key, required this.index, this.title, this.image, this.imageExist});
+
   final int index;
   final String? title;
   final String? image;
+  final bool? imageExist;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +20,7 @@ class QuestionHeaderWidget extends StatelessWidget {
       child: Container(
         width: 360.w,
         decoration: const BoxDecoration(boxShadow: [
-          BoxShadow(
-              blurRadius: 1,
-              spreadRadius: 1,
-              color: Color.fromARGB(255, 231, 231, 231))
+          BoxShadow(blurRadius: 1, spreadRadius: 1, color: Color.fromARGB(255, 231, 231, 231))
         ]),
         child: Padding(
           padding: EdgeInsets.all(20.0.r),
@@ -29,37 +29,30 @@ class QuestionHeaderWidget extends StatelessWidget {
             children: [
               Text(
                 "السؤال ${index + 1}:",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
               ),
               SizedBox(
                 height: 10.h,
               ),
               Text(
                 title ?? "هذا السؤال بلا نص",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: kprimaryGreyColor),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryGreyColor),
               ),
               SizedBox(
                 height: 10.h,
               ),
               if (image != null)
-                CachedNetworkImage(
-                  width: 260.w,
-                  height: 200.h,
-                  fit: BoxFit.cover,
-                  imageUrl: image!,
-                  placeholder: ((context, url) => ShimmerPlaceholder(
-                        child: Container(
-                          height: 150.h,
-                          width: 200.w,
-                          color: Colors.black,
-                        ),
-                      )),
+                InkWell(
+                  onTap: () {
+                    Get.to(() => QuizImageFullScreen(image: image!));
+                  },
+                  child: CachedImageWithFallback(
+                    imageFound: imageExist!,
+                    imageUrl: image!,
+                    height: 200.h,
+                    width: 260.w,
+                    fit: BoxFit.cover,
+                  ),
                 ),
             ],
           ),

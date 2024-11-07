@@ -13,6 +13,7 @@ class NewsResponse {
 class NewsModel {
   int? id;
   String? image;
+  bool? imageExist;
   String? title;
 
   NewsModel({this.image, this.title, this.id});
@@ -20,6 +21,7 @@ class NewsModel {
   NewsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     image = json['image'];
+    imageExist = false;
     title = json['title'];
   }
 }

@@ -29,6 +29,7 @@ class MyProfilePage extends GetView<MyProfileController> {
           await controller.getMyProfile();
         },
         child: ListView(
+          padding: EdgeInsets.zero,
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
             const MyProfileHeader(),

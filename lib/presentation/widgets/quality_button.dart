@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 
 class QualityButton extends StatelessWidget {
-  const QualityButton(
-      {super.key, required this.onPressed, required this.quality});
+  const QualityButton({super.key, required this.onPressed, required this.quality});
   final Function() onPressed;
   final String quality;
 
@@ -14,10 +13,7 @@ class QualityButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             quality,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: kDarkBlueColor),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kDarkBlueColor),
           )),
     );
   }

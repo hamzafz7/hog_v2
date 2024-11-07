@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/presentation/splashpage/controller/splash_controller.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -41,6 +42,20 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     Get.put(SplashPageController());
   }
 
+  Future<bool> _isRealDevice() async {
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // if (Theme.of(context).platform == TargetPlatform.android) {
+    // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   return androidInfo.isPhysicalDevice;
+    // } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   return iosInfo.isPhysicalDevice;
+    // } else {
+    //   return false;
+    // }
+    return true;
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -50,67 +65,69 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: Get.height,
-        width: Get.width,
-        child: Column(
-          children: [
-            SizedBox(height: 130.h),
+      body: FutureBuilder(
+          future: _isRealDevice(),
+          builder: (context, snapshot) => SizedBox(
+                height: Get.height,
+                width: Get.width,
+                child: Column(
+                  children: [
+                    SizedBox(height: 130.h),
 
-            // Image Fade-In Animation
-            FadeTransition(
-              opacity: _fadeInAnimation,
-              child: Image.asset("assets/images/logo.png"),
-            ),
-
-            SizedBox(height: 20.h),
-
-            // Text Slide Animation
-            SlideTransition(
-              position: _slideAnimation,
-              child: Text(
-                "House Of",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-
-            SlideTransition(
-              position: _slideAnimation,
-              child: Text(
-                "Geniuses",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-
-            SizedBox(height: 10.h),
-
-            // Underline animation (you can animate this further if needed)
-            FadeTransition(
-              opacity: _fadeInAnimation,
-              child: Container(
-                width: 63.w,
-                height: 2.h,
-                color: ksecondaryColor,
-              ),
-            ),
-
-            SizedBox(height: 20.h),
-
-            // Another Slide Transition for Arabic Text
-            SlideTransition(
-              position: _slideAnimation,
-              child: Text(
-                "التعلم والمهارة والإبداع هدفك",
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.black.withOpacity(0.61),
+                    // Image Fade-In Animation
+                    FadeTransition(
+                      opacity: _fadeInAnimation,
+                      child: Image.asset("assets/images/logo.png"),
                     ),
-              ),
-            ),
 
-            SizedBox(height: 59.h),
-          ],
-        ),
-      ),
+                    SizedBox(height: 20.h),
+
+                    // Text Slide Animation
+                    SlideTransition(
+                      position: _slideAnimation,
+                      child: Text(
+                        "House Of",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+
+                    SlideTransition(
+                      position: _slideAnimation,
+                      child: Text(
+                        "Geniuses",
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+
+                    SizedBox(height: 10.h),
+
+                    // Underline animation (you can animate this further if needed)
+                    FadeTransition(
+                      opacity: _fadeInAnimation,
+                      child: Container(
+                        width: 63.w,
+                        height: 2.h,
+                        color: ksecondaryColor,
+                      ),
+                    ),
+
+                    SizedBox(height: 20.h),
+
+                    // Another Slide Transition for Arabic Text
+                    SlideTransition(
+                      position: _slideAnimation,
+                      child: Text(
+                        "التعلم والمهارة والإبداع هدفك",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: Colors.black.withOpacity(0.61),
+                            ),
+                      ),
+                    ),
+
+                    SizedBox(height: 59.h),
+                  ],
+                ),
+              )),
     );
   }
 }

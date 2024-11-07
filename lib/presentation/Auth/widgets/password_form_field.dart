@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
+import 'package:hog_v2/data/providers/keyboard_service.dart';
 import 'package:svg_flutter/svg.dart';
 
 class PasswordFormField extends StatefulWidget {
@@ -43,6 +44,10 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 8.w),
         child: TextFormField(
+          onTap: () async {
+            await KeyboardService.showKeyboard();
+          },
+          enableInteractiveSelection: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: widget.controller,
           validator: widget.validator,

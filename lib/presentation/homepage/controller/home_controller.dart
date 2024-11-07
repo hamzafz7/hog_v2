@@ -4,6 +4,7 @@ import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/data/models/categories_model.dart';
 import 'package:hog_v2/data/models/courses_model.dart';
 import 'package:hog_v2/data/models/news_model.dart';
+import 'package:hog_v2/data/providers/sure_image_exist.dart';
 import 'package:hog_v2/data/repositories/category_repo.dart';
 import 'package:hog_v2/data/repositories/home_repo.dart';
 
@@ -20,8 +21,9 @@ class HomeController extends GetxController {
   int currentCategoryIndex = 0;
 
   changeCurrentIndex(int ind, int courseId) {
-    update(["changeCurrentIndex_$currentCategoryIndex"]);
+    int i = currentCategoryIndex;
     currentCategoryIndex = ind;
+    update(["changeCurrentIndex_$i"]);
     update(["changeCurrentIndex_$ind"]);
     getCourses(courseId);
   }
@@ -51,7 +53,10 @@ class HomeController extends GetxController {
       if (newsResponse!.news.isEmpty) {
         updateGetNewsStatus(RequestStatus.noData);
       } else {
-        updateGetNewsStatus(RequestStatus.success);
+        ff().then((_) {
+          updateGetNewsStatus(RequestStatus.success);
+          update(["newsSection"]);
+        });
       }
     } else if (!response.success) {
       if (response.errorMessage == "لا يوجد اتصال بالانترنت") {
@@ -61,6 +66,15 @@ class HomeController extends GetxController {
       }
     }
     update(["newsSection"]);
+  }
+
+  Future<void> ff() async {
+    for (int i = 0; i < newsResponse!.news.length; i++) {
+      if (newsResponse!.news[i].image != null && !(newsResponse!.news[i].imageExist ?? false)) {
+        newsResponse!.news[i].imageExist =
+            await SureImageExist.checkImageAvailability(newsResponse!.news[i].image!);
+      }
+    }
   }
 
   Future<void> getCategories() async {
@@ -99,7 +113,10 @@ class HomeController extends GetxController {
       if (coursesModel!.courses == null || coursesModel!.courses!.isEmpty) {
         updatecourseStatus(RequestStatus.noData);
       } else {
-        updatecourseStatus(RequestStatus.success);
+        dd().then((_) {
+          updatecourseStatus(RequestStatus.success);
+          update(["coursesSection"]);
+        });
       }
     } else if (!response.success) {
       if (response.errorMessage == "لا يوجد اتصال بالانترنت") {
@@ -109,5 +126,15 @@ class HomeController extends GetxController {
       }
     }
     update(["coursesSection"]);
+  }
+
+  Future<void> dd() async {
+    for (int i = 0; i < coursesModel!.courses!.length; i++) {
+      if (coursesModel!.courses![i].image != null &&
+          !(coursesModel!.courses![i].imageExist ?? false)) {
+        coursesModel!.courses![i].imageExist =
+            await SureImageExist.checkImageAvailability(coursesModel!.courses![i].image!);
+      }
+    }
   }
 }

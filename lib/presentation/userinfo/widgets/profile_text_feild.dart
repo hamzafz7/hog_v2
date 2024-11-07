@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
+import 'package:hog_v2/data/providers/keyboard_service.dart';
 
 class ProfileTextFeild extends StatefulWidget {
   const ProfileTextFeild(
@@ -9,6 +10,7 @@ class ProfileTextFeild extends StatefulWidget {
       required this.titleText,
       required this.controller,
       required this.onValidate});
+
   final bool isEdited;
   final String titleText;
   final TextEditingController controller;
@@ -57,14 +59,11 @@ class _ProfileTextFeildState extends State<ProfileTextFeild> {
                     ),
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
                     child: Text(
                       widget.controller.text,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: kDarkBlueColor),
+                      style:
+                          Theme.of(context).textTheme.bodyMedium!.copyWith(color: kDarkBlueColor),
                     ),
                   ),
                 )
@@ -73,37 +72,32 @@ class _ProfileTextFeildState extends State<ProfileTextFeild> {
           : SizedBox(
               height: 55.h,
               child: TextFormField(
+                onTap: () async {
+                  await KeyboardService.showKeyboard();
+                },
+                enableInteractiveSelection: false,
                 cursorHeight: 20.h,
                 cursorColor: Colors.black,
                 focusNode: myFocusNode,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 18.sp),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 18.sp),
                 controller: widget.controller,
                 validator: widget.onValidate,
                 decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                     hintText: widget.controller.text,
-                    floatingLabelStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: kprimaryBlueColor),
+                    floatingLabelStyle:
+                        Theme.of(context).textTheme.bodyMedium!.copyWith(color: kprimaryBlueColor),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     label: Text(
                       widget.titleText,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: myFocusNode.hasFocus
-                              ? kprimaryBlueColor
-                              : ksecondaryGreyColor),
+                          color: myFocusNode.hasFocus ? kprimaryBlueColor : ksecondaryGreyColor),
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: kprimaryBlueColor),
                         borderRadius: BorderRadius.circular(13.r)),
                     enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: ksecondaryGreyColor),
+                        borderSide: const BorderSide(color: ksecondaryGreyColor),
                         borderRadius: BorderRadius.circular(13.r))),
               ),
             ),

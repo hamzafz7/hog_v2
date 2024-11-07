@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:hog_v2/offline_videos_feature/presentation/pages/play_offline_video_page.dart';
 
 import '../../dependency_injection/injection_container.dart';
@@ -28,6 +29,7 @@ class _OfflineVideosPageState extends State<OfflineVideosPage> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
+    printError(info: 'OfflineVideosPage Build');
     return BlocListener(
       bloc: _bloc,
       listener: (BuildContext context, OfflineVideosState state) {
@@ -237,13 +239,19 @@ class _OfflineVideosPageState extends State<OfflineVideosPage> with TickerProvid
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: videoWidget(index, state),
+              child: videoWidget(index, state, onTap: () {
+                Get.to(PlayOfflineVideoPage(
+                  offlineVideoModel: state.selectedVideoMaterial == 'All'
+                      ? state.offlineVideos[index]
+                      : state.filteredOfflineVideos[index],
+                ));
+              }),
             );
           });
     }
   }
 
-  Widget videoWidget(int index, OfflineVideosState state) {
+  Widget videoWidget(int index, OfflineVideosState state, {required void Function()? onTap}) {
     if (kDebugMode) {
       debugPrint(
           "state.offlineVideos[index].lessonTitle! = ${state.offlineVideos[index].lessonTitle!}");
@@ -251,17 +259,18 @@ class _OfflineVideosPageState extends State<OfflineVideosPage> with TickerProvid
     return Directionality(
       textDirection: TextDirection.ltr,
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PlayOfflineVideoPage(
-                        offlineVideoModel: state.offlineVideos[index],
-                      )));
-          // Get.to(() => PlayOfflineVideoPage(
-          //       offlineVideoModel: state.offlineVideos[index],
-          //     ));
-        },
+        onTap: onTap,
+        //     () {
+        //   // Navigator.push(
+        //   //     context,
+        //   //     MaterialPageRoute(
+        //   //         builder: (context) => PlayOfflineVideoPage(
+        //   //               offlineVideoModel: state.offlineVideos[index],
+        //   //             )));
+        //   Get.to(() => PlayOfflineVideoPage(
+        //         offlineVideoModel: state.offlineVideos[index],
+        //       ));
+        // },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(

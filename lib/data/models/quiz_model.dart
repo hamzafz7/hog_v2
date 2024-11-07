@@ -11,8 +11,7 @@ class QuizzModel {
     description = json['description'];
     isFree = json['is_free'];
     questions = json['questions'] != null
-        ? List<QuestionModel>.from(
-            json['questions']?.map((e) => QuestionModel.fromJson(e)))
+        ? List<QuestionModel>.from(json['questions']?.map((e) => QuestionModel.fromJson(e)))
         : [];
   }
 }

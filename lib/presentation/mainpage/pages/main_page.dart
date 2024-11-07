@@ -12,23 +12,21 @@ class MainPage extends GetView<MainPageController> {
   Widget build(BuildContext context) {
     printError(info: 'MainPage Build');
     return GetBuilder<ThemeController>(
-      init: ThemeController(),
       id: "appTheme",
       builder: (cnt) {
         printError(info: 'appTheme Build');
         return Scaffold(
-          extendBody: true,
-          // ignore: deprecated_member_use
-          body: WillPopScope(
-            onWillPop: () async {
-              // Check if we're on the first tab, then allow exit
-              if (controller.bottomNavController.index == 0) {
-                // exit(0);
-                return true; // Allow app to close
-              } else {
-                // Navigate back to the first tab instead of closing the app
-                controller.bottomNavController.jumpToTab(0);
-                return false; // Prevent app from closing
+          body: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              if (!didPop) {
+                // Check if we're on the first tab, then allow exit
+                if (controller.bottomNavController.index == 0) {
+                  Get.back();
+                } else {
+                  // Navigate back to the first tab instead of closing the app
+                  controller.bottomNavController.jumpToTab(0);
+                }
               }
             },
             child: PersistentTabView(
@@ -64,5 +62,28 @@ class MainPage extends GetView<MainPageController> {
         );
       },
     );
+  }
+}
+
+class KeepAlivePage extends StatefulWidget {
+  final Widget child;
+
+  const KeepAlivePage({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  State<KeepAlivePage> createState() => _KeepAlivePageState();
+}
+
+class _KeepAlivePageState extends State<KeepAlivePage> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
   }
 }
