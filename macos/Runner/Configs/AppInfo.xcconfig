@@ -8,7 +8,7 @@
 PRODUCT_NAME = hog_v2
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = dev.odyessey.hog_v2
+PRODUCT_BUNDLE_IDENTIFIER = dev.odyessey.hogV2
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 dev.odyessey. All rights reserved.

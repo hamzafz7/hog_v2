@@ -173,54 +173,8 @@ Future<void> deleteFile(String filePath) async {
   }
 }
 
-class MyErrorsHandler {
-  // Initialize any resources for error handling, like logging
-  static Future<void> initialize() async {
-    // Perform any initialization if needed
-    if (kDebugMode) {
-      print('Error handler initialized.');
-    }
-  }
-
-  // Handle Flutter framework errors
-  static void onErrorDetails(FlutterErrorDetails details) {
-    // Log or handle Flutter error details
-    if (kDebugMode) {
-      print("\x1B[35m Flutter error: ${details.exceptionAsString()} \x1B[35m");
-      print('\x1B[37m Stack trace: ${details.stack} \x1B[37m');
-    }
-  }
-
-  // Handle uncaught errors from Dart or the platform
-  static void onError(Object error, StackTrace stack) {
-    // Log or handle uncaught error
-    if (kDebugMode) {
-      print('\x1B[31m Caught error: $error \x1B[31m');
-      print('\x1B[34m Stack trace: $stack \x1B[34m');
-      print('\x1B[37m \x1B[37m');
-    }
-  }
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MyErrorsHandler.initialize();
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    MyErrorsHandler.onErrorDetails(details);
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    MyErrorsHandler.onError(error, stack);
-    return true;
-  };
-  // FlutterError.onError = (FlutterErrorDetails details) {
-  //   FlutterError.dumpErrorToConsole(details, forceReport: true);
-  //   // FlutterMemoryAllocations.instance.addListener((value) {
-  //   //   if (kDebugMode) {
-  //   //     print("FlutterMemoryAllocations : ${value.toString()}");
-  //   //   }
-  //   // });
-  // };
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();

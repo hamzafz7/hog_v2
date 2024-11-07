@@ -26,7 +26,7 @@ class AppInterceptors extends Interceptor {
       debugPrint("REQUEST[${options.method}] => PATH: $baseUrl${options.path}");
     }
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult.first == ConnectivityResult.none) {
+    if (connectivityResult == ConnectivityResult.none) {
       return handler
           .reject(DioException(requestOptions: options, message: "لا يوجد اتصال بالانترنت"));
     }
@@ -43,7 +43,7 @@ class AppInterceptors extends Interceptor {
     }
 
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult.first == ConnectivityResult.none) {
+    if (connectivityResult == ConnectivityResult.none) {
       return handler.reject(DioException(
           requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
     }

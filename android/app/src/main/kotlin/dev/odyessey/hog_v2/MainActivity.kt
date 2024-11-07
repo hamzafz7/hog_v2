@@ -1,4 +1,4 @@
-package dev.odyessey.hog_v2
+package dev.odyessey.hog2
 
 import android.os.DeadObjectException
 import android.util.Log
