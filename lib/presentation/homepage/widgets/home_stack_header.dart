@@ -79,36 +79,40 @@ class HomeStackHeader extends GetView<HomeController> {
           SizedBox(
             height: 250.h,
             child: GetBuilder<HomeController>(
-              builder: (_) => switch (controller.getNewsStatus) {
-                RequestStatus.success => Swiper(
-                    viewportFraction: 0.8,
-                    scale: 0.9,
-                    loop: true,
-                    indicatorLayout: PageIndicatorLayout.SCALE,
-                    itemHeight: 300.h,
-                    itemWidth: 350.w,
-                    layout: SwiperLayout.DEFAULT,
-                    autoplay: true,
-                    itemCount: controller.newsResponse!.news.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.all(8.0.r),
-                      child: NewsItem(model: controller.newsResponse!.news[index]),
+              id: "newsSection",
+              builder: (_) {
+                printError(info: 'newsSection Build');
+                return switch (controller.getNewsStatus) {
+                  RequestStatus.success => Swiper(
+                      viewportFraction: 0.8,
+                      scale: 0.9,
+                      loop: true,
+                      indicatorLayout: PageIndicatorLayout.SCALE,
+                      itemHeight: 300.h,
+                      itemWidth: 350.w,
+                      layout: SwiperLayout.DEFAULT,
+                      autoplay: true,
+                      itemCount: controller.newsResponse!.news.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.all(8.0.r),
+                        child: NewsItem(model: controller.newsResponse!.news[index]),
+                      ),
                     ),
-                  ),
-                RequestStatus.begin => Container(),
-                RequestStatus.loading => Center(
-                    child: appCircularProgress(),
-                  ),
-                RequestStatus.onError => const Center(
-                    child: Text("حدث خطأ"),
-                  ),
-                RequestStatus.noData => const Center(
-                    child: Text("لا يوجد أخبار للعرض"),
-                  ),
-                RequestStatus.noInternentt => const Center(
-                    child: Text("لا يوجد اتصال بالانترنت"),
-                  ),
+                  RequestStatus.begin => Container(),
+                  RequestStatus.loading => Center(
+                      child: appCircularProgress(),
+                    ),
+                  RequestStatus.onError => const Center(
+                      child: Text("حدث خطأ"),
+                    ),
+                  RequestStatus.noData => const Center(
+                      child: Text("لا يوجد أخبار للعرض"),
+                    ),
+                  RequestStatus.noInternentt => const Center(
+                      child: Text("لا يوجد اتصال بالانترنت"),
+                    ),
+                };
               },
             ),
           ),

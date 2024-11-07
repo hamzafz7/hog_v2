@@ -287,8 +287,11 @@ class Utils {
         outPath,
         quality: 88,
       );
+      if (result == null) {
+        return null;
+      }
 
-      return File(result!.path);
+      return File(result.path);
     } on CompressError {
       rethrow;
     }

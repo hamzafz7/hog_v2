@@ -63,7 +63,7 @@ class MyProfileController extends GetxController {
 
   Future<void> getMyProfile() async {
     updateGetProfileStatus(RequestStatus.loading);
-    update();
+    update(["profilePage"]);
     var response = await _repo.getMyProfile();
     if (response.success) {
       prfoileResponse = ProfileResponse.fromJson(response.data);
@@ -83,7 +83,7 @@ class MyProfileController extends GetxController {
       }
       Get.snackbar("حدث خطأ", response.errorMessage!);
     }
-    update();
+    update(["profilePage"]);
   }
 
   Future<void> updateProfile() async {
@@ -114,7 +114,7 @@ class MyProfileController extends GetxController {
 
   Future<void> logOut() async {
     updateLogOutStatus(RequestStatus.loading);
-    update();
+    update(["logoutButton"]);
     var response = await _repo.signOut();
     if (response.success) {
       updateLogOutStatus(RequestStatus.success);
@@ -123,14 +123,17 @@ class MyProfileController extends GetxController {
     } else if (!response.success) {
       updateLogOutStatus(RequestStatus.onError);
       Get.snackbar("حدث خطأ", response.errorMessage!);
-      update();
+      update(["logoutButton"]);
     }
   }
 
   Future<void> deleteProfile() async {
     updateDeleteProfileStatus(RequestStatus.loading);
-    update();
+    update(["deleteProfileButton"]);
     var response = await _repo.deleteProfile();
+    // var response = AppResponse(success: true, data: "", errorMessage: "sadas");
+    // await Future.delayed(Duration(seconds: 2));
+
     if (response.success) {
       updateDeleteProfileStatus(RequestStatus.success);
       GetIt.instance<CacheProvider>().clearAppToken();
@@ -138,7 +141,7 @@ class MyProfileController extends GetxController {
     } else if (!response.success) {
       updateDeleteProfileStatus(RequestStatus.onError);
       Get.snackbar("حدث خطأ", response.errorMessage!);
-      update();
+      update(["deleteProfileButton"]);
     }
   }
 }

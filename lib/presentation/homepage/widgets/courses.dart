@@ -14,7 +14,6 @@ class CoursesWidget extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        /// Remove form here Obs parent Row
         Row(
           children: [
             Padding(

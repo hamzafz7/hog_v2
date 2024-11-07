@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -243,8 +244,10 @@ class _OfflineVideosPageState extends State<OfflineVideosPage> with TickerProvid
   }
 
   Widget videoWidget(int index, OfflineVideosState state) {
-    debugPrint(
-        "state.offlineVideos[index].lessonTitle! = ${state.offlineVideos[index].lessonTitle!}");
+    if (kDebugMode) {
+      debugPrint(
+          "state.offlineVideos[index].lessonTitle! = ${state.offlineVideos[index].lessonTitle!}");
+    }
     return Directionality(
       textDirection: TextDirection.ltr,
       child: GestureDetector(

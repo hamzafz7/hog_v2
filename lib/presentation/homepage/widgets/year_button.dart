@@ -22,6 +22,7 @@ class YearButton extends GetView<HomeController> {
     return InkWell(
       onTap: onPressed,
       child: GetBuilder<HomeController>(
+        id: "changeCurrentIndex_$index",
         builder: (_) => Container(
           width: 146.w,
           height: 70.h,

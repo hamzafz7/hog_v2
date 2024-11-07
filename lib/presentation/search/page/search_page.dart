@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,32 +18,33 @@ class SearchPage extends GetView<SearchPageController> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        leading: Icon(
-          Icons.search,
-          color: kprimaryGreyColor,
-          size: 40.r,
-        ),
+        automaticallyImplyLeading: false,
         title: TextFormField(
           style: Theme.of(context).textTheme.bodyMedium,
           controller: controller.searchController,
           autofocus: true,
-          onChanged: (val) async {
+          onChanged: (val) {
             if (controller.debounceTimer != null) controller.debounceTimer?.cancel();
             controller.debounceTimer = Timer(const Duration(milliseconds: 500), () async {
               if (val.isNotEmpty && controller.searchController.text.isNotEmpty) {
                 controller.cancelToken.cancel();
-                debugPrint('Request was cancelled');
-                debugPrint('Search again');
+                if (kDebugMode) {
+                  debugPrint('Request was cancelled');
+                  debugPrint('Search again');
+                }
                 await controller.searchCourse(val);
-              }
-              if (val.isEmpty || controller.searchController.text.isEmpty) {
-                controller.updatecourseStatus(RequestStatus.begin);
               }
             });
           },
           cursorColor: kprimaryBlueColor,
           keyboardType: TextInputType.name,
           decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.search,
+              color: kprimaryGreyColor,
+              size: 40.r,
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
             hintText: '  ابحث عن ما تريد ما تريد من كوررسات..',
             hintStyle: Theme.of(context).textTheme.bodyMedium,

@@ -21,22 +21,25 @@ class MyProfilePage extends GetView<MyProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    printError(info: 'MyProfilePage Build');
     return Scaffold(
       body: RefreshIndicator(
         color: kprimaryBlueColor,
         onRefresh: () async {
-          controller.getMyProfile();
+          await controller.getMyProfile();
         },
-        child: SingleChildScrollView(
+        child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              const MyProfileHeader(),
-              SizedBox(
-                height: 25.h,
-              ),
-              GetBuilder<MyProfileController>(
-                builder: (_) => controller.getProfileStatus == RequestStatus.loading
+          children: [
+            const MyProfileHeader(),
+            SizedBox(
+              height: 25.h,
+            ),
+            GetBuilder<MyProfileController>(
+              id: "profilePage",
+              builder: (_) {
+                printError(info: 'profilePage Build');
+                return controller.getProfileStatus == RequestStatus.loading
                     ? Center(
                         child: appCircularProgress(),
                       )
@@ -78,19 +81,29 @@ class MyProfilePage extends GetView<MyProfileController> {
                                     height: 30.h,
                                   ),
                                   GetBuilder<MyProfileController>(
-                                    builder: (_) => controller.logOutStatus == RequestStatus.loading
-                                        ? appCircularProgress()
-                                        : ProfileListItem(
-                                            svgUrl: "assets/icons/log-out.svg",
-                                            onTap: () {
-                                              customDialog(context,
-                                                  child: LogOutDialog(onPressed: () {
-                                                controller.logOut();
-
-                                                Get.back();
-                                              }), height: 250, width: 390);
-                                            },
-                                            text: "تسجيل الخروج"),
+                                    id: "logoutButton",
+                                    builder: (_) {
+                                      printError(info: 'logoutButton Build');
+                                      return controller.logOutStatus == RequestStatus.loading
+                                          ? appCircularProgress()
+                                          : ProfileListItem(
+                                              svgUrl: "assets/icons/log-out.svg",
+                                              onTap: () {
+                                                customDialog(
+                                                  context,
+                                                  child: LogOutDialog(
+                                                    onPressed: () {
+                                                      controller.logOut();
+                                                      Get.back();
+                                                    },
+                                                  ),
+                                                  height: 250,
+                                                  width: 390,
+                                                );
+                                              },
+                                              text: "تسجيل الخروج",
+                                            );
+                                    },
                                   ),
                                   SizedBox(
                                     height: 30.h,
@@ -103,19 +116,20 @@ class MyProfilePage extends GetView<MyProfileController> {
                                           text: "الوضع الليلي"),
                                       const Spacer(),
                                       GetBuilder<ThemeController>(
-                                          init: ThemeController(),
-                                          builder: (cnt) {
-                                            return Switch.adaptive(
-                                                activeColor: Colors.blue,
-                                                inactiveThumbColor: Colors.blue,
-                                                trackOutlineColor: WidgetStateProperty.resolveWith(
-                                                    (states) => Colors.blue),
-                                                value: cnt.currentTheme == ThemeMode.dark,
-                                                onChanged: (val) {
-                                                  cnt.switchTheme();
-                                                  Get.changeThemeMode(cnt.currentTheme);
-                                                });
-                                          }),
+                                        id: "switchThemeButton",
+                                        builder: (cnt) {
+                                          printError(info: 'switchThemeButton Build');
+                                          return Switch.adaptive(
+                                              activeColor: Colors.blue,
+                                              inactiveThumbColor: Colors.blue,
+                                              trackOutlineColor: WidgetStateProperty.resolveWith(
+                                                  (states) => Colors.blue),
+                                              value: cnt.currentTheme == ThemeMode.dark,
+                                              onChanged: (val) {
+                                                cnt.switchTheme();
+                                              });
+                                        },
+                                      ),
                                       SizedBox(
                                         width: 40.w,
                                       )
@@ -125,26 +139,35 @@ class MyProfilePage extends GetView<MyProfileController> {
                                     height: 30.h,
                                   ),
                                   GetBuilder<MyProfileController>(
-                                    builder: (_) =>
-                                        controller.deleteProfileStatus == RequestStatus.loading
-                                            ? appCircularProgress()
-                                            : ProfileListItem(
-                                                svgUrl: "assets/icons/x.svg",
-                                                onTap: () {
-                                                  customDialog(context,
-                                                      child: DeleteProfileDialog(onPressed: () {
-                                                    controller.deleteProfile();
-
-                                                    Get.back();
-                                                  }), height: 250, width: 390);
-                                                },
-                                                text: "حذف الحساب"),
+                                    id: "deleteProfileButton",
+                                    builder: (_) {
+                                      printError(info: 'deleteProfileButton Build');
+                                      return controller.deleteProfileStatus == RequestStatus.loading
+                                          ? appCircularProgress()
+                                          : ProfileListItem(
+                                              svgUrl: "assets/icons/x.svg",
+                                              onTap: () {
+                                                customDialog(
+                                                  context,
+                                                  child: DeleteProfileDialog(
+                                                    onPressed: () {
+                                                      controller.deleteProfile();
+                                                      Get.back();
+                                                    },
+                                                  ),
+                                                  height: 250,
+                                                  width: 390,
+                                                );
+                                              },
+                                              text: "حذف الحساب",
+                                            );
+                                    },
                                   )
                                 ],
-                              ),
-              ),
-            ],
-          ),
+                              );
+              },
+            ),
+          ],
         ),
       ),
     );

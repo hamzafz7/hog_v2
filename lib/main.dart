@@ -50,8 +50,9 @@ void writeVideoBytes(List arg) async {
   final key = enc.Key.fromUtf8(keyEnc);
   final iv = enc.IV.fromUtf8("e16ce888a20dadb8");
   final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.sic, padding: null));
-
-  debugPrint("DDDDDD");
+  if (kDebugMode) {
+    debugPrint("DDDDDD");
+  }
   int offset = 0;
   final dio = Dio(BaseOptions(
     connectTimeout: const Duration(hours: 1),
@@ -143,9 +144,11 @@ void decryptFile(List arg) async {
     reader.cancel();
     sendPort?.send("done");
   } catch (e, s) {
-    debugPrint("****************exc writeVideoBytes");
-    debugPrint(e.toString());
-    debugPrint(s.toString());
+    if (kDebugMode) {
+      debugPrint("****************exc writeVideoBytes");
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+    }
   }
 }
 
@@ -156,12 +159,18 @@ Future<void> deleteFile(String filePath) async {
     // Check if the file exists
     if (await file.exists()) {
       await file.delete();
-      debugPrint('File deleted successfully');
+      if (kDebugMode) {
+        debugPrint('File deleted successfully');
+      }
     } else {
-      debugPrint('File not found');
+      if (kDebugMode) {
+        debugPrint('File not found');
+      }
     }
   } catch (e) {
-    debugPrint('Error deleting file: $e');
+    if (kDebugMode) {
+      debugPrint('Error deleting file: $e');
+    }
   }
 }
 

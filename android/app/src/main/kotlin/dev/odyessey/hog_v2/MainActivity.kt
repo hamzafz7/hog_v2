@@ -1,4 +1,4 @@
-package dev.odyessey.hog2
+package dev.odyessey.hog_v2
 
 import io.flutter.embedding.android.FlutterActivity
 

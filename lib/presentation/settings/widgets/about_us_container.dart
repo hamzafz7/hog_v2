@@ -33,7 +33,7 @@ class AboutUsConatiner extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(10.r)),
         child: Container(
           width: 345.w,
-          height: 168.h,
+          // height: 168.h,
           decoration: BoxDecoration(
             // color: Colors.white,
             border: Border(
@@ -64,7 +64,7 @@ class AboutUsConatiner extends StatelessWidget {
                   ),
                   SizedBox(
                     width: 288.w,
-                    height: 100.38.h,
+                    // height: 100.38.h,
                     child: Text(body,
                         textAlign: rightSide ? TextAlign.right : TextAlign.left,
                         style: Theme.of(context).textTheme.bodySmall),

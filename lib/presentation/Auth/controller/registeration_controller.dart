@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +17,6 @@ class RegisterationController extends GetxController {
     confirmPasswordController.dispose();
     loginPhoneController.dispose();
     registerPhoneController.dispose();
-    isloginpasswordShown.close();
     super.onClose();
   }
 
@@ -32,70 +30,86 @@ class RegisterationController extends GetxController {
   var loginPageFormKey = GlobalKey<FormState>();
   var registerPageFormKey = GlobalKey<FormState>();
 
-  var loginRequestStatus = RequestStatus.begin;
-  var registerRequestStatus = RequestStatus.begin;
+  RequestStatus loginState = RequestStatus.begin;
 
-  uptateLoginRequestStatus(RequestStatus val) => loginRequestStatus = val;
-
-  uptateRegisterRequestStatus(RequestStatus val) => registerRequestStatus = val;
-
-  RxBool isloginpasswordShown = false.obs;
+  RequestStatus registerStatus = RequestStatus.begin;
 
   final AccountRepo _repo = AccountRepo();
 
-  changeIsLoginPasswordShown() {
-    isloginpasswordShown.value = !isloginpasswordShown.value;
+  userLogin() {
+    if (!(loginPageFormKey.currentState?.validate() ?? false)) return;
+
+    loginState = RequestStatus.loading;
+    update();
+    _login().whenComplete(() {
+      loginState = RequestStatus.success;
+      update();
+    }).catchError((error) {
+      loginState = RequestStatus.onError;
+      update();
+    });
   }
 
-  AuthResponse? authResponse;
+  Future<void> _login() async {
+    try {
+      final user = User(
+          password: loginPasswordController.text.trim(), phone: loginPhoneController.text.trim());
+      final response = await _repo.userLogin(user);
 
-  Future<void> userLogin({required String phone, required String password}) async {
-    uptateLoginRequestStatus(RequestStatus.loading);
-    update();
-    User user = User(password: password.trim(), phone: phone.trim());
-
-    var response = await _repo.userLogin(user);
-    if (response.success) {
-      authResponse = AuthResponse.fromJson(response.data);
-      if (kDebugMode) {
-        print(authResponse!.data!.token!);
+      if (response.success) {
+        final authResponse = AuthResponse.fromJson(response.data);
+        await _saveUserData(authResponse);
+        Get.snackbar("مرحباً !!", authResponse.message!);
+        Get.offAllNamed(AppRoute.mainPageRoute);
+      } else {
+        Get.snackbar("حدث خطأ", response.errorMessage!);
       }
-
-      Get.snackbar("مرحباً !!", authResponse!.message!);
-      GetIt.instance<CacheProvider>().setUserId(authResponse!.data!.user!.id!);
-      GetIt.instance<CacheProvider>().setUserName(authResponse!.data!.user!.fullName!);
-      GetIt.instance<CacheProvider>().setAppToken(authResponse!.data!.token!);
-      GetIt.instance<CacheProvider>().setUserType(authResponse!.data!.user!.type);
-      Get.offAllNamed(AppRoute.mainPageRoute);
-      uptateLoginRequestStatus(RequestStatus.success);
-    } else {
-      uptateLoginRequestStatus(RequestStatus.onError);
-      Get.snackbar("حدث خطأ", response.errorMessage!);
+    } catch (e) {
+      Get.snackbar("حدث خطأ", "حدث خطأ غير متوقع");
     }
-    update();
   }
 
-  Future<void> userRegister(
-      {required String phone, required String password, required String fullName}) async {
-    uptateRegisterRequestStatus(RequestStatus.loading);
+  userRegister() {
+    if (!registerPageFormKey.currentState!.validate()) return;
+
+    registerStatus = RequestStatus.loading;
     update();
-    User user = User(password: password.trim(), phone: phone.trim(), fullName: fullName.trim());
+    _register().whenComplete(() {
+      registerStatus = RequestStatus.success;
+      update();
+    }).catchError((error) {
+      registerStatus = RequestStatus.onError;
+      update();
+    });
+  }
 
-    var response = await _repo.userRegister(user);
-    if (response.success) {
-      authResponse = AuthResponse.fromJson(response.data);
-      Get.snackbar("مرحباً !!", authResponse!.message!);
-      GetIt.instance<CacheProvider>().setUserId(authResponse!.data!.user!.id!);
-      GetIt.instance<CacheProvider>().setUserName(authResponse!.data!.user!.fullName!);
-      GetIt.instance<CacheProvider>().setAppToken(authResponse!.data!.token!);
-      GetIt.instance<CacheProvider>().setUserType(authResponse!.data!.user!.type);
+  Future<void> _register() async {
+    try {
+      final user = User(
+        password: registerPhoneController.text.trim(),
+        phone: registerPasswordController.text.trim(),
+        fullName: nameController.text.trim(),
+      );
 
-      Get.offAllNamed(AppRoute.mainPageRoute);
-      uptateRegisterRequestStatus(RequestStatus.success);
-    } else {
-      uptateRegisterRequestStatus(RequestStatus.onError);
-      Get.snackbar("حدث خطأ", response.errorMessage!);
+      var response = await _repo.userRegister(user);
+      if (response.success) {
+        final authResponse = AuthResponse.fromJson(response.data);
+        await _saveUserData(authResponse);
+        Get.snackbar("مرحباً !!", authResponse.message!);
+        Get.offAllNamed(AppRoute.mainPageRoute);
+      } else {
+        Get.snackbar("حدث خطأ", response.errorMessage!);
+      }
+    } catch (e) {
+      Get.snackbar("حدث خطأ", "حدث خطأ غير متوقع");
     }
-    update();
+  }
+
+  Future<void> _saveUserData(AuthResponse authResponse) async {
+    final cache = GetIt.instance<CacheProvider>();
+    await cache.setUserId(authResponse.data!.user!.id!);
+    await cache.setUserName(authResponse.data!.user!.fullName!);
+    await cache.setAppToken(authResponse.data!.token!);
+    await cache.setUserType(authResponse.data!.user!.type);
   }
 }

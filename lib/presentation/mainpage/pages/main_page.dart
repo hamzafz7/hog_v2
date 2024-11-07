@@ -10,54 +10,59 @@ class MainPage extends GetView<MainPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: GetBuilder<ThemeController>(
-        init: ThemeController(),
-        // ignore: deprecated_member_use
-        builder: (cnt) => WillPopScope(
-          onWillPop: () async {
-            // Check if we're on the first tab, then allow exit
-            if (controller.bottomNavController.index == 0) {
-              // exit(0);
-              return true; // Allow app to close
-            } else {
-              // Navigate back to the first tab instead of closing the app
-              controller.bottomNavController.jumpToTab(0);
-              return false; // Prevent app from closing
-            }
-          },
-          child: PersistentTabView(
-            context,
-            controller: controller.bottomNavController,
-            backgroundColor: cnt.currentTheme == ThemeMode.dark
-                ? const Color.fromARGB(255, 7, 37, 61)
-                : Colors.white,
-            screens: controller.screens,
-            items: [
-              PersistentBottomNavBarItem(
-                icon: const Icon(Icons.person),
-                title: "حسابي",
-                activeColorPrimary: kprimaryBlueColor,
-                inactiveColorPrimary: Colors.grey,
-                inactiveColorSecondary: Colors.grey,
-              ),
-              PersistentBottomNavBarItem(
-                icon: const Icon(Icons.home),
-                title: "الرئيسية",
-                activeColorPrimary: kprimaryBlueColor,
-                inactiveColorPrimary: Colors.grey,
-              ),
-              PersistentBottomNavBarItem(
-                icon: const Icon(Icons.message),
-                title: "كورساتي",
-                activeColorPrimary: kprimaryBlueColor,
-                inactiveColorPrimary: Colors.grey,
-              ),
-            ],
+    printError(info: 'MainPage Build');
+    return GetBuilder<ThemeController>(
+      init: ThemeController(),
+      id: "appTheme",
+      builder: (cnt) {
+        printError(info: 'appTheme Build');
+        return Scaffold(
+          extendBody: true,
+          // ignore: deprecated_member_use
+          body: WillPopScope(
+            onWillPop: () async {
+              // Check if we're on the first tab, then allow exit
+              if (controller.bottomNavController.index == 0) {
+                // exit(0);
+                return true; // Allow app to close
+              } else {
+                // Navigate back to the first tab instead of closing the app
+                controller.bottomNavController.jumpToTab(0);
+                return false; // Prevent app from closing
+              }
+            },
+            child: PersistentTabView(
+              context,
+              controller: controller.bottomNavController,
+              backgroundColor: cnt.currentTheme == ThemeMode.dark
+                  ? const Color.fromARGB(255, 7, 37, 61)
+                  : Colors.white,
+              screens: controller.screens,
+              items: [
+                PersistentBottomNavBarItem(
+                  icon: const Icon(Icons.person),
+                  title: "حسابي",
+                  activeColorPrimary: kprimaryBlueColor,
+                  inactiveColorPrimary: Colors.grey,
+                  inactiveColorSecondary: Colors.grey,
+                ),
+                PersistentBottomNavBarItem(
+                  icon: const Icon(Icons.home),
+                  title: "الرئيسية",
+                  activeColorPrimary: kprimaryBlueColor,
+                  inactiveColorPrimary: Colors.grey,
+                ),
+                PersistentBottomNavBarItem(
+                  icon: const Icon(Icons.message),
+                  title: "كورساتي",
+                  activeColorPrimary: kprimaryBlueColor,
+                  inactiveColorPrimary: Colors.grey,
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -19,11 +19,11 @@ class AppInterceptors extends Interceptor {
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (kDebugMode) {
       print("hello from request ");
+      debugPrint("request is sending");
+      debugPrint("REQUEST[${options.method}] => PATH: $baseUrl${options.path}");
     }
-    debugPrint("request is sending");
-    debugPrint("REQUEST[${options.method}] => PATH: $baseUrl${options.path}");
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult.first == ConnectivityResult.none) {
       return handler
           .reject(DioException(requestOptions: options, message: "لا يوجد اتصال بالانترنت"));
     }
@@ -35,12 +35,12 @@ class AppInterceptors extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     if (kDebugMode) {
       print("zzz");
+      debugPrint("response is getting");
+      debugPrint(response.data.toString());
     }
-    debugPrint("response is getting");
-    debugPrint(response.data.toString());
 
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult.first == ConnectivityResult.none) {
       return handler.reject(DioException(
           requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
     }

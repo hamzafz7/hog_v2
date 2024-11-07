@@ -37,6 +37,7 @@ class User {
         type: json['type'],
         image: json['image']);
   }
+
   Map<String, dynamic> loginUserToJson() {
     return {
       "phone": phone,
@@ -60,12 +61,14 @@ class User {
   }
 
   Future<Map<String, dynamic>> updateUserToJSon() async {
+    late File image1;
+    if (image != null && image != "") {
+      image1 = await GetIt.instance<Utils>().compressImage(File(image!)) ?? File(image!);
+    }
     return {
       "full_name": fullName,
       "phone": phone,
-      if (image != null && image != "")
-        'image': await MultipartFile.fromFile(
-            (await GetIt.instance<Utils>().compressImage(File(image!)))!.path)
+      if (image != null && image != "") 'image': await MultipartFile.fromFile(image1.path)
     };
   }
 }

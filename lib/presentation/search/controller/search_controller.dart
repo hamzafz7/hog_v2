@@ -12,10 +12,12 @@ class SearchPageController extends GetxController {
   final CategoryRepository _categoryRepository = CategoryRepository();
   final CancelToken cancelToken = CancelToken();
   Timer? debounceTimer;
+  FocusNode focusNode = FocusNode();
 
   @override
   void onClose() {
     searchController.dispose();
+    focusNode.dispose();
     super.onClose();
   }
 

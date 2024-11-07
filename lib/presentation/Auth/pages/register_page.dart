@@ -5,9 +5,9 @@ import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
-import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/common/utils/utils.dart';
-import 'package:hog_v2/presentation/Auth/widgets/registeration_form_feild.dart';
+import 'package:hog_v2/presentation/Auth/widgets/password_form_field.dart';
+import 'package:hog_v2/presentation/Auth/widgets/regular_form_field.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
 
 import '../controller/registeration_controller.dart';
@@ -48,7 +48,7 @@ class RegisterPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 40.h,
               ),
-              RegisterationFormFeild(
+              RegularFormField(
                 controller: controller.nameController,
                 hintText: 'الاسم',
                 svgSrc: "assets/icons/person1.svg",
@@ -59,7 +59,7 @@ class RegisterPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 20.h,
               ),
-              RegisterationFormFeild(
+              RegularFormField(
                 controller: controller.registerPhoneController,
                 hintText: 'رقم الهاتف',
                 svgSrc: "assets/icons/Phone1.svg",
@@ -70,7 +70,7 @@ class RegisterPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 20.h,
               ),
-              RegisterationFormFeild(
+              PasswordFormField(
                 controller: controller.registerPasswordController,
                 hintText: 'كلمة المرور',
                 svgSrc: "assets/icons/Lock.svg",
@@ -81,7 +81,7 @@ class RegisterPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 20.h,
               ),
-              RegisterationFormFeild(
+              PasswordFormField(
                 controller: controller.confirmPasswordController,
                 hintText: 'تأكيد كلمة المرور',
                 svgSrc: "assets/icons/Lock.svg",
@@ -97,16 +97,11 @@ class RegisterPage extends GetView<RegisterationController> {
                 height: 60.h,
               ),
               GetBuilder<RegisterationController>(
-                builder: (_) => controller.registerRequestStatus == RequestStatus.loading
+                builder: (_) => controller.registerStatus == RequestStatus.loading
                     ? appCircularProgress()
                     : CustomButton(
                         onTap: () {
-                          if (controller.registerPageFormKey.currentState!.validate()) {
-                            controller.userRegister(
-                                phone: controller.registerPhoneController.text.trim(),
-                                password: controller.registerPasswordController.text.trim(),
-                                fullName: controller.nameController.text.trim());
-                          }
+                          controller.userRegister();
                         },
                         height: 55.h,
                         width: 333.w,
@@ -126,7 +121,7 @@ class RegisterPage extends GetView<RegisterationController> {
                   Text("لديك حساب مسبق ؟", style: Theme.of(context).textTheme.bodySmall),
                   TextButton(
                       onPressed: () {
-                        Get.offAllNamed(AppRoute.loginPageRoute);
+                        Get.back();
                       },
                       child: Text("تسجيل الدخول",
                           style: Theme.of(context).textTheme.bodySmall!.copyWith(

@@ -14,6 +14,7 @@ class ThemeController extends GetxController {
   void switchTheme() {
     currentTheme = currentTheme == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     GetIt.instance<CacheProvider>().setAppTheme(!GetIt.instance<CacheProvider>().getAppTheme());
-    update();
+    Get.changeThemeMode(currentTheme);
+    update(["appTheme"]);
   }
 }

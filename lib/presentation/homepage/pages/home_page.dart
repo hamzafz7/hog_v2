@@ -18,38 +18,44 @@ class HomePage extends GetView<HomeController> {
       child: RefreshIndicator(
         color: kprimaryBlueColor,
         onRefresh: () async {
-          controller.getNews();
-          controller.getCategories();
+          await Future.wait([controller.getNews(), controller.getCategories()]);
         },
         child: Scaffold(
-          body: SingleChildScrollView(
+          body: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(width: Get.width, child: const HomeStackHeader()),
-                SizedBox(
-                  height: 20.h,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    const HomeStackHeader(),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      child: Text('التصنيفات الرئيسية',
+                          textAlign: TextAlign.right,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600)),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w),
-                  child: Text('التصنيفات الرئيسية',
-                      textAlign: TextAlign.right,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600)),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                SizedBox(
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
                   height: 70.h,
                   child: GetBuilder<HomeController>(
-                      builder: (_) => switch (controller.categoriesStatus) {
-                            RequestStatus.success => controller.categoriesModel != null &&
-                                    controller.categoriesModel!.categories != null &&
-                                    controller.categoriesModel!.categories!.isNotEmpty
+                      id: "categoriesSection",
+                      builder: (_) {
+                        printError(info: 'categoriesSection Build');
+                        return switch (controller.categoriesStatus) {
+                          RequestStatus.success =>
+                            controller.categoriesModel?.categories?.isNotEmpty == true
                                 ? ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: controller.categoriesModel!.categories!.length,
@@ -67,48 +73,57 @@ class HomePage extends GetView<HomeController> {
                                         ),
                                       );
                                     })
-                                : Container(),
-                            RequestStatus.begin => Container(),
-                            RequestStatus.loading => Center(
-                                child: appCircularProgress(),
-                              ),
-                            RequestStatus.onError => const Center(
-                                child: SizedBox(height: 70, child: Text("حدث خطأ")),
-                              ),
-                            RequestStatus.noData => const Center(
-                                child: SizedBox(height: 70, child: Text("لا يوجد بيانات")),
-                              ),
-                            RequestStatus.noInternentt => const Center(
-                                child: Text("لا يوجد اتصال بالانترنت"),
-                              ),
-                          }),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                GetBuilder<HomeController>(
-                    builder: (_) => switch (controller.courseStatus) {
-                          RequestStatus.success => controller.coursesModel != null &&
-                                  controller.coursesModel!.courses != null &&
-                                  controller.coursesModel!.courses!.isNotEmpty
-                              ? const CoursesWidget()
-                              : Container(),
+                                : const SizedBox.shrink(),
                           RequestStatus.begin => Container(),
                           RequestStatus.loading => Center(
                               child: appCircularProgress(),
                             ),
                           RequestStatus.onError => const Center(
-                              child: Text("حدث خطأ"),
+                              child: SizedBox(height: 70, child: Text("حدث خطأ")),
                             ),
                           RequestStatus.noData => const Center(
-                              child: Text("لا يوجد بيانات"),
+                              child: SizedBox(height: 70, child: Text("لا يوجد بيانات")),
                             ),
                           RequestStatus.noInternentt => const Center(
                               child: Text("لا يوجد اتصال بالانترنت"),
                             ),
-                        }),
-              ],
-            ),
+                        };
+                      }),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 30.h,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: GetBuilder<HomeController>(
+                    id: "coursesSection",
+                    builder: (_) {
+                      printError(info: 'coursesSection Build');
+                      return switch (controller.courseStatus) {
+                        RequestStatus.success => controller.coursesModel != null &&
+                                controller.coursesModel!.courses != null &&
+                                controller.coursesModel!.courses!.isNotEmpty
+                            ? const CoursesWidget()
+                            : const SizedBox.shrink(),
+                        RequestStatus.begin => Container(),
+                        RequestStatus.loading => Center(
+                            child: appCircularProgress(),
+                          ),
+                        RequestStatus.onError => const Center(
+                            child: Text("حدث خطأ"),
+                          ),
+                        RequestStatus.noData => const Center(
+                            child: Text("لا يوجد بيانات"),
+                          ),
+                        RequestStatus.noInternentt => const Center(
+                            child: Text("لا يوجد اتصال بالانترنت"),
+                          ),
+                      };
+                    }),
+              ),
+            ],
           ),
         ),
       ),

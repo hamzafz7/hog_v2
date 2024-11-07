@@ -7,7 +7,8 @@ import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/common/utils/utils.dart';
-import 'package:hog_v2/presentation/Auth/widgets/registeration_form_feild.dart';
+import 'package:hog_v2/presentation/Auth/widgets/password_form_field.dart';
+import 'package:hog_v2/presentation/Auth/widgets/regular_form_field.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
 
 import '../controller/registeration_controller.dart';
@@ -48,7 +49,7 @@ class LoginPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 40.h,
               ),
-              RegisterationFormFeild(
+              RegularFormField(
                 controller: controller.loginPhoneController,
                 hintText: 'رقم الهاتف',
                 svgSrc: "assets/icons/Phone1.svg",
@@ -59,37 +60,23 @@ class LoginPage extends GetView<RegisterationController> {
               SizedBox(
                 height: 20.h,
               ),
-              Obx(
-                () => RegisterationFormFeild(
-                  visibility: controller.isloginpasswordShown.value,
-                  suffix: IconButton(
-                      onPressed: () {
-                        controller.changeIsLoginPasswordShown();
-                      },
-                      icon: Icon(controller.isloginpasswordShown.value
-                          ? Icons.visibility_off
-                          : Icons.visibility)),
-                  controller: controller.loginPasswordController,
-                  hintText: 'كلمة المرور',
-                  svgSrc: "assets/icons/Lock.svg",
-                  validator: (val) {
-                    return GetIt.instance<Utils>().isPasswordValidated(val?.trim());
-                  },
-                ),
+              PasswordFormField(
+                controller: controller.loginPasswordController,
+                hintText: 'كلمة المرور',
+                svgSrc: "assets/icons/Lock.svg",
+                validator: (val) {
+                  return GetIt.instance<Utils>().isPasswordValidated(val?.trim());
+                },
               ),
               SizedBox(
                 height: 70.h,
               ),
               GetBuilder<RegisterationController>(
-                builder: (_) => controller.loginRequestStatus == RequestStatus.loading
+                builder: (_) => controller.loginState == RequestStatus.loading
                     ? appCircularProgress()
                     : CustomButton(
                         onTap: () {
-                          if (controller.loginPageFormKey.currentState!.validate()) {
-                            controller.userLogin(
-                                phone: controller.loginPhoneController.text,
-                                password: controller.loginPasswordController.text);
-                          }
+                          controller.userLogin();
                         },
                         height: 55.h,
                         width: 333.w,

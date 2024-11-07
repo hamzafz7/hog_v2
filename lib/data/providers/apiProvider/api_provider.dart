@@ -84,7 +84,7 @@ class ApiProvider {
       print("Post body: ${body.toString()}");
     }
     if (kDebugMode) {
-      print("Post body: ${query.toString()}");
+      print("Post query: ${query.toString()}");
     }
     return await dio!.patch(
       url,
@@ -107,7 +107,7 @@ class ApiProvider {
       print("Post body: ${body.toString()}");
     }
     if (kDebugMode) {
-      print("Post body: ${query.toString()}");
+      print("Post query: ${query.toString()}");
     }
     return await dio!.put(
       url,
@@ -130,7 +130,7 @@ class ApiProvider {
       print("Post body: ${body.toString()}");
     }
     if (kDebugMode) {
-      print("Post body: ${query.toString()}");
+      print("Post query: ${query.toString()}");
     }
     return await dio!.delete(
       url,

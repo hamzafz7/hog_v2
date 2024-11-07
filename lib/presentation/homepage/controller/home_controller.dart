@@ -20,23 +20,28 @@ class HomeController extends GetxController {
   int currentCategoryIndex = 0;
 
   changeCurrentIndex(int ind, int courseId) {
+    update(["changeCurrentIndex_$currentCategoryIndex"]);
     currentCategoryIndex = ind;
+    update(["changeCurrentIndex_$ind"]);
     getCourses(courseId);
   }
 
   var getNewsStatus = RequestStatus.begin;
   var categoriesStatus = RequestStatus.begin;
+
   updateGetNewsStatus(RequestStatus status) => getNewsStatus = status;
 
   var courseStatus = RequestStatus.begin;
+
   updatecourseStatus(RequestStatus status) => courseStatus = status;
+
   updateCategoriesStatus(RequestStatus status) => categoriesStatus = status;
   final HomeRepository _homeRepository = HomeRepository();
   final CategoryRepository _categoryRepository = CategoryRepository();
 
   Future<void> getNews() async {
     updateGetNewsStatus(RequestStatus.loading);
-    update();
+    update(["newsSection"]);
     var response = await _homeRepository.getNews();
     if (response.success) {
       newsResponse = NewsResponse.fromJson(response.data);
@@ -55,12 +60,12 @@ class HomeController extends GetxController {
         updateGetNewsStatus(RequestStatus.onError);
       }
     }
-    update();
+    update(["newsSection"]);
   }
 
   Future<void> getCategories() async {
     updateCategoriesStatus(RequestStatus.loading);
-    update();
+    update(["categoriesSection"]);
     var response = await _categoryRepository.getCategories();
     if (response.success) {
       categoriesModel = CategoriesModel.fromJson(response.data);
@@ -77,14 +82,14 @@ class HomeController extends GetxController {
         updateCategoriesStatus(RequestStatus.onError);
       }
     }
-    update();
+    update(["categoriesSection"]);
   }
 
   CoursesModel? coursesModel;
 
   Future<void> getCourses(int id) async {
     updatecourseStatus(RequestStatus.loading);
-    update();
+    update(["coursesSection"]);
     var response = await _categoryRepository.getCourses(id);
     if (response.success) {
       coursesModel = CoursesModel.fromJson(response.data);
@@ -103,6 +108,6 @@ class HomeController extends GetxController {
         updatecourseStatus(RequestStatus.onError);
       }
     }
-    update();
+    update(["coursesSection"]);
   }
 }
