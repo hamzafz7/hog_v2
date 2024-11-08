@@ -19,16 +19,20 @@ class AppInterceptors extends Interceptor {
   });
 
   @override
-  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     if (kDebugMode) {
       print("hello from request ");
       debugPrint("request is sending");
       debugPrint("REQUEST[${options.method}] => PATH: $baseUrl${options.path}");
     }
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
-      return handler
-          .reject(DioException(requestOptions: options, message: "لا يوجد اتصال بالانترنت"));
+    if (kDebugMode) {
+      print(connectivityResult.toString());
+    }
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      return handler.reject(DioException(
+          requestOptions: options, message: "لا يوجد اتصال بالانترنت"));
     }
 
     return handler.next(options);
@@ -43,13 +47,18 @@ class AppInterceptors extends Interceptor {
     }
 
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
+    if (kDebugMode) {
+      print(connectivityResult.toString());
+    }
+    if (connectivityResult.contains(ConnectivityResult.none)) {
       return handler.reject(DioException(
-          requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
+          requestOptions: response.requestOptions,
+          message: "لا يوجد اتصال بالانترنت"));
     }
     if (!response.requestOptions.persistentConnection) {
       return handler.reject(DioException(
-          requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
+          requestOptions: response.requestOptions,
+          message: "لا يوجد اتصال بالانترنت"));
     }
     if ((response.statusCode != 200 &&
             response.statusCode != 201 &&
@@ -58,7 +67,8 @@ class AppInterceptors extends Interceptor {
             response.statusCode != 422) ||
         response.statusCode == null) {
       handler.reject(DioException(
-          requestOptions: response.requestOptions, message: "لا يوجد اتصال بالانترنت"));
+          requestOptions: response.requestOptions,
+          message: "لا يوجد اتصال بالانترنت"));
     } else {
       return handler.next(response);
     }

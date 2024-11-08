@@ -1,4 +1,5 @@
 // import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -96,11 +97,24 @@ class CacheProvider {
 
   Future<String> getOrCreateUUID() async {
     String? uuid = GetIt.instance<CacheProvider>().getDeviceId();
+    if (kDebugMode) {
+      print("saved uuid: $uuid");
+    }
     if (uuid == null) {
       uuid = Uuid().v4();
+      if (kDebugMode) {
+        print("create uuid: $uuid");
+      }
+
       String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
       uuid = "$uuid-$timestamp";
+      if (kDebugMode) {
+        print("uuid + timestamp: $uuid");
+      }
       await setDeviceId(uuid);
+      if (kDebugMode) {
+        print("save uuid");
+      }
     }
 
     return uuid;

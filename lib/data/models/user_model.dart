@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/utils/utils.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
@@ -42,21 +43,27 @@ class User {
     );
   }
 
-  Map<String, dynamic> loginUserToJson() {
+  Map<String, dynamic> loginUserToJson(String device_id) {
+     if (kDebugMode) {
+      print("get device_id: $device_id");
+    }
     return {
       "phone": phone,
       "password": password,
-      "device_id": GetIt.instance<CacheProvider>().getOrCreateUUID(),
+      "device_id": device_id,
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
   }
 
-  Map<String, dynamic> registerUserToJson() {
+  Future<Map<String, dynamic>> registerUserToJson(String device_id) async {
+    if (kDebugMode) {
+      print("get device_id: $device_id");
+    }
     return {
       "full_name": fullName,
       "phone": phone,
       "password": password,
-      "device_id": GetIt.instance<CacheProvider>().getOrCreateUUID(),
+      "device_id": device_id,
       "email": "hamzafz888@gmail.com",
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
@@ -65,12 +72,14 @@ class User {
   Future<Map<String, dynamic>> updateUserToJSon() async {
     late File image1;
     if (image != null && image != "") {
-      image1 = await GetIt.instance<Utils>().compressImage(File(image!)) ?? File(image!);
+      image1 = await GetIt.instance<Utils>().compressImage(File(image!)) ??
+          File(image!);
     }
     return {
       "full_name": fullName,
       "phone": phone,
-      if (image != null && image != "") 'image': await MultipartFile.fromFile(image1.path)
+      if (image != null && image != "")
+        'image': await MultipartFile.fromFile(image1.path)
     };
   }
 }

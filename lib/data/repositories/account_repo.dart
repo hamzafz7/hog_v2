@@ -12,9 +12,12 @@ import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 class AccountRepo {
   Future<AppResponse> userLogin(User model) async {
     try {
+      String device_id =
+          await GetIt.instance<CacheProvider>().getOrCreateUUID();
+
       var response = await GetIt.instance<ApiProvider>().post(
         url: loginUrl,
-        body: model.loginUserToJson(),
+        body: model.loginUserToJson(device_id),
       );
       return AppResponse(
         errorMessage: null,
@@ -44,9 +47,12 @@ class AccountRepo {
 
   Future<AppResponse> userRegister(User model) async {
     try {
+      String device_id =
+          await GetIt.instance<CacheProvider>().getOrCreateUUID();
+
       var response = await GetIt.instance<ApiProvider>().post(
         url: registerUrl,
-        body: model.registerUserToJson(),
+        body: model.registerUserToJson(device_id),
       );
       return AppResponse(
         errorMessage: null,
