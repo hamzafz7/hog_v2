@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -7,7 +8,6 @@ import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/common/utils/utils.dart';
-import 'package:hog_v2/data/providers/keyboard_service.dart';
 import 'package:hog_v2/presentation/Auth/widgets/password_form_field.dart';
 import 'package:hog_v2/presentation/Auth/widgets/regular_form_field.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
@@ -21,10 +21,11 @@ class LoginPage extends GetView<RegisterationController> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
-          if (await KeyboardService.isKeyboardVisible()) {
-            await KeyboardService.hideKeyboard();
+          if (GetIt.instance<KeyboardVisibilityController>().isVisible) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            Get.back();
           } else {
             Get.back();
           }
@@ -88,7 +89,8 @@ class LoginPage extends GetView<RegisterationController> {
                       ? appCircularProgress()
                       : CustomButton(
                           onTap: () {
-                            controller.userLogin();
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            controller.userLogin(context);
                           },
                           height: 55.h,
                           width: 333.w,

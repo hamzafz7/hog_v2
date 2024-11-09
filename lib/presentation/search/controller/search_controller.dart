@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/data/models/courses_model.dart';
-import 'package:hog_v2/data/providers/sure_image_exist.dart';
 import 'package:hog_v2/data/repositories/category_repo.dart';
 
 class SearchPageController extends GetxController {
@@ -38,9 +37,7 @@ class SearchPageController extends GetxController {
         if (coursesModel!.courses == null || coursesModel!.courses!.isEmpty) {
           updatecourseStatus(RequestStatus.noData);
         } else {
-          ff().then((_) {
-            updatecourseStatus(RequestStatus.success);
-          });
+          updatecourseStatus(RequestStatus.success);
         }
       } else if (!response.success) {
         if (response.errorMessage == "لا يوجد اتصال بالانترنت") {
@@ -50,15 +47,5 @@ class SearchPageController extends GetxController {
         }
       }
     });
-  }
-
-  Future<void> ff() async {
-    for (int i = 0; i < coursesModel!.courses!.length; i++) {
-      if (coursesModel!.courses![i].image != null &&
-          !(coursesModel!.courses![i].imageExist ?? false)) {
-        coursesModel!.courses![i].imageExist =
-            await SureImageExist.checkImageAvailability(coursesModel!.courses![i].image!);
-      }
-    }
   }
 }

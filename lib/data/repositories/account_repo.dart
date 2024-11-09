@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/data/endpoints.dart';
 import 'package:hog_v2/data/models/app_response.dart';
@@ -10,10 +11,10 @@ import 'package:hog_v2/data/providers/apiProvider/api_provider.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 
 class AccountRepo {
-  Future<AppResponse> userLogin(User model) async {
+  Future<AppResponse> userLogin(User model, BuildContext context) async {
     try {
       String device_id =
-          await GetIt.instance<CacheProvider>().getOrCreateUUID();
+          await GetIt.instance<CacheProvider>().createUUID(phone: model.phone, context: context);
 
       var response = await GetIt.instance<ApiProvider>().post(
         url: loginUrl,
@@ -45,10 +46,10 @@ class AccountRepo {
     }
   }
 
-  Future<AppResponse> userRegister(User model) async {
+  Future<AppResponse> userRegister(User model, BuildContext context) async {
     try {
       String device_id =
-          await GetIt.instance<CacheProvider>().getOrCreateUUID();
+          await GetIt.instance<CacheProvider>().createUUID(phone: model.phone, context: context);
 
       var response = await GetIt.instance<ApiProvider>().post(
         url: registerUrl,

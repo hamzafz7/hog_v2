@@ -11,8 +11,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
@@ -197,14 +199,8 @@ void main() async {
 
   await checkSecurityFromApi();
 
-  if (GetIt.instance<CacheProvider>().getDeviceId() == null) {
-    await GetIt.instance<CacheProvider>().getOrCreateUUID();
-    await setupDi();
-    runApp(MyApp());
-  } else {
-    await setupDi();
-    runApp(MyApp());
-  }
+  await setupDi();
+  runApp(MyApp());
 }
 
 checkSecurityFromApi() async {
@@ -235,32 +231,63 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  var appKey = UniqueKey();
+
+  late KeyboardVisibilityController keyboardVisibilityController;
+
+  @override
+  void initState() {
+    super.initState();
+    keyboardVisibilityController = GetIt.instance<KeyboardVisibilityController>();
+  }
+
+  @override
+  void didChangeDependencies() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.didChangeDependencies();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<OfflineVideosBloc>(create: (context) => getIt<OfflineVideosBloc>()),
-      ],
-      child: ScreenUtilInit(
-        designSize: const Size(393, 852),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        fontSizeResolver: (fontSize, instance) {
-          final display = View.of(context).display;
-          final screenSize = display.size / display.devicePixelRatio;
-          final scaleWidth = screenSize.width / 393;
-          return fontSize * scaleWidth;
-        },
-        builder: (_, __) => GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: lighttheme,
-          darkTheme: darkTheme,
-          themeMode:
-              GetIt.instance<CacheProvider>().getAppTheme() ? ThemeMode.dark : ThemeMode.light,
-          locale: const Locale('ar'),
-          getPages: AppRoute.pages,
-          home: const SplashPage(),
+    return KeyboardVisibilityProvider(
+      controller: keyboardVisibilityController,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<OfflineVideosBloc>(create: (context) => getIt<OfflineVideosBloc>()),
+          ],
+          child: ScreenUtilInit(
+            designSize: const Size(393, 852),
+            minTextAdapt: true,
+            splitScreenMode: true,
+            fontSizeResolver: (fontSize, instance) {
+              final display = View.of(context).display;
+              final screenSize = display.size / display.devicePixelRatio;
+              final scaleWidth = screenSize.width / 393;
+              return fontSize * scaleWidth;
+            },
+            builder: (_, __) => GetMaterialApp(
+              key: appKey,
+              debugShowCheckedModeBanner: false,
+              theme: lighttheme,
+              darkTheme: darkTheme,
+              themeMode:
+                  GetIt.instance<CacheProvider>().getAppTheme() ? ThemeMode.dark : ThemeMode.light,
+              locale: const Locale('ar'),
+              getPages: AppRoute.pages,
+              home: const SplashPage(),
+              routingCallback: (routing) {
+                if (keyboardVisibilityController.isVisible) {
+                  if (Get.context != null) {
+                    FocusScope.of(Get.context!).requestFocus(FocusNode());
+                  }
+                }
+              },
+            ),
+          ),
         ),
       ),
     );

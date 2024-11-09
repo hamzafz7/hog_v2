@@ -9,7 +9,8 @@ class SplashPageController extends GetxController {
     Future.delayed(const Duration(seconds: 3), () async {
       if (GetIt.instance<CacheProvider>().getIsOnBoardingOpened() == null) {
         Get.offAllNamed(AppRoute.onboardingPageRoute);
-      } else if (await GetIt.instance<CacheProvider>().getAppToken() == null) {
+      } else if (await GetIt.instance<CacheProvider>().getAppToken() == null ||
+          await GetIt.instance<CacheProvider>().getDeviceId() == null) {
         Get.offAllNamed(AppRoute.loginPageRoute);
       } else {
         Get.offAllNamed(AppRoute.mainPageRoute);

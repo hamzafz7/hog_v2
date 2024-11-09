@@ -8,7 +8,6 @@ import 'package:hog_v2/common/utils/utils.dart';
 import 'package:hog_v2/data/models/profile_model.dart';
 import 'package:hog_v2/data/models/user_model.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog_v2/data/providers/sure_image_exist.dart';
 import 'package:hog_v2/data/repositories/account_repo.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -75,10 +74,7 @@ class MyProfileController extends GetxController {
       phoneController = TextEditingController(text: prfoileResponse!.data.phone ?? "لا يوجد");
       nameController = TextEditingController(text: prfoileResponse!.data.fullName ?? "لا يوجد");
       addressController = TextEditingController(text: prfoileResponse!.data.location ?? "لا يوجد");
-      ff().then((_) {
-        updateGetProfileStatus(RequestStatus.success);
-        update(["profilePage"]);
-      });
+      updateGetProfileStatus(RequestStatus.success);
       if (kDebugMode) {
         print(response.data);
       }
@@ -91,18 +87,6 @@ class MyProfileController extends GetxController {
       Get.snackbar("حدث خطأ", response.errorMessage!);
     }
     update(["profilePage"]);
-  }
-
-  Future<void> ff() async {
-    if (prfoileResponse != null && !(prfoileResponse!.data.imageExist ?? false)) {
-      if (prfoileResponse!.data.image != null) {
-        prfoileResponse!.data.imageExist =
-            await SureImageExist.checkImageAvailability(prfoileResponse!.data.image!);
-      } else {
-        prfoileResponse!.data.imageExist =
-            await SureImageExist.checkImageAvailability(imageProfile);
-      }
-    }
   }
 
   Future<void> updateProfile() async {

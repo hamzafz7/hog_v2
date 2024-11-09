@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/data/providers/keyboard_service.dart';
 
 class ProfileTextFeild extends StatefulWidget {
   const ProfileTextFeild(
@@ -72,9 +71,6 @@ class _ProfileTextFeildState extends State<ProfileTextFeild> {
           : SizedBox(
               height: 55.h,
               child: TextFormField(
-                onTap: () async {
-                  await KeyboardService.showKeyboard();
-                },
                 enableInteractiveSelection: false,
                 cursorHeight: 20.h,
                 cursorColor: Colors.black,

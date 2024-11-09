@@ -36,12 +36,12 @@ class RegisterationController extends GetxController {
 
   final AccountRepo _repo = AccountRepo();
 
-  userLogin() {
+  userLogin(BuildContext context) {
     if (!(loginPageFormKey.currentState?.validate() ?? false)) return;
 
     loginState = RequestStatus.loading;
     update();
-    _login().whenComplete(() {
+    _login(context).whenComplete(() {
       loginState = RequestStatus.success;
       update();
     }).catchError((error) {
@@ -50,11 +50,11 @@ class RegisterationController extends GetxController {
     });
   }
 
-  Future<void> _login() async {
+  Future<void> _login(BuildContext context) async {
     try {
       final user = User(
           password: loginPasswordController.text.trim(), phone: loginPhoneController.text.trim());
-      final response = await _repo.userLogin(user);
+      final response = await _repo.userLogin(user, context);
 
       if (response.success) {
         final authResponse = AuthResponse.fromJson(response.data);
@@ -69,12 +69,12 @@ class RegisterationController extends GetxController {
     }
   }
 
-  userRegister() {
+  userRegister(BuildContext context) {
     if (!registerPageFormKey.currentState!.validate()) return;
 
     registerStatus = RequestStatus.loading;
     update();
-    _register().whenComplete(() {
+    _register(context).whenComplete(() {
       registerStatus = RequestStatus.success;
       update();
     }).catchError((error) {
@@ -83,7 +83,7 @@ class RegisterationController extends GetxController {
     });
   }
 
-  Future<void> _register() async {
+  Future<void> _register(BuildContext context) async {
     try {
       final user = User(
         password: registerPhoneController.text.trim(),
@@ -91,7 +91,7 @@ class RegisterationController extends GetxController {
         fullName: nameController.text.trim(),
       );
 
-      var response = await _repo.userRegister(user);
+      var response = await _repo.userRegister(user, context);
       if (response.success) {
         final authResponse = AuthResponse.fromJson(response.data);
         await _saveUserData(authResponse);

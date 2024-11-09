@@ -5,7 +5,6 @@ import 'package:hog_v2/common/constants/shimmer_effect.dart';
 
 class CachedImageWithFallback extends StatelessWidget {
   final String imageUrl;
-  final bool imageFound;
   final double height;
   final double width;
   final BoxFit? fit;
@@ -16,42 +15,35 @@ class CachedImageWithFallback extends StatelessWidget {
     required this.height,
     required this.width,
     this.fit = BoxFit.fill,
-    required this.imageFound,
   });
 
   @override
   Widget build(BuildContext context) {
-    return !imageFound
-        ? SizedBox(
-            height: height,
-            width: width,
-            child: const Icon(Icons.error),
-          )
-        : CachedNetworkImage(
-            cacheManager: CustomCacheManager.instance,
-            imageUrl: imageUrl,
-            imageBuilder: (context, imageProvider) {
-              return Image(
-                image: ResizeImage(
-                  imageProvider,
-                  width: (width * MediaQuery.of(context).devicePixelRatio).round(),
-                  height: (height * MediaQuery.of(context).devicePixelRatio).round(),
-                ),
-                width: width,
-                height: height,
-                fit: fit,
-              );
-            },
-            progressIndicatorBuilder: (_, __, ___) => ShimmerPlaceholder(
-              child: Container(
-                height: height,
-                color: Colors.black,
-              ),
-            ),
-            errorWidget: (context, url, error) {
-              return SizedBox(width: width, height: height, child: const Icon(Icons.error));
-            },
-          );
+    return CachedNetworkImage(
+      cacheManager: CustomCacheManager.instance,
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) {
+        return Image(
+          image: ResizeImage(
+            imageProvider,
+            width: (width * MediaQuery.of(context).devicePixelRatio).round(),
+            height: (height * MediaQuery.of(context).devicePixelRatio).round(),
+          ),
+          width: width,
+          height: height,
+          fit: fit,
+        );
+      },
+      progressIndicatorBuilder: (_, __, ___) => ShimmerPlaceholder(
+        child: Container(
+          height: height,
+          color: Colors.black,
+        ),
+      ),
+      errorWidget: (context, url, error) {
+        return SizedBox(width: width, height: height, child: const Icon(Icons.error));
+      },
+    );
   }
 }
 

@@ -45,7 +45,6 @@ class MyCourseCotainer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.r),
                   child: CachedImageWithFallback(
                     imageUrl: courseModel.image ?? defPic,
-                    imageFound: courseModel.image != null ? courseModel.imageExist! : defPicExist,
                     height: 105.h,
                     width: 114.w,
                   ),

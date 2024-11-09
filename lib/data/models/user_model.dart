@@ -44,7 +44,7 @@ class User {
   }
 
   Map<String, dynamic> loginUserToJson(String device_id) {
-     if (kDebugMode) {
+    if (kDebugMode) {
       print("get device_id: $device_id");
     }
     return {
@@ -55,7 +55,7 @@ class User {
     };
   }
 
-  Future<Map<String, dynamic>> registerUserToJson(String device_id) async {
+  Map<String, dynamic> registerUserToJson(String device_id) {
     if (kDebugMode) {
       print("get device_id: $device_id");
     }
@@ -72,14 +72,12 @@ class User {
   Future<Map<String, dynamic>> updateUserToJSon() async {
     late File image1;
     if (image != null && image != "") {
-      image1 = await GetIt.instance<Utils>().compressImage(File(image!)) ??
-          File(image!);
+      image1 = await GetIt.instance<Utils>().compressImage(File(image!)) ?? File(image!);
     }
     return {
       "full_name": fullName,
       "phone": phone,
-      if (image != null && image != "")
-        'image': await MultipartFile.fromFile(image1.path)
+      if (image != null && image != "") 'image': await MultipartFile.fromFile(image1.path)
     };
   }
 }

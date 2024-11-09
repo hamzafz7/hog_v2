@@ -34,8 +34,6 @@ class MyCoursesPageHeader extends StatelessWidget {
               width: 50.w,
               decoration: BoxDecoration(border: Border.all(color: kprimaryBlueColor)),
               child: CachedImageWithFallback(
-                imageFound: true,
-
                 /// TODO: when use it sure about it
                 imageUrl: GetIt.instance<CacheProvider>().getUserImage() != null
                     ? imagebaseUrl + GetIt.instance<CacheProvider>().getUserImage()

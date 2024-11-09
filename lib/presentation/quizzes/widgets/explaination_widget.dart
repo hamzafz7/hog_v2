@@ -19,7 +19,6 @@ class ExplainationWidget extends StatelessWidget {
           const Text("التوضيح :"),
           if (image != null)
             CachedImageWithFallback(
-              imageFound: imageExist!,
               imageUrl: image!,
               height: 200.h,
               width: 260.w,

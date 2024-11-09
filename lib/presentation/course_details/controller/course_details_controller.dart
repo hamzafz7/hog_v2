@@ -10,7 +10,6 @@ import 'package:hog_v2/data/models/course_info_model.dart';
 import 'package:hog_v2/data/models/courses_model.dart';
 import 'package:hog_v2/data/models/download_model.dart';
 import 'package:hog_v2/data/models/video_link_response.dart';
-import 'package:hog_v2/data/providers/sure_image_exist.dart';
 import 'package:hog_v2/data/repositories/category_repo.dart';
 import 'package:hog_v2/offline_videos_feature/helpers/prefs_helper.dart';
 import 'package:hog_v2/offline_videos_feature/models/offline_video_model.dart';
@@ -175,10 +174,7 @@ class CourseDetailsController extends GetxController {
                 'courseInfoModel!.course!.image in CourseDetailsPage-------------------- ${courseInfoModel!.course!.image}');
             print(courseInfoModel!.course!.image);
           }
-          ff().then((_) {
-            updateGetCourseInfo(RequestStatus.success);
-            update();
-          });
+          updateGetCourseInfo(RequestStatus.success);
         }
       } else {
         if (response.errorMessage == "لا يوجد اتصال بالانترنت") {
@@ -189,72 +185,6 @@ class CourseDetailsController extends GetxController {
       }
       update();
     });
-  }
-
-  Future<void> ff() async {
-    if (courseInfoModel!.course!.image != null && !(courseInfoModel!.course!.imageExist ?? false)) {
-      SureImageExist.checkImageAvailability(courseInfoModel!.course!.image!).then((value) {
-        courseInfoModel!.course!.imageExist = value;
-      });
-    }
-    if (courseInfoModel!.course!.chapters != null) {
-      for (int i = 0; i < courseInfoModel!.course!.chapters!.length; i++) {
-        if (courseInfoModel!.course!.chapters![i].quizzes != null) {
-          for (int j = 0; j < courseInfoModel!.course!.chapters![i].quizzes!.length; j++) {
-            if (courseInfoModel!.course!.chapters![i].quizzes![j].questions != null) {
-              for (int k = 0;
-                  k < courseInfoModel!.course!.chapters![i].quizzes![j].questions!.length;
-                  k++) {
-                if (courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].image != null &&
-                    !(courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].imageExist ??
-                        false)) {
-                  SureImageExist.checkImageAvailability(
-                          courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].image!)
-                      .then((value) {
-                    courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].imageExist =
-                        value;
-                  });
-                }
-                if (courseInfoModel!
-                            .course!.chapters![i].quizzes![j].questions![k].clarificationImage !=
-                        null &&
-                    !(courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].imageExist ??
-                        false)) {
-                  SureImageExist.checkImageAvailability(courseInfoModel!
-                          .course!.chapters![i].quizzes![j].questions![k].clarificationImage!)
-                      .then((value) {
-                    courseInfoModel!.course!.chapters![i].quizzes![j].questions![k]
-                        .clarificationImageExist = value;
-                  });
-                }
-                if (courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].choices !=
-                    null) {
-                  for (int v = 0;
-                      v <
-                          courseInfoModel!
-                              .course!.chapters![i].quizzes![j].questions![k].choices!.length;
-                      v++) {
-                    if (courseInfoModel!
-                                .course!.chapters![i].quizzes![j].questions![k].choices![v].image !=
-                            null &&
-                        !(courseInfoModel!.course!.chapters![i].quizzes![j].questions![k]
-                                .choices![v].imageExist ??
-                            false)) {
-                      SureImageExist.checkImageAvailability(courseInfoModel!
-                              .course!.chapters![i].quizzes![j].questions![k].choices![v].image!)
-                          .then((value) {
-                        courseInfoModel!.course!.chapters![i].quizzes![j].questions![k].choices![v]
-                            .imageExist = value;
-                      });
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
   }
 
   void launchTelegramURL(String? url) async {

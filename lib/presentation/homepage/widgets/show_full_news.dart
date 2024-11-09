@@ -24,7 +24,6 @@ class ShowFullNewsPage extends StatelessWidget {
               ),
               child: CachedImageWithFallback(
                 imageUrl: newsModel.image ?? defPic,
-                imageFound: newsModel.image != null ? newsModel.imageExist! : defPicExist,
                 height: 300.h,
                 width: Get.width,
               ),

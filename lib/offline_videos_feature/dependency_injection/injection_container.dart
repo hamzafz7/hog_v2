@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/utils/screen_secuirity.dart';
 import 'package:hog_v2/common/utils/utils.dart';
@@ -24,6 +25,7 @@ Future<void> init() async {
   }
 
   GetIt.instance.registerLazySingleton<AccountRepo>(() => AccountRepo());
+  GetIt.instance.registerSingleton<KeyboardVisibilityController>(KeyboardVisibilityController());
   GetIt.instance.registerLazySingleton<ApiProvider>(() => ApiProvider());
   GetIt.instance.registerLazySingleton<ScreenSecurity>(() => ScreenSecurity());
   GetIt.instance.registerLazySingleton<Utils>(() => Utils());

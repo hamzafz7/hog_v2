@@ -46,7 +46,6 @@ class ResultListTile extends StatelessWidget {
             children: [
               if (choiceModel.image != null)
                 CachedImageWithFallback(
-                  imageFound: choiceModel.imageExist!,
                   imageUrl: choiceModel.image!,
                   height: 200.h,
                   width: 280.w,

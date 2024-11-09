@@ -57,7 +57,6 @@ class QuestionResultWidget extends GetView<QuizController> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CachedImageWithFallback(
-                          imageFound: model.imageExist!,
                           imageUrl: model.image!,
                           height: 136.h,
                           width: 166.w,

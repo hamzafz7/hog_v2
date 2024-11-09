@@ -43,8 +43,6 @@ class _HomeCourseItemState extends State<HomeCourseItem> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10.r),
               child: CachedImageWithFallback(
-                imageFound:
-                    widget.courseModel.image != null ? widget.courseModel.imageExist! : defPicExist,
                 imageUrl: widget.courseModel.image ?? defPic,
                 height: 136.h,
                 width: 166.w,

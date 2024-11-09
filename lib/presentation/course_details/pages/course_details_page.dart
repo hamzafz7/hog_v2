@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -6,7 +7,6 @@ import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/common/utils/utils.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog_v2/data/providers/keyboard_service.dart';
 import 'package:hog_v2/presentation/course_details/controller/course_details_controller.dart';
 import 'package:hog_v2/presentation/course_details/widgets/course_curriculum.dart';
 import 'package:hog_v2/presentation/course_details/widgets/course_describtion.dart';
@@ -35,8 +35,9 @@ class CourseDetailsPage extends GetView<CourseDetailsController> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
-          if (await KeyboardService.isKeyboardVisible()) {
-            await KeyboardService.hideKeyboard();
+          if (GetIt.instance<KeyboardVisibilityController>().isVisible) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            Get.back();
           } else {
             Get.back();
           }

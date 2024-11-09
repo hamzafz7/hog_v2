@@ -40,7 +40,6 @@ class NewsItem extends StatelessWidget {
                   ),
                   child: CachedImageWithFallback(
                     imageUrl: model.image ?? defPic,
-                    imageFound: model.image != null ? model.imageExist! : defPicExist,
                     height: 170.h,
                     width: 350.w,
                   ),

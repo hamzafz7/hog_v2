@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/data/providers/keyboard_service.dart';
 
 class CustomActivationFeild extends StatelessWidget {
   const CustomActivationFeild(
@@ -64,9 +63,6 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onTap: () async {
-        await KeyboardService.showKeyboard();
-      },
       enableInteractiveSelection: false,
       style: TextStyle(fontSize: 14.sp, color: kDarkBlueColor),
       autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -1,8 +1,10 @@
-// import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
+
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:uuid/uuid.dart';
 
 class CacheProvider {
   late GetStorage _getStorage;
@@ -95,26 +97,58 @@ class CacheProvider {
     await _getStorage.write("device_id", uuid);
   }
 
-  Future<String> getOrCreateUUID() async {
-    String? uuid = GetIt.instance<CacheProvider>().getDeviceId();
-    if (kDebugMode) {
-      print("saved uuid: $uuid");
+  Future<String> createUUID({String? phone, BuildContext? context}) async {
+    late String uuid;
+    String phoneNo = phone ?? "";
+    String width = MediaQuery.sizeOf(context!).width.toString();
+    String height = MediaQuery.sizeOf(context).height.toString();
+    late String model;
+    late String manufacturer;
+    late String osVersion;
+    late String os;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      os = 'Android';
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      model = androidInfo.model;
+      manufacturer = androidInfo.manufacturer + androidInfo.device;
+      osVersion = androidInfo.version.release;
+    } else if (Platform.isIOS) {
+      os = 'IOS';
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      model = iosInfo.utsname.machine;
+      manufacturer = 'Apple';
+      osVersion = iosInfo.systemVersion;
+      if (kDebugMode) {
+        print('Device Model: ${iosInfo.utsname.machine}');
+      }
     }
-    if (uuid == null) {
-      uuid = Uuid().v4();
-      if (kDebugMode) {
-        print("create uuid: $uuid");
-      }
+    final jwt = JWT(
+      {
+        'phoneNo': phoneNo,
+        'width': width,
+        'height': height,
+        'model': model,
+        'manufacturer': manufacturer,
+        'osVersion': osVersion,
+        'os': os,
+      },
+      issuer: 'https://github.com/jonasroussel/dart_jsonwebtoken',
+    );
 
-      String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      uuid = "$uuid-$timestamp";
-      if (kDebugMode) {
-        print("uuid + timestamp: $uuid");
-      }
-      await setDeviceId(uuid);
-      if (kDebugMode) {
-        print("save uuid");
-      }
+    uuid = jwt.sign(SecretKey('roeo5RPD4qNqU1CIHCBk5Rucs+5e79gtNf3fIs5HB6s='));
+
+    if (kDebugMode) {
+      print('Signed token: $uuid\n');
+    }
+
+    if (kDebugMode) {
+      print("create uuid: $uuid");
+    }
+
+    await setDeviceId(uuid);
+    if (kDebugMode) {
+      print("save uuid");
     }
 
     return uuid;

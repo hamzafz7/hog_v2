@@ -28,7 +28,6 @@ class MyProfileImage extends GetView<MyProfileController> {
                   imageUrl: controller.prfoileResponse?.data.image != null
                       ? controller.prfoileResponse!.data.image!
                       : controller.imageProfile,
-                  imageFound: controller.prfoileResponse!.data.imageExist!,
                 ),
         ),
       ),
@@ -40,38 +39,34 @@ class CachedImageCircle extends StatelessWidget {
   const CachedImageCircle({
     super.key,
     required this.imageUrl,
-    required this.imageFound,
   });
 
   final String imageUrl;
-  final bool imageFound;
 
   @override
   Widget build(BuildContext context) {
-    return !imageFound
-        ? const Icon(Icons.error)
-        : CachedNetworkImage(
-            cacheManager: CustomCacheManager.instance,
-            imageUrl: imageUrl,
-            imageBuilder: (context, imageProvider) {
-              return CircleAvatar(
-                radius: 56.r,
-                backgroundImage: ResizeImage(
-                  imageProvider,
-                  width: (56.r * MediaQuery.of(context).devicePixelRatio).round(),
-                  height: (56.r * MediaQuery.of(context).devicePixelRatio).round(),
-                ),
-              );
-            },
-            progressIndicatorBuilder: (___, __, _) => ShimmerPlaceholder(
-              child: CircleAvatar(
-                radius: 56.r,
-                backgroundColor: Colors.black,
-              ),
-            ),
-            errorWidget: (context, url, error) {
-              return const Icon(Icons.error);
-            },
-          );
+    return CachedNetworkImage(
+      cacheManager: CustomCacheManager.instance,
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) {
+        return CircleAvatar(
+          radius: 56.r,
+          backgroundImage: ResizeImage(
+            imageProvider,
+            width: (56.r * MediaQuery.of(context).devicePixelRatio).round(),
+            height: (56.r * MediaQuery.of(context).devicePixelRatio).round(),
+          ),
+        );
+      },
+      progressIndicatorBuilder: (___, __, _) => ShimmerPlaceholder(
+        child: CircleAvatar(
+          radius: 56.r,
+          backgroundColor: Colors.black,
+        ),
+      ),
+      errorWidget: (context, url, error) {
+        return const Icon(Icons.error);
+      },
+    );
   }
 }

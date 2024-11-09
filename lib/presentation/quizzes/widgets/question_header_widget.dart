@@ -47,7 +47,6 @@ class QuestionHeaderWidget extends StatelessWidget {
                     Get.to(() => QuizImageFullScreen(image: image!));
                   },
                   child: CachedImageWithFallback(
-                    imageFound: imageExist!,
                     imageUrl: image!,
                     height: 200.h,
                     width: 260.w,

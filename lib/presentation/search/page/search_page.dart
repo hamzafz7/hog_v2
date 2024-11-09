@@ -29,6 +29,7 @@ class _SearchPageState extends State<SearchPage> {
       if (mounted) {
         Future.delayed(Duration(milliseconds: 400), () {
           if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
             focusNode.requestFocus();
           }
         });

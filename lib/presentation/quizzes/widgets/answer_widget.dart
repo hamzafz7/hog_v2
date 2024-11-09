@@ -43,7 +43,6 @@ class AnswerWidget extends GetView<QuizController> {
               children: [
                 if (choice.image != null)
                   CachedImageWithFallback(
-                    imageFound: choice.imageExist!,
                     imageUrl: choice.image!,
                     height: 200.h,
                     width: 260.w,

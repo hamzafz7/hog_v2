@@ -1,9 +1,9 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/presentation/splashpage/controller/splash_controller.dart';
-// import 'package:device_info_plus/device_info_plus.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -43,17 +43,16 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   }
 
   Future<bool> _isRealDevice() async {
-    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    // if (Theme.of(context).platform == TargetPlatform.android) {
-    // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   return androidInfo.isPhysicalDevice;
-    // } else if (Theme.of(context).platform == TargetPlatform.iOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   return iosInfo.isPhysicalDevice;
-    // } else {
-    //   return false;
-    // }
-    return true;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.isPhysicalDevice;
+    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.isPhysicalDevice;
+    } else {
+      return false;
+    }
   }
 
   @override

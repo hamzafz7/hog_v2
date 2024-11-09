@@ -24,7 +24,6 @@ class CourseDetailsHeader extends StatelessWidget {
         children: [
           CachedImageWithFallback(
             imageUrl: image ?? defPic,
-            imageFound: image != null ? imageExist! : defPicExist,
             height: Get.height * 0.4,
             width: Get.width,
           ),
