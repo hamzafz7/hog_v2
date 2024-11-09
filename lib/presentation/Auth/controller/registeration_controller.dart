@@ -86,8 +86,8 @@ class RegisterationController extends GetxController {
   Future<void> _register(BuildContext context) async {
     try {
       final user = User(
-        password: registerPhoneController.text.trim(),
-        phone: registerPasswordController.text.trim(),
+        password: registerPasswordController.text.trim(),
+        phone: registerPhoneController.text.trim(),
         fullName: nameController.text.trim(),
       );
 
