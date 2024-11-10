@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -123,21 +124,16 @@ class CacheProvider {
         print('Device Model: ${iosInfo.utsname.machine}');
       }
     }
-    final jwt = JWT(
-      {
-        'phoneNo': phoneNo,
-        'width': width,
-        'height': height,
-        'model': model,
-        'manufacturer': manufacturer,
-        'osVersion': osVersion,
-        'os': os,
-      },
-      issuer: 'https://github.com/jonasroussel/dart_jsonwebtoken',
-    );
-
-    uuid = jwt.sign(SecretKey('roeo5RPD4qNqU1CIHCBk5Rucs+5e79gtNf3fIs5HB6s='));
-
+    Map data = {
+      'phoneNo': phoneNo,
+      'width': width,
+      'height': height,
+      'model': model,
+      'manufacturer': manufacturer,
+      'osVersion': osVersion,
+      'os': os,
+    };
+    uuid = EncryptionService().encryptData(jsonEncode(data));
     if (kDebugMode) {
       print('Signed token: $uuid\n');
     }
@@ -152,5 +148,32 @@ class CacheProvider {
     }
 
     return uuid;
+  }
+}
+
+class EncryptionService {
+  final String key = 'a1b2c3dy9lf6g7h8';
+  final String iv = 'initva3nor123456';
+
+  String encryptData(String data) {
+    final keyBytes = encrypt.Key.fromUtf8(key);
+    final ivBytes = encrypt.IV.fromUtf8(iv);
+
+    final encrypter = encrypt.Encrypter(encrypt.AES(keyBytes));
+
+    final encrypted = encrypter.encrypt(data, iv: ivBytes);
+
+    return encrypted.base64;
+  }
+
+  String decryptData(String encryptedData) {
+    final keyBytes = encrypt.Key.fromUtf8(key);
+    final ivBytes = encrypt.IV.fromUtf8(iv);
+
+    final encrypter = encrypt.Encrypter(encrypt.AES(keyBytes));
+
+    final decrypted = encrypter.decrypt64(encryptedData, iv: ivBytes);
+
+    return decrypted;
   }
 }

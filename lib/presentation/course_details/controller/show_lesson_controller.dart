@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
+// import "dart:io";
+
 import 'package:get/get.dart';
 import "package:hog_v2/common/constants/enums/request_enum.dart";
+// import 'package:http/http.dart' as http;
+// import "package:path_provider/path_provider.dart";
 import 'package:pod_player/pod_player.dart';
 
 class ShowLessonController extends GetxController {

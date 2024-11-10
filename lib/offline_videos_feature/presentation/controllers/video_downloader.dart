@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:hog_v2/offline_videos_feature/presentation/bloc/offline_videos_event.dart';
 import 'package:path_provider/path_provider.dart';
@@ -39,9 +39,9 @@ class VideoDownloader {
       // RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
       IsolateNameServer.registerPortWithName(receivePort!.sendPort, "iso_$videoId");
 
-      if (kDebugMode) {
-        print("QQQQQ");
-      }
+      // if (kDebugMode) {
+      //   print("QQQQQ");
+      // }
       receivePort!.listen((message) {
         if (message == "done") {
           // print("DONOONO");
@@ -67,9 +67,9 @@ class VideoDownloader {
           newDownloadPercentage.value = {"percent": 0.0, "value": "0%"};
           onDone();
           if (myIsolate != null) {
-            if (kDebugMode) {
-              print("KKKKK");
-            }
+            // if (kDebugMode) {
+            //   print("KKKKK");
+            // }
 
             myIsolate = null;
           }
@@ -86,13 +86,13 @@ class VideoDownloader {
         }
       });
 
-      if (kDebugMode) {
-        print("SSSS");
-      }
+      // if (kDebugMode) {
+      //   print("SSSS");
+      // }
       myIsolate = await FlutterIsolate.spawn(writeVideoBytes, [videoId, url]);
-      if (kDebugMode) {
-        print("WWWWW");
-      }
+      // if (kDebugMode) {
+      //   print("WWWWW");
+      // }
     } catch (e) {
       // Catcher2.reportCheckedError(e, s);
       downloadStatus.value = DownloadStatus.init;

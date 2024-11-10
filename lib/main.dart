@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:async/async.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
@@ -181,7 +181,9 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).whenComplete(() {
+    FireBaseAPi().initNotifications();
+  });
 
   await GetStorage.init();
 
@@ -191,16 +193,24 @@ void main() async {
 
   await GetIt.instance<ApiProvider>().init();
 
+  if (Platform.isAndroid) secureScreen();
+
   checkSecurityFromApi();
 
-  await FireBaseAPi().initNotifications();
-
-  secureScreen();
-
-  await checkSecurityFromApi();
-
   await setupDi();
-  runApp(MyApp());
+
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  String manufacturer = androidInfo.manufacturer;
+  if (kDebugMode) {
+    print("manufacturer : $manufacturer");
+    print("manufacturer == 'samsung' : ${manufacturer == 'samsung'}");
+  }
+  if (Platform.isAndroid && manufacturer == 'samsung') {
+    runApp(MyAppKeyboardSamsungHandler());
+  } else {
+    runApp(MyApp());
+  }
 }
 
 checkSecurityFromApi() async {
@@ -223,16 +233,14 @@ Future<void> secureScreen() async {
   await FlutterWindowManagerPlus.addFlags(FlutterWindowManagerPlus.FLAG_SECURE);
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyAppKeyboardSamsungHandler extends StatefulWidget {
+  const MyAppKeyboardSamsungHandler({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyAppKeyboardSamsungHandler> createState() => _MyAppKeyboardSamsungHandlerState();
 }
 
-class _MyAppState extends State<MyApp> {
-  var appKey = UniqueKey();
-
+class _MyAppKeyboardSamsungHandlerState extends State<MyAppKeyboardSamsungHandler> {
   late KeyboardVisibilityController keyboardVisibilityController;
 
   @override
@@ -247,47 +255,56 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityProvider(
       controller: keyboardVisibilityController,
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<OfflineVideosBloc>(create: (context) => getIt<OfflineVideosBloc>()),
-          ],
-          child: ScreenUtilInit(
-            designSize: const Size(393, 852),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            fontSizeResolver: (fontSize, instance) {
-              final display = View.of(context).display;
-              final screenSize = display.size / display.devicePixelRatio;
-              final scaleWidth = screenSize.width / 393;
-              return fontSize * scaleWidth;
-            },
-            builder: (_, __) => GetMaterialApp(
-              key: appKey,
-              debugShowCheckedModeBanner: false,
-              theme: lighttheme,
-              darkTheme: darkTheme,
-              themeMode:
-                  GetIt.instance<CacheProvider>().getAppTheme() ? ThemeMode.dark : ThemeMode.light,
-              locale: const Locale('ar'),
-              getPages: AppRoute.pages,
-              home: const SplashPage(),
-              routingCallback: (routing) {
-                if (keyboardVisibilityController.isVisible) {
-                  if (Get.context != null) {
-                    FocusScope.of(Get.context!).requestFocus(FocusNode());
-                  }
-                }
-              },
-            ),
-          ),
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: MyApp(),
+      ),
+    );
+  }
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var appKey = UniqueKey();
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<OfflineVideosBloc>(create: (context) => getIt<OfflineVideosBloc>()),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(393, 852),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        fontSizeResolver: (fontSize, instance) {
+          final display = View.of(context).display;
+          final screenSize = display.size / display.devicePixelRatio;
+          final scaleWidth = screenSize.width / 393;
+          return fontSize * scaleWidth;
+        },
+        builder: (_, __) => GetMaterialApp(
+          key: appKey,
+          debugShowCheckedModeBanner: false,
+          theme: lighttheme,
+          darkTheme: darkTheme,
+          themeMode:
+              GetIt.instance<CacheProvider>().getAppTheme() ? ThemeMode.dark : ThemeMode.light,
+          locale: const Locale('ar'),
+          getPages: AppRoute.pages,
+          home: const SplashPage(),
         ),
       ),
     );
