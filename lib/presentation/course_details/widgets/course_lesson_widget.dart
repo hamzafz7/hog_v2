@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,8 @@ import 'package:hog_v2/presentation/course_details/controller/course_details_con
 import 'package:hog_v2/presentation/course_details/widgets/course_pdf.dart';
 import 'package:hog_v2/presentation/custom_dialogs/complete_failure.dart';
 import 'package:hog_v2/presentation/custom_dialogs/custom_dialogs.dart';
+import 'package:hog_v2/presentation/custom_dialogs/pick_quality_dialog.dart';
+import 'package:hog_v2/presentation/custom_dialogs/pick_quality_from_url.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 import '../../../offline_videos_feature/presentation/bloc/offline_videos_bloc.dart';
@@ -41,12 +44,29 @@ class CourseLessonWidget extends GetView<CourseDetailsController> {
                     controller.courseInfoModel!.course!.isTeachWithCourse == true ||
                     GetIt.instance<CacheProvider>().getUserType() == 'admin') {
                   if (lessionModel.type == 'video') {
-                    controller.watchResponseFromUrl(context,
-                        link: lessionModel.link!,
-                        id: lessionModel.id,
-                        description: lessionModel.description,
-                        name: lessionModel.title ?? "لا يوجد اسم",
-                        source: lessionModel.source);
+                    controller
+                        .watchResponseFromUrl(link: lessionModel.link!, source: lessionModel.source)
+                        .then((watchResponse) {
+                      if (!context.mounted) return;
+                      customDialog(
+                        context,
+                        child: PickQualityFromUrl(
+                          response: watchResponse!,
+                          id: lessionModel.id,
+                          description: lessionModel.description,
+                          name: lessionModel.title ?? "لا يوجد اسم",
+                        ),
+                      );
+                      customDialog(
+                        context,
+                        child: PickQualityFromUrl(
+                          response: watchResponse!,
+                          id: lessionModel.id,
+                          description: lessionModel.description,
+                          name: lessionModel.title ?? "لا يوجد اسم",
+                        ),
+                      );
+                    });
                   } else {
                     Get.to(FileViewWidget(imagePath: lessionModel.link!));
                     // print(lessionModel.link);
@@ -145,27 +165,42 @@ class CourseLessonWidget extends GetView<CourseDetailsController> {
                         onPressed: () {
                           if (!controller.isLessionExist(lessionModel.id)) {
                             controller.updateCurrentId(lessionModel.id);
-                            controller.downloadVideo(
-                                lessionModel.link!,
+                            controller
+                                .downloadVideo(
+                              lessionModel.link!,
+                              lessionModel.source!,
+                            )
+                                .then((downloadResponse) {
+                              if (kDebugMode) {
+                                print("course video :${lessionModel.title!}");
+                              }
+                              if (!context.mounted) return;
+                              customDialog(
                                 context,
-                                controller.courseInfoModel!.course!.name!,
-                                lessionModel.title!,
-                                lessionModel.id,
-                                lessionModel.description,
-                                lessionModel.source!, onRealDownload: (link) {
-                              BlocProvider.of<OfflineVideosBloc>(context).add(DownloadYoutubeVideo(
-                                sectionName: lessionModel.title!,
-                                courseName: controller.courseInfoModel!.course!.name!,
-                                videoModel: Video(
-                                    courseName: controller.courseInfoModel!.course!.name!,
-                                    videoName: lessionModel.title!,
-                                    key: '',
-                                    description: '',
-                                    id: lessionModel.id,
-                                    source: ''),
-                                tilteVideo: lessionModel.title!,
-                                link: link,
-                              ));
+                                child: PickQualityDialog(
+                                  response: downloadResponse!,
+                                  onRealDownload: (link) {
+                                    BlocProvider.of<OfflineVideosBloc>(context)
+                                        .add(DownloadYoutubeVideo(
+                                      sectionName: lessionModel.title!,
+                                      courseName: controller.courseInfoModel!.course!.name!,
+                                      videoModel: Video(
+                                          courseName: controller.courseInfoModel!.course!.name!,
+                                          videoName: lessionModel.title!,
+                                          key: '',
+                                          description: '',
+                                          id: lessionModel.id,
+                                          source: ''),
+                                      tilteVideo: lessionModel.title!,
+                                      link: link,
+                                    ));
+                                  },
+                                  videoName: lessionModel.title!,
+                                  courseName: controller.courseInfoModel!.course!.name!,
+                                  videoId: lessionModel.id,
+                                  description: lessionModel.description,
+                                ),
+                              );
                             });
                           }
                         },

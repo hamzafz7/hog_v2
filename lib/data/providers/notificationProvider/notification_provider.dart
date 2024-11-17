@@ -12,7 +12,7 @@ class FireBaseAPi {
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
     if (kDebugMode) {
-      debugPrint(fcmToken);
+      debugPrint('fcmToken: $fcmToken');
     }
     GetIt.instance<CacheProvider>().setdeviceToken(fcmToken);
     initpushnotification();

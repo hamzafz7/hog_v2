@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -36,12 +37,12 @@ class RegisterationController extends GetxController {
 
   final AccountRepo _repo = AccountRepo();
 
-  userLogin(BuildContext context) {
+  userLogin(Size size) {
     if (!(loginPageFormKey.currentState?.validate() ?? false)) return;
 
     loginState = RequestStatus.loading;
     update();
-    _login(context).whenComplete(() {
+    _login(size).whenComplete(() {
       loginState = RequestStatus.success;
       update();
     }).catchError((error) {
@@ -50,13 +51,16 @@ class RegisterationController extends GetxController {
     });
   }
 
-  Future<void> _login(BuildContext context) async {
+  Future<void> _login(Size size) async {
     try {
       final user = User(
           password: loginPasswordController.text.trim(), phone: loginPhoneController.text.trim());
-      final response = await _repo.userLogin(user, context);
+      final response = await _repo.userLogin(user, size);
 
       if (response.success) {
+        if (kDebugMode) {
+          print(response.data);
+        }
         final authResponse = AuthResponse.fromJson(response.data);
         await _saveUserData(authResponse);
         Get.snackbar("مرحباً !!", authResponse.message!);
@@ -69,12 +73,12 @@ class RegisterationController extends GetxController {
     }
   }
 
-  userRegister(BuildContext context) {
+  userRegister(Size size) {
     if (!registerPageFormKey.currentState!.validate()) return;
 
     registerStatus = RequestStatus.loading;
     update();
-    _register(context).whenComplete(() {
+    _register(size).whenComplete(() {
       registerStatus = RequestStatus.success;
       update();
     }).catchError((error) {
@@ -83,7 +87,7 @@ class RegisterationController extends GetxController {
     });
   }
 
-  Future<void> _register(BuildContext context) async {
+  Future<void> _register(Size size) async {
     try {
       final user = User(
         password: registerPasswordController.text.trim(),
@@ -91,8 +95,11 @@ class RegisterationController extends GetxController {
         fullName: nameController.text.trim(),
       );
 
-      var response = await _repo.userRegister(user, context);
+      var response = await _repo.userRegister(user, size);
       if (response.success) {
+        if (kDebugMode) {
+          print(response.data);
+        }
         final authResponse = AuthResponse.fromJson(response.data);
         await _saveUserData(authResponse);
         Get.snackbar("مرحباً !!", authResponse.message!);

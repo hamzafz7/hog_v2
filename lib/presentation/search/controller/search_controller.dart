@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
@@ -24,7 +25,9 @@ class SearchPageController extends GetxController {
 
   updatecourseStatus(RequestStatus status) {
     courseStatus = status;
-    update(["SearchPage"]);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update(["SearchPage"]);
+    });
   }
 
   CoursesModel? coursesModel;
@@ -33,6 +36,9 @@ class SearchPageController extends GetxController {
     updatecourseStatus(RequestStatus.loading);
     _categoryRepository.searchCourses(searchText, cancelToken).then((response) {
       if (response.success) {
+        if (kDebugMode) {
+          print(response.data);
+        }
         coursesModel = CoursesModel.fromJson(response.data);
         if (coursesModel!.courses == null || coursesModel!.courses!.isEmpty) {
           updatecourseStatus(RequestStatus.noData);

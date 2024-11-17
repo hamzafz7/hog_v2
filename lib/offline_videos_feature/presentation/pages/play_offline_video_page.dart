@@ -1,8 +1,10 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:pod_player/pod_player.dart';
+
 import '../../dependency_injection/injection_container.dart';
 import '../../models/offline_video_model.dart';
 import '../bloc/offline_videos_bloc.dart';
@@ -64,15 +66,13 @@ class _PlayOfflineVideoPageState extends State<PlayOfflineVideoPage> {
                 children: [
                   Align(
                       alignment: Alignment.center,
-                      child: state.isLoadingOfflineVideo ||
-                              state.podController == null
+                      child: state.isLoadingOfflineVideo || state.podController == null
                           ? StreamBuilder(
                               stream: state.percentageDataRead.stream,
                               builder: (context, value) {
                                 return Center(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       CircularProgressIndicator(
@@ -85,8 +85,7 @@ class _PlayOfflineVideoPageState extends State<PlayOfflineVideoPage> {
                                       ),
                                       Text(
                                         "${((((value.data ?? 0) > 1 ? 1 : value.data) ?? 0) * 100).toStringAsFixed(1)} %",
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                        style: const TextStyle(color: Colors.white),
                                       )
                                     ],
                                   ),
@@ -105,8 +104,8 @@ class _PlayOfflineVideoPageState extends State<PlayOfflineVideoPage> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.08,
                           height: MediaQuery.of(context).size.width * 0.08,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.white),
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                           child: Center(
                             child: Icon(
                               Icons.arrow_forward,

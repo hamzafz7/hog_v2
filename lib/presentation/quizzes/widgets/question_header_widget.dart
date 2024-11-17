@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 import 'package:hog_v2/presentation/quizzes/pages/quiz_image_full_screen.dart';
 
 class QuestionHeaderWidget extends StatelessWidget {

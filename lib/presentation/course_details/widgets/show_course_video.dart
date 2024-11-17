@@ -1,9 +1,10 @@
+import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/enums/request_enum.dart';
 import 'package:hog_v2/presentation/course_details/controller/show_lesson_controller.dart';
-import 'package:pod_player/pod_player.dart';
+// import 'package:pod_player/pod_player.dart';
 
 class ShowCourseVideo extends StatefulWidget {
   const ShowCourseVideo({super.key, this.description, this.name});
@@ -30,8 +31,8 @@ class _ShowCourseVideoState extends State<ShowCourseVideo> {
   @override
   void dispose() {
     // Dispose PodPlayerController manually here when the widget is disposed
-    showLessonController.podPlayerController?.dispose();
-    showLessonController.podPlayerController = null; // Ensure it's cleared out
+    // showLessonController.podPlayerController?.dispose();
+    // showLessonController.podPlayerController = null; // Ensure it's cleared out
     super.dispose();
   }
 
@@ -47,15 +48,18 @@ class _ShowCourseVideoState extends State<ShowCourseVideo> {
                   children: [
                     AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: showLessonController.podPlayerController != null
-                          ? PodVideoPlayer(
-                              controller: showLessonController.podPlayerController!,
-                              podProgressBarConfig: const PodProgressBarConfig(
-                                playingBarColor: Colors.red,
-                                bufferedBarColor: Colors.grey,
-                              ),
-                            )
-                          : const Center(child: CircularProgressIndicator()),
+                      child: FijkView(
+                        player: showLessonController.player,
+                      ),
+                      // showLessonController.podPlayerController != null
+                      //     ? PodVideoPlayer(
+                      //         controller: showLessonController.podPlayerController!,
+                      //         podProgressBarConfig: const PodProgressBarConfig(
+                      //           playingBarColor: Colors.red,
+                      //           bufferedBarColor: Colors.grey,
+                      //         ),
+                      //       )
+                      //     : const Center(child: CircularProgressIndicator()),
                     ),
                     Padding(
                       padding: EdgeInsets.all(12.0.r),

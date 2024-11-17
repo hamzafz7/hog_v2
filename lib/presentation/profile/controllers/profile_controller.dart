@@ -99,6 +99,9 @@ class MyProfileController extends GetxController {
         image: imagePicked.value);
     var response = await _repo.updateProfile(user);
     if (response.success) {
+      if (kDebugMode) {
+        print(response.data);
+      }
       updateEditProfileStatus(RequestStatus.success);
       prfoileResponse = ProfileResponse.fromJson(response.data);
       GetIt.instance<CacheProvider>().setUserName(prfoileResponse!.data.fullName!);
@@ -120,6 +123,9 @@ class MyProfileController extends GetxController {
     update(["logoutButton"]);
     var response = await _repo.signOut();
     if (response.success) {
+      if (kDebugMode) {
+        print(response.data);
+      }
       updateLogOutStatus(RequestStatus.success);
       GetIt.instance<CacheProvider>().clearAppToken();
       Get.offAllNamed(AppRoute.loginPageRoute);
@@ -138,6 +144,9 @@ class MyProfileController extends GetxController {
     // await Future.delayed(Duration(seconds: 2));
 
     if (response.success) {
+      if (kDebugMode) {
+        print(response.data);
+      }
       updateDeleteProfileStatus(RequestStatus.success);
       GetIt.instance<CacheProvider>().clearAppToken();
       Get.offAllNamed(AppRoute.loginPageRoute);

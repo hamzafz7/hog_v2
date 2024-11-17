@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,10 +10,12 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    printError(info: 'CustomSearchBar Build');
+    if (kDebugMode) {
+      printError(info: 'CustomSearchBar Build');
+    }
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoute.searchPageRoute);
+        Get.offAllNamed(AppRoute.searchPageRoute);
       },
       child: Container(
         height: 50.h,

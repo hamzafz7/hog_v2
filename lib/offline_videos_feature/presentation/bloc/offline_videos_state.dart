@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:built_value/built_value.dart';
 import 'package:pod_player/pod_player.dart';
-import 'dart:async';
 
 import '../../../data/models/courses_model.dart';
 import '../../helpers/error/failures.dart';
@@ -9,8 +10,7 @@ import '../../models/offline_video_model.dart';
 
 part 'offline_videos_state.g.dart';
 
-abstract class OfflineVideosState
-    implements Built<OfflineVideosState, OfflineVideosStateBuilder> {
+abstract class OfflineVideosState implements Built<OfflineVideosState, OfflineVideosStateBuilder> {
   OfflineVideosState._();
 
   factory OfflineVideosState([Function(OfflineVideosStateBuilder b) updates]) =
@@ -81,7 +81,6 @@ abstract class OfflineVideosState
       ..videoDownloaded = false
       ..isLoadingOfflinePDFFile = false
       ..offlineItemIsDeleted = false
-      ..downloadingItemCount = 0
-    );
+      ..downloadingItemCount = 0);
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/models/question_model.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 import 'package:hog_v2/presentation/quizzes/controllers/quiz_controller.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/explaination_widget.dart';
 import 'package:hog_v2/presentation/quizzes/widgets/result_list_tile.dart';

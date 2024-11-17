@@ -1,11 +1,8 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
-import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 import 'package:hog_v2/presentation/splashpage/controller/splash_controller.dart';
 
 class SplashPage extends StatefulWidget {
@@ -58,19 +55,19 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     }
   }
 
-  @override
-  void didChangeDependencies() async {
-    String token1 =
-        await GetIt.instance<CacheProvider>().createUUID(phone: '0999999998', context: context);
-    String token2 =
-        await GetIt.instance<CacheProvider>().createUUID(phone: '0999999998', context: context);
-    if (kDebugMode) {
-      print("token1 : $token1");
-      print("token2 : $token2");
-      print("token2 == token1 : ${token2 == token1}");
-    }
-    super.didChangeDependencies();
-  }
+  // @override
+  // void didChangeDependencies() async {
+  //   String token1 =
+  //       await GetIt.instance<CacheProvider>().createUUID(phone: '0999999998', context: context);
+  //   String token2 =
+  //       await GetIt.instance<CacheProvider>().createUUID(phone: '0999999998', context: context);
+  //   if (kDebugMode) {
+  //     print("token1 : $token1");
+  //     print("token2 : $token2");
+  //     print("token2 == token1 : ${token2 == token1}");
+  //   }
+  //   super.didChangeDependencies();
+  // }
 
   @override
   void dispose() {

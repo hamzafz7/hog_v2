@@ -36,7 +36,7 @@ class PickQualityFromUrl extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                     if (kDebugMode) {
-                      print(response.link[index].link);
+                      print('response.link[index].link: ${response.link[index].link}');
                     }
                     Get.toNamed(
                       AppRoute.showCourseVideoRoute,

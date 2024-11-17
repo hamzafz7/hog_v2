@@ -218,7 +218,7 @@ class CategoryRepository {
   Future<AppResponse> watchVideo(String link, String source) async {
     try {
       if (kDebugMode) {
-        print(GetIt.instance<CacheProvider>().getAppToken());
+        print("getAppToken: ${GetIt.instance<CacheProvider>().getAppToken()}");
       }
       var body = {"link": link, "source": source};
       if (kDebugMode) {

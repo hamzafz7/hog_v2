@@ -114,8 +114,9 @@ class RegisterPage extends GetView<RegisterationController> {
                       ? appCircularProgress()
                       : CustomButton(
                           onTap: () {
+                            final Size size = MediaQuery.sizeOf(context);
                             FocusScope.of(context).requestFocus(FocusNode());
-                            controller.userRegister(context);
+                            controller.userRegister(size);
                           },
                           height: 55.h,
                           width: 333.w,

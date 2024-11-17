@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/data/models/news_model.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 
 class ShowFullNewsPage extends StatelessWidget {
   const ShowFullNewsPage({super.key, required this.newsModel});

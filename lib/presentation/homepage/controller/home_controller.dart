@@ -45,6 +45,9 @@ class HomeController extends GetxController {
     update(["newsSection"]);
     var response = await _homeRepository.getNews();
     if (response.success) {
+      if (kDebugMode) {
+        print(response.data);
+      }
       newsResponse = NewsResponse.fromJson(response.data);
       if (kDebugMode) {
         print('newsResponse?.news ${newsResponse?.news}');
@@ -69,6 +72,9 @@ class HomeController extends GetxController {
     update(["categoriesSection"]);
     var response = await _categoryRepository.getCategories();
     if (response.success) {
+      if (kDebugMode) {
+        print(response.data);
+      }
       categoriesModel = CategoriesModel.fromJson(response.data);
       if (categoriesModel!.categories == null || categoriesModel!.categories!.isEmpty) {
         updateCategoriesStatus(RequestStatus.noData);

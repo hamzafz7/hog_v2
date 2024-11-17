@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,9 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    printError(info: 'HomePage Build');
+    if (kDebugMode) {
+      printError(info: 'HomePage Build');
+    }
     return SafeArea(
       child: RefreshIndicator(
         color: kprimaryBlueColor,
@@ -22,6 +25,7 @@ class HomePage extends GetView<HomeController> {
           await Future.wait([controller.getNews(), controller.getCategories()]);
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -53,7 +57,9 @@ class HomePage extends GetView<HomeController> {
                   child: GetBuilder<HomeController>(
                       id: "categoriesSection",
                       builder: (_) {
-                        printError(info: 'categoriesSection Build');
+                        if (kDebugMode) {
+                          printError(info: 'categoriesSection Build');
+                        }
                         return switch (controller.categoriesStatus) {
                           RequestStatus.success =>
                             controller.categoriesModel?.categories?.isNotEmpty == true
@@ -101,7 +107,9 @@ class HomePage extends GetView<HomeController> {
                 child: GetBuilder<HomeController>(
                     id: "coursesSection",
                     builder: (_) {
-                      printError(info: 'coursesSection Build');
+                      if (kDebugMode) {
+                        printError(info: 'coursesSection Build');
+                      }
                       return switch (controller.courseStatus) {
                         RequestStatus.success => controller.coursesModel != null &&
                                 controller.coursesModel!.courses != null &&

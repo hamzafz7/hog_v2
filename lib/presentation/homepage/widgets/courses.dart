@@ -31,7 +31,7 @@ class CoursesWidget extends GetView<HomeController> {
             const Spacer(),
             TextButton(
                 onPressed: () {
-                  Get.toNamed(AppRoute.yearsPageRoute);
+                  Get.offAllNamed(AppRoute.yearsPageRoute);
                 },
                 child: Row(
                   children: [

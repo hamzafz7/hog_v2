@@ -7,9 +7,9 @@ import 'package:hog_v2/presentation/profile/controllers/profile_controller.dart'
 class MainPageBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => MainPageController());
-    Get.lazyPut(() => MyProfileController());
-    Get.lazyPut(() => HomeController());
-    Get.lazyPut(() => ThemeController());
+    Get.put(MainPageController(), permanent: true);
+    Get.put(MyProfileController(), permanent: true);
+    Get.put(HomeController(), permanent: true);
+    Get.put(ThemeController(), permanent: true);
   }
 }

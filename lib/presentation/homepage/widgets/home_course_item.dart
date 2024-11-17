@@ -7,7 +7,7 @@ import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/common/routes/app_routes.dart';
 import 'package:hog_v2/data/models/courses_model.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 import 'package:hog_v2/presentation/widgets/custom_button.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 

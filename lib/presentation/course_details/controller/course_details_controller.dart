@@ -13,9 +13,6 @@ import 'package:hog_v2/data/models/video_link_response.dart';
 import 'package:hog_v2/data/repositories/category_repo.dart';
 import 'package:hog_v2/offline_videos_feature/helpers/prefs_helper.dart';
 import 'package:hog_v2/offline_videos_feature/models/offline_video_model.dart';
-import 'package:hog_v2/presentation/custom_dialogs/custom_dialogs.dart';
-import 'package:hog_v2/presentation/custom_dialogs/pick_quality_dialog.dart';
-import 'package:hog_v2/presentation/custom_dialogs/pick_quality_from_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -46,7 +43,7 @@ class CourseDetailsController extends GetxController {
           videoIds.add(e.videoId);
         }
         if (kDebugMode) {
-          print(videoIds);
+          print('videoIds: $videoIds');
         }
       });
     });
@@ -82,13 +79,9 @@ class CourseDetailsController extends GetxController {
 
   VideoLinksResponse? watchResponse;
 
-  Future<void> watchResponseFromUrl(
-    BuildContext context, {
+  Future<VideoLinksResponse?> watchResponseFromUrl({
     required String link,
-    required int id,
-    String? description,
     String? source,
-    required String name,
   }) async {
     var response = await _categoryRepository.watchVideo(link, source ?? "");
     if (kDebugMode) {
@@ -100,17 +93,12 @@ class CourseDetailsController extends GetxController {
         print("response : ${response.data}");
       }
       watchResponse = VideoLinksResponse.fromJson(response.data);
-      customDialog(context,
-          child: PickQualityFromUrl(
-            response: watchResponse!,
-            id: id,
-            description: description,
-            name: name,
-          ));
+      return watchResponse;
     } else {
       if (kDebugMode) {
         print(response.errorMessage);
       }
+      return null;
     }
   }
 
@@ -225,35 +213,24 @@ class CourseDetailsController extends GetxController {
   // StreamSubscription<List<int>>? _downloadSubscription;
   Timer? _retryTimer;
 
-  Future<void> downloadVideo(String link, BuildContext context, String courseName, String videoName,
-      int videoId, String? description, String source,
-      {required Function(String) onRealDownload}) async {
+  Future<DownloadResponse?> downloadVideo(String link, String source) async {
     updateDownloadStatus(RequestStatus.loading);
     update();
     var response = await _categoryRepository.downloadVideo(link, source);
     if (response.success) {
-      downloadResponse = DownloadResponse.fromJson(response.data["data"]['link']);
       if (kDebugMode) {
-        print("course video :$videoName");
+        print(response.data);
       }
-
-      customDialog(
-        context,
-        child: PickQualityDialog(
-          response: downloadResponse!,
-          onRealDownload: onRealDownload,
-          videoName: videoName,
-          courseName: courseName,
-          videoId: videoId,
-          description: description,
-        ),
-      );
-
+      downloadResponse = DownloadResponse.fromJson(response.data["data"]['link']);
       updateDownloadStatus(RequestStatus.success);
+      update();
+
+      return downloadResponse;
     } else {
       // Handle error if the response is unsuccessful
       updateDownloadStatus(RequestStatus.onError);
+      update();
+      return null;
     }
-    update();
   }
 }

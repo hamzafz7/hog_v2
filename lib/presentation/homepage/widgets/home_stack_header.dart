@@ -1,4 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,9 @@ class HomeStackHeader extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    printError(info: 'HomeStackHeader Build');
+    if (kDebugMode) {
+      printError(info: 'HomeStackHeader Build');
+    }
     return Container(
       decoration: BoxDecoration(
         color: GetIt.instance<CacheProvider>().getAppTheme()
@@ -82,7 +85,9 @@ class HomeStackHeader extends GetView<HomeController> {
             child: GetBuilder<HomeController>(
               id: "newsSection",
               builder: (_) {
-                printError(info: 'newsSection Build');
+                if (kDebugMode) {
+                  printError(info: 'newsSection Build');
+                }
                 return switch (controller.getNewsStatus) {
                   RequestStatus.success => Swiper(
                       viewportFraction: 0.8,
@@ -97,7 +102,9 @@ class HomeStackHeader extends GetView<HomeController> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) => Padding(
                         padding: EdgeInsets.all(8.0.r),
-                        child: NewsItem(model: controller.newsResponse!.news[index]),
+                        child: NewsItem(
+                          model: controller.newsResponse!.news[index],
+                        ),
                       ),
                     ),
                   RequestStatus.begin => Container(),

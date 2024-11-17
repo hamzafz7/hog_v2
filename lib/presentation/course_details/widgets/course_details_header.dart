@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hog_v2/common/constants/constants.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 
 class CourseDetailsHeader extends StatelessWidget {
   const CourseDetailsHeader({super.key, this.image, this.text, this.imageExist});
@@ -13,10 +14,9 @@ class CourseDetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("image $image");
-    print("imageExist $imageExist");
-    print("defPicExist $defPicExist");
-    print("image != null ? imageExist! : defPicExist ${image != null ? imageExist! : defPicExist}");
+    if (kDebugMode) {
+      print("image $image");
+    }
     return SizedBox(
       height: 337.h,
       width: Get.width,

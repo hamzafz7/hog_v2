@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/endpoints.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 
 class MyCoursesPageHeader extends StatelessWidget {
   const MyCoursesPageHeader({super.key});

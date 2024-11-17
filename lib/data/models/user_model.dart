@@ -43,27 +43,27 @@ class User {
     );
   }
 
-  Map<String, dynamic> loginUserToJson(String device_id) {
+  Map<String, dynamic> loginUserToJson(String deviceId) {
     if (kDebugMode) {
-      print("get device_id: $device_id");
+      print("get device_id: $deviceId");
     }
     return {
       "phone": phone,
       "password": password,
-      "device_id": device_id,
+      "device_id": deviceId,
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };
   }
 
-  Map<String, dynamic> registerUserToJson(String device_id) {
+  Map<String, dynamic> registerUserToJson(String deviceId) {
     if (kDebugMode) {
-      print("get device_id: $device_id");
+      print("get device_id: $deviceId");
     }
     return {
       "full_name": fullName,
       "phone": phone,
       "password": password,
-      "device_id": device_id,
+      "device_id": deviceId,
       "email": "hamzafz888@gmail.com",
       'device_notification_id': GetIt.instance<CacheProvider>().getdeviceToken()
     };

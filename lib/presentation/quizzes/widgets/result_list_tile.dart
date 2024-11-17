@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/data/models/choice_model.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 
 class ResultListTile extends StatelessWidget {
   const ResultListTile(

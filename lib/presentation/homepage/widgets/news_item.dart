@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -5,20 +6,24 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:hog_v2/common/constants/colors.dart';
 import 'package:hog_v2/common/constants/constants.dart';
 import 'package:hog_v2/data/models/news_model.dart';
-import 'package:hog_v2/presentation/course_details/widgets/cachedImageWithFallback.dart';
+import 'package:hog_v2/presentation/course_details/widgets/cached_image_with_fallback.dart';
 import 'package:hog_v2/presentation/homepage/widgets/show_full_news.dart';
 
 class NewsItem extends StatelessWidget {
-  const NewsItem({super.key, required this.model});
+  const NewsItem({
+    super.key,
+    required this.model,
+    this.memoizer,
+  });
+
+  final AsyncMemoizer? memoizer;
   final NewsModel model;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ShowFullNewsPage(
-              newsModel: model,
-            ));
+        Get.to(() => ShowFullNewsPage(newsModel: model));
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),

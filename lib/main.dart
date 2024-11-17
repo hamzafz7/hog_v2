@@ -30,12 +30,15 @@ import 'package:hog_v2/firebase_options.dart';
 import 'package:hog_v2/presentation/splashpage/page/splash_page.dart';
 import 'package:path_provider/path_provider.dart';
 
+// import 'package:video_player_media_kit/video_player_media_kit.dart';
+
 import 'offline_videos_feature/dependency_injection/injection_container.dart';
 import 'offline_videos_feature/presentation/bloc/offline_videos_bloc.dart';
 import 'offline_videos_feature/presentation/controllers/video_downloader.dart';
 
 @pragma('vm:entry-point')
 void writeVideoBytes(List arg) async {
+  DartPluginRegistrant.ensureInitialized();
   SendPort? sendPort = IsolateNameServer.lookupPortByName("iso_${arg[0]}");
   String basePath = await VideoDownloader().createBasePathFolder("hog_v2 Offline Videos");
 
@@ -104,6 +107,7 @@ void writeVideoBytes(List arg) async {
 
 @pragma('vm:entry-point')
 void decryptFile(List arg) async {
+  DartPluginRegistrant.ensureInitialized();
   SendPort? sendPort = IsolateNameServer.lookupPortByName("readVideo");
 
   // BackgroundIsolateBinaryMessenger.ensureInitialized(arg[1]);
@@ -179,11 +183,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  HttpOverrides.global = MyHttpOverrides();
-
-  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).whenComplete(() {
-    FireBaseAPi().initNotifications();
-  });
+  final caCert = await rootBundle.loadString('assets/certs/caCert.pem');
+  HttpOverrides.global = AppHttpOverrides(caCert);
 
   await GetStorage.init();
 
@@ -193,11 +194,17 @@ void main() async {
 
   await GetIt.instance<ApiProvider>().init();
 
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).whenComplete(() {
+    FireBaseAPi().initNotifications();
+  });
+
   if (Platform.isAndroid) secureScreen();
 
   checkSecurityFromApi();
 
   await setupDi();
+
+  // VideoPlayerMediaKit.ensureInitialized(android: true, iOS: false);
 
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -218,6 +225,9 @@ checkSecurityFromApi() async {
   var response = await accountRepo.getScreenShoots();
   if (Platform.isIOS) {
     if (response.success) {
+      if (kDebugMode) {
+        print(response.data);
+      }
       if (response.data["screenshot"] == true) {
         GetIt.instance<ScreenSecurity>().toggleScreenSecurity(true);
       } else {

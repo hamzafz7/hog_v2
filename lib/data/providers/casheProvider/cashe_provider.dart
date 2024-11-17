@@ -98,11 +98,11 @@ class CacheProvider {
     await _getStorage.write("device_id", uuid);
   }
 
-  Future<String> createUUID({String? phone, BuildContext? context}) async {
+  Future<String> createUUID({required String phone, required Size size}) async {
     late String uuid;
-    String phoneNo = phone ?? "";
-    String width = MediaQuery.sizeOf(context!).width.toString();
-    String height = MediaQuery.sizeOf(context).height.toString();
+    String phoneNo = phone;
+    String width = size.width.toString();
+    String height = size.height.toString();
     late String model;
     late String manufacturer;
     late String osVersion;

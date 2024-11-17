@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,9 @@ class MyProfilePage extends GetView<MyProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    printError(info: 'MyProfilePage Build');
+    if (kDebugMode) {
+      printError(info: 'MyProfilePage Build');
+    }
     return Scaffold(
       body: RefreshIndicator(
         color: kprimaryBlueColor,
@@ -39,7 +42,9 @@ class MyProfilePage extends GetView<MyProfileController> {
             GetBuilder<MyProfileController>(
               id: "profilePage",
               builder: (_) {
-                printError(info: 'profilePage Build');
+                if (kDebugMode) {
+                  printError(info: 'profilePage Build');
+                }
                 return controller.getProfileStatus == RequestStatus.loading
                     ? Center(
                         child: appCircularProgress(),
@@ -84,7 +89,9 @@ class MyProfilePage extends GetView<MyProfileController> {
                                   GetBuilder<MyProfileController>(
                                     id: "logoutButton",
                                     builder: (_) {
-                                      printError(info: 'logoutButton Build');
+                                      if (kDebugMode) {
+                                        printError(info: 'logoutButton Build');
+                                      }
                                       return controller.logOutStatus == RequestStatus.loading
                                           ? appCircularProgress()
                                           : ProfileListItem(
@@ -119,7 +126,9 @@ class MyProfilePage extends GetView<MyProfileController> {
                                       GetBuilder<ThemeController>(
                                         id: "switchThemeButton",
                                         builder: (cnt) {
-                                          printError(info: 'switchThemeButton Build');
+                                          if (kDebugMode) {
+                                            printError(info: 'switchThemeButton Build');
+                                          }
                                           return Switch.adaptive(
                                               activeColor: Colors.blue,
                                               inactiveThumbColor: Colors.blue,
@@ -142,7 +151,9 @@ class MyProfilePage extends GetView<MyProfileController> {
                                   GetBuilder<MyProfileController>(
                                     id: "deleteProfileButton",
                                     builder: (_) {
-                                      printError(info: 'deleteProfileButton Build');
+                                      if (kDebugMode) {
+                                        printError(info: 'deleteProfileButton Build');
+                                      }
                                       return controller.deleteProfileStatus == RequestStatus.loading
                                           ? appCircularProgress()
                                           : ProfileListItem(

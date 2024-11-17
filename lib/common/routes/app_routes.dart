@@ -48,7 +48,7 @@ class AppRoute {
       page: () => const OnBoardingPage(),
       binding: BindingsBuilder(
         () {
-          Get.put(OnBoardingPageController());
+          Get.lazyPut(() => OnBoardingPageController());
         },
       ),
     ),
@@ -57,7 +57,7 @@ class AppRoute {
       page: () => const LoginPage(),
       binding: BindingsBuilder(
         () {
-          Get.put(RegisterationController());
+          Get.lazyPut(() => RegisterationController());
         },
       ),
     ),
@@ -66,7 +66,7 @@ class AppRoute {
       page: () => const RegisterPage(),
       binding: BindingsBuilder(
         () {
-          Get.put(RegisterationController());
+          Get.lazyPut(() => RegisterationController());
         },
       ),
     ),
@@ -76,7 +76,7 @@ class AppRoute {
       page: () => const SettingsPage(),
       binding: BindingsBuilder(
         () {
-          Get.put(SettingController());
+          Get.lazyPut(() => SettingController());
         },
       ),
     ),
@@ -84,7 +84,7 @@ class AppRoute {
 
     GetPage(
       name: mainPageRoute,
-      page: () => KeepAlivePage(child: const MainPage()),
+      page: () => const MainPage(),
       binding: MainPageBinding(),
     ),
     GetPage(name: yearsPageRoute, page: () => const YearsCoursesPage()),
@@ -103,17 +103,17 @@ class AppRoute {
       page: () => const QuizzesPage(),
       binding: BindingsBuilder(
         () {
-          Get.put(QuizController());
+          Get.lazyPut(() => QuizController());
         },
       ),
     ),
     // GetPage(name: quizResultPageRoute, page: () => ResultPage()),
     GetPage(
       name: searchPageRoute,
-      page: () => KeepAlivePage(child: const SearchPage()),
+      page: () => const SearchPage(),
       binding: BindingsBuilder(
         () {
-          Get.put(SearchPageController());
+          Get.lazyPut(() => SearchPageController());
         },
       ),
     ),

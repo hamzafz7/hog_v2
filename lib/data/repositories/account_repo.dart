@@ -11,14 +11,14 @@ import 'package:hog_v2/data/providers/apiProvider/api_provider.dart';
 import 'package:hog_v2/data/providers/casheProvider/cashe_provider.dart';
 
 class AccountRepo {
-  Future<AppResponse> userLogin(User model, BuildContext context) async {
+  Future<AppResponse> userLogin(User model, Size size) async {
     try {
-      String device_id =
-          await GetIt.instance<CacheProvider>().createUUID(phone: model.phone, context: context);
+      String deviceId =
+          await GetIt.instance<CacheProvider>().createUUID(phone: model.phone!, size: size);
 
       var response = await GetIt.instance<ApiProvider>().post(
         url: loginUrl,
-        body: model.loginUserToJson(device_id),
+        body: model.loginUserToJson(deviceId),
       );
       return AppResponse(
         errorMessage: null,
@@ -46,14 +46,14 @@ class AccountRepo {
     }
   }
 
-  Future<AppResponse> userRegister(User model, BuildContext context) async {
+  Future<AppResponse> userRegister(User model, Size size) async {
     try {
-      String device_id =
-          await GetIt.instance<CacheProvider>().createUUID(phone: model.phone, context: context);
+      String deviceId =
+          await GetIt.instance<CacheProvider>().createUUID(phone: model.phone!, size: size);
 
       var response = await GetIt.instance<ApiProvider>().post(
         url: registerUrl,
-        body: model.registerUserToJson(device_id),
+        body: model.registerUserToJson(deviceId),
       );
       return AppResponse(
         errorMessage: null,
