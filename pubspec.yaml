@@ -75,6 +75,8 @@ dependencies:
 #  video_player: ^2.9.2
   fijkplayer: ^0.11.0
   video_player_media_kit: ^1.0.5
+  crypto: ^3.0.6
+  flutter_cache_manager: ^3.4.1
 
 
 dependency_overrides:

@@ -1,5 +1,4 @@
 import 'package:async/async.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hog_v2/common/constants/shimmer_effect.dart';
@@ -52,34 +51,29 @@ class _CachedImageWithFallbackState extends State<CachedImageWithFallback> {
     return FutureBuilder(
       future: memorizer.runOnce(() async {
         return (!_connectivityResult!.contains(ConnectivityResult.none))
-            ? CachedNetworkImage(
-                httpHeaders: {'Cache-Control': 'max-age=86400'},
-                cacheManager: CachedNetworkImageProvider.defaultCacheManager,
-                imageUrl: widget.imageUrl,
-                imageBuilder: (context, imageProvider) {
-                  return Image(
-                    image: ResizeImage(
-                      imageProvider,
-                      // width: (widget.width * MediaQuery.of(context).devicePixelRatio).round(),
-                      // height: (widget.height * MediaQuery.of(context).devicePixelRatio).round(),
-                      width: (widget.width).round(),
-                      height: (widget.height).round(),
-                    ),
+            ? RepaintBoundary(
+                child: Image.network(
+                  widget.imageUrl,
+                  width: widget.width,
+                  height: widget.height,
+                  cacheWidth: (widget.width).round(),
+                  cacheHeight: (widget.height).round(),
+                  fit: widget.fit,
+                  gaplessPlayback: true,
+                  loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
+                      ? child
+                      : ShimmerPlaceholder(
+                          child: Container(
+                            height: widget.height,
+                            color: Colors.black,
+                          ),
+                        ),
+                  errorBuilder: (context, error, stackTrace) => SizedBox(
                     width: widget.width,
                     height: widget.height,
-                    fit: widget.fit,
-                  );
-                },
-                progressIndicatorBuilder: (_, __, ___) => ShimmerPlaceholder(
-                  child: Container(
-                    height: widget.height,
-                    color: Colors.black,
+                    child: const Icon(Icons.error),
                   ),
                 ),
-                errorWidget: (context, url, error) {
-                  return SizedBox(
-                      width: widget.width, height: widget.height, child: const Icon(Icons.error));
-                },
               )
             : SizedBox(
                 width: widget.width,

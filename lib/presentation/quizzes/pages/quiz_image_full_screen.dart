@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hog_v2/common/constants/shimmer_effect.dart';
@@ -44,24 +43,20 @@ class _QuizImageFullScreenState extends State<QuizImageFullScreen> {
                   ),
                 )
               : (!_connectivityResult!.contains(ConnectivityResult.none))
-                  ? CachedNetworkImage(
-                      httpHeaders: {'Cache-Control': 'max-age=86400'},
-                      cacheManager: CachedNetworkImageProvider.defaultCacheManager,
-                      imageUrl: widget.image,
-                      imageBuilder: (context, imageProvider) {
-                        return Image(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      progressIndicatorBuilder: (_, __, ___) => ShimmerPlaceholder(
-                        child: Container(
-                          color: Colors.black,
-                        ),
+                  ? RepaintBoundary(
+                      child: Image.network(
+                        widget.image,
+                        fit: BoxFit.cover,
+                        gaplessPlayback: true,
+                        loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
+                            ? child
+                            : ShimmerPlaceholder(
+                                child: Container(
+                                  color: Colors.black,
+                                ),
+                              ),
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                       ),
-                      errorWidget: (context, url, error) {
-                        return const Icon(Icons.error);
-                      },
                     )
                   : const Icon(Icons.offline_bolt),
         ),

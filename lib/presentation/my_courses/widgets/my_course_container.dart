@@ -48,20 +48,6 @@ class MyCourseCotainer extends StatelessWidget {
                     height: 105.h,
                     width: 114.w,
                   ),
-                  // CachedNetworkImage(
-                  //   imageUrl: courseModel.image ?? defPic,
-                  //   height: 105.h,
-                  //   width: 114.w,
-                  //   fit: BoxFit.fill,
-                  //   progressIndicatorBuilder: (___, __, _) => ShimmerPlaceholder(
-                  //     child: Container(
-                  //       height: 105.h,
-                  //       width: 114.w,
-                  //       color: Colors.black,
-                  //     ),
-                  //   ),
-                  //   errorWidget: (context, url, error) => const Icon(Icons.error),
-                  // ),
                 ),
               ),
               SizedBox(
@@ -109,21 +95,6 @@ class MyCourseCotainer extends StatelessWidget {
                   )
                 ],
               ),
-              // Center(
-              //   child: SizedBox(
-              //     width: 30.w,
-              //     child: CircularPercentIndicator(
-              //       radius: 30.0,
-              //       lineWidth: 5.0,
-              //       percent: 0.6,
-              //       center: Text(
-              //         "${60}%",
-              //         style: Theme.of(context).textTheme.bodySmall,
-              //       ),
-              //       progressColor: kprimaryBlueColor,
-              //     ),
-              //   ),
-              // )
             ],
           ),
         ),

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -74,31 +73,27 @@ class _CachedImageCircleState extends State<CachedImageCircle> {
       );
     }
     return (!_connectivityResult!.contains(ConnectivityResult.none))
-        ? CachedNetworkImage(
-            httpHeaders: {'Cache-Control': 'max-age=86400'},
-            cacheManager: CachedNetworkImageProvider.defaultCacheManager,
-            imageUrl: widget.imageUrl,
-            imageBuilder: (context, imageProvider) {
-              return CircleAvatar(
-                radius: 56.r,
-                backgroundImage: ResizeImage(
-                  imageProvider,
-                  // width: (56.r * MediaQuery.of(context).devicePixelRatio).round(),
-                  // height: (56.r * MediaQuery.of(context).devicePixelRatio).round(),
-                  width: (56.r).round(),
-                  height: (56.r).round(),
-                ),
-              );
-            },
-            progressIndicatorBuilder: (___, __, _) => ShimmerPlaceholder(
-              child: CircleAvatar(
-                radius: 56.r,
-                backgroundColor: Colors.black,
+        ? RepaintBoundary(
+            child: CircleAvatar(
+              radius: 56.r,
+              child: Image.network(
+                widget.imageUrl,
+                width: 56.r,
+                height: 56.r,
+                cacheHeight: (56.r).round(),
+                cacheWidth: (56.r).round(),
+                gaplessPlayback: true,
+                loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
+                    ? child
+                    : ShimmerPlaceholder(
+                        child: CircleAvatar(
+                          radius: 56.r,
+                          backgroundColor: Colors.black,
+                        ),
+                      ),
+                errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
               ),
             ),
-            errorWidget: (context, url, error) {
-              return const Icon(Icons.error);
-            },
           )
         : const Icon(Icons.offline_bolt);
   }

@@ -60,7 +60,7 @@ class CourseLessonWidget extends GetView<CourseDetailsController> {
                       customDialog(
                         context,
                         child: PickQualityFromUrl(
-                          response: watchResponse!,
+                          response: watchResponse,
                           id: lessionModel.id,
                           description: lessionModel.description,
                           name: lessionModel.title ?? "لا يوجد اسم",

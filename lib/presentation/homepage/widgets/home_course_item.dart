@@ -111,8 +111,8 @@ class _HomeCourseItemState extends State<HomeCourseItem> {
               width: 110.w,
               borderRadius: 6.r,
               child: Text(
-                widget.courseModel.isPaid != true &&
-                        widget.courseModel.isOpen != true &&
+                widget.courseModel.isOpen == false &&
+                        widget.courseModel.isPaid != true &&
                         (widget.courseModel.isTeachWithCourse != true ||
                             widget.courseModel.isTeachWithCourse == null) &&
                         GetIt.instance<CacheProvider>().getUserType() != 'admin'

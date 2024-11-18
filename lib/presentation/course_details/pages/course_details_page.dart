@@ -20,17 +20,21 @@ import 'package:hog_v2/presentation/widgets/custom_button.dart';
 class CourseDetailsPage extends GetView<CourseDetailsController> {
   const CourseDetailsPage({super.key});
 
+  bool isCourseAccessible(CourseDetailsController controller) {
+    final course = controller.courseInfoModel?.course;
+    // print('${course}');
+    // print('course.isOpen: ${course?.isOpen}');
+    // print(
+    //     'condition: ${course != null && (course.isOpen == true || (course.isPaid == true || course.isTeachWithCourse == true || GetIt.instance<CacheProvider>().getUserType() == 'admin'))}');
+    return course != null &&
+        (course.isOpen == true ||
+            (course.isPaid == true ||
+                course.isTeachWithCourse == true ||
+                GetIt.instance<CacheProvider>().getUserType() == 'admin'));
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isCourseAccessible(CourseDetailsController controller) {
-      final course = controller.courseInfoModel?.course;
-      return course != null &&
-          (course.isOpen == true ||
-              course.isPaid == true ||
-              course.isTeachWithCourse == true ||
-              GetIt.instance<CacheProvider>().getUserType() == 'admin');
-    }
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
